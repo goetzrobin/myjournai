@@ -2,7 +2,7 @@ import { pgTable, pgEnum, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { cohorts } from './cohorts';
 import { users } from './users';
 
-const cohorts_users_status = pgEnum('cohorts_users_status', ['ACTIVE', 'INACTIVE']);
+export const cohorts_users_status = pgEnum('cohorts_users_status', ['ACTIVE', 'INACTIVE']);
 
 export const cohorts_users = pgTable('cohorts_users', {
   id: uuid('id').defaultRandom().primaryKey(),
