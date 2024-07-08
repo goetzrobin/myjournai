@@ -1,7 +1,7 @@
 import {useMutation} from "@tanstack/react-query";
 import {SignInRequest} from "../signin-request";
 
-export const useSignInMutation = () => {
+export const useSignInMutation = (onSuccess?: (data: any) => void) => {
     return useMutation({
         mutationFn: (values: SignInRequest) => fetch('/api/auth/signin', {
             method: 'POST',
@@ -16,6 +16,7 @@ export const useSignInMutation = () => {
             })
             .catch((error) => {
                 console.error(error);
-            })
+            }),
+      onSuccess: data => onSuccess?.(data)
     })
 }

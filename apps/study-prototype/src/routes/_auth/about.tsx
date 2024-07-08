@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { authenticateRoute } from '~myjournai/auth';
 
-export const Route = createFileRoute('/about')({
+export const Route = createFileRoute('/_auth/about')({
   component: About,
   beforeLoad: authenticateRoute
 })

@@ -2,7 +2,6 @@ import { AuthSession } from '@supabase/supabase-js';
 
 export const getAuthSessionFromHeaders = (): AuthSession | null => {
   const cookie = decodeURIComponent(decodeURIComponent(document.cookie.replace(/(?:(?:^|.*;\s*)sb-sxtpdrbqkflduazyzuga-auth-token\s*=\s*([^;]*).*$)|^.*$/, '$1')));
-  console.log(cookie)
   if (cookie && cookie.length > 0) {
     return JSON.parse(cookie);
   }

@@ -4,7 +4,7 @@ import { getAuthSessionFromHeaders } from './session';
 export const authenticateRoute = async ({ location }: { location: ParsedLocation }) => {
   if (!getAuthSessionFromHeaders()) {
     throw redirect({
-      to: '/',
+      to: '/sign-in',
       search: {
         // Use the current location to power a redirect after login
         // (Do not use `router.state.resolvedLocation` as it can
