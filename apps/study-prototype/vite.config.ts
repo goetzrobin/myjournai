@@ -2,6 +2,8 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import { VitePWA } from 'vite-plugin-pwa';
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 
 export default defineConfig({
   root: __dirname,
@@ -10,26 +12,34 @@ export default defineConfig({
   server: {
     port: 4200,
     host: 'localhost',
+    proxy: {
+      '/api': 'http://localhost:3000',
+    }
   },
 
   preview: {
     port: 4300,
-    host: 'localhost',
+    host: 'localhost'
   },
 
-  plugins: [react(), nxViteTsPaths()],
+  plugins: [
+    TanStackRouterVite(),
+    react(),
+    VitePWA({ registerType: 'autoUpdate' }),
+    nxViteTsPaths(),
+  ],
 
   // Uncomment this if you are using workers.
-  // worker: {
-  //  plugins: [ nxViteTsPaths() ],
-  // },
+  worker: {
+    plugins: () => [nxViteTsPaths()]
+  },
 
   build: {
     outDir: '../../dist/apps/study-prototype',
     emptyOutDir: true,
     reportCompressedSize: true,
     commonjsOptions: {
-      transformMixedEsModules: true,
-    },
-  },
+      transformMixedEsModules: true
+    }
+  }
 });

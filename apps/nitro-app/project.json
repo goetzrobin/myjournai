@@ -1,0 +1,32 @@
+{
+  "name": "nitro-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/nitro-app",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project study-prototype --web",
+  "targets": {
+    "build": {
+      "command": "nitro build",
+      "options": {
+        "dir": "apps/nitro-app"
+      }
+    },
+    "dev": {
+      "command": "nitro dev",
+      "options": {
+        "dir": "apps/nitro-app"
+      }
+    },
+    "prepare":{
+      "command":  "nitro prepare",
+      "options": {
+        "dir": "apps/nitro-app"
+      }
+    },
+    "preview": {
+      "dependsOn": ["^build"],
+      "command":  "node dist/apps/nitro-app/.output/server/index.mjs"
+    }
+  }
+}

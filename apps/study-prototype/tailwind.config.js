@@ -13,5 +13,6 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [],
-};
+  plugins: [
+    require('tailwindcss-react-aria-components')
+  ]};

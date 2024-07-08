@@ -40,3 +40,13 @@ Thumbs.db
 
 .nx/cache
 .nx/workspace-data
+
+# Nitro
+**/.data
+**/.nitro
+**/.cache
+**/.output
+
+# env
+.env
+.env.local
