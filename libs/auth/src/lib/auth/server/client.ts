@@ -3,8 +3,8 @@ import { deleteCookie, getCookie, H3Event, setCookie } from 'h3';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 export function createClient(event: H3Event): SupabaseClient<never, 'public', never> {
-  const publicKey = process.env['NITRO_PUBLIC_SUPABASE_URL'];
-  const anonKey = process.env['NITRO_PUBLIC_SUPABASE_ANON_KEY'];
+  const publicKey = process.env['NITRO_SUPABASE_URL'];
+  const anonKey = process.env['NITRO_SUPABASE_ANON_KEY'];
   if (!publicKey || !anonKey) {
     throw Error('supabase public and anon key must be set as environment variables');
   }

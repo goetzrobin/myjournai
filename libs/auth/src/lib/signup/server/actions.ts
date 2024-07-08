@@ -20,5 +20,9 @@ export const signUpAction = async (event: H3Event, {
   if (signUpResult.error) {
     return signUpResult.error;
   }
-  return signUpResult.data.user;
+  const signInResult = await authClient.auth.signInWithPassword({
+    email,
+    password,
+  },)
+  return signInResult.data.user;
 };

@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "~myjournai/auth": ["libs/auth/src/index.ts"],
-      "~myjournai/components": ["libs/ui/components/src/index.ts"]
+      "~myjournai/components": ["libs/ui/components/src/index.ts"],
+      "~myjournai/form-utils": ["libs/form-utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
