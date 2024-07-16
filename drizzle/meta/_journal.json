@@ -15,6 +15,20 @@
       "when": 1720449605422,
       "tag": "0001_striped_sleeper",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1720816707038,
+      "tag": "0002_thankful_colossus",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1720817046277,
+      "tag": "0003_shocking_dust",
+      "breakpoints": true
     }
   ]
 }

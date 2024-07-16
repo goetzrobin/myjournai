@@ -1,6 +1,7 @@
-import { SignUpRequestSchema, signUpAction } from '~myjournai/auth';
+import { signUpAction } from '@myjournai/auth-server';
 import { AuthError } from '@supabase/auth-js';
 import { createError, eventHandler, readBody } from 'h3';
+import { SignUpRequestSchema } from '~myjournai/auth-shared';
 
 export default eventHandler(async (event) => {
   console.log('signing up');
@@ -10,7 +11,7 @@ export default eventHandler(async (event) => {
     throw createError({
       status: 400,
       statusMessage: 'Bad Request',
-      message: parsedRequest.error.message
+      message: parsedRequest.error.message,
     });
   }
   const signUpResult = await signUpAction(event, parsedRequest.data);
@@ -18,7 +19,7 @@ export default eventHandler(async (event) => {
     throw createError({
       status: 401,
       statusMessage: 'Unauthorized',
-      message: signUpResult.message
+      message: signUpResult.message,
     });
   }
   return signUpResult;

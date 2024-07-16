@@ -11,6 +11,7 @@ export default defineNitroModule({
       ...aliases,
       [aliasKey]: join(workspaceRoot, aliasValue[0])
     }), {});
+    console.log(aliases)
     nitro.options.alias ??= {};
     nitro.options.alias = { ...nitro.options.alias, ...aliases };
   }

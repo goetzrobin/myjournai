@@ -1,47 +1,16 @@
-import { createFileRoute, Link, Outlet, useNavigate } from '@tanstack/react-router';
-import { authenticateRoute, useSignOutMutation } from '~myjournai/auth';
+import { createFileRoute, Outlet } from '@tanstack/react-router';
+import { JournaiJ } from '~myjournai/components';
 
 export const Route = createFileRoute('/_auth')({
-  beforeLoad: authenticateRoute,
-  component: AuthLayout
-});
-
-function AuthLayout() {
-  const navigate = useNavigate();
-  const signOutMut = useSignOutMutation(() => navigate({
-    to: '/sign-in'
-  }));
-  return (
-    <div className="h-full">
-      <ul className="py-2 flex gap-2">
-        <li>
-          <Link
-            to="/"
-            className="hover:underline data-[status='active']:font-semibold"
-          >
-            Dashboard
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/about"
-            className="hover:underline data-[status='active']:font-semibold"
-          >
-            Invoices
-          </Link>
-        </li>
-        <li>
-          <button
-            type="button"
-            className="hover:underline"
-            onClick={() => signOutMut.mutate()}
-          >
-            Logout
-          </button>
-        </li>
-      </ul>
-      <hr />
-      <Outlet />
+  component: () => <div className="p-2 mx-auto max-w-screen-sm h-full">
+    <div>
+      <div className="mx-auto mt-16 mb-10 flex justify-center items-center">
+        <JournaiJ className="size-10" />
+        <span className="ml-1 text-4xl tracking-tight font-bold">journai</span>
+      </div>
+      <p className="pt-10 pb-16 mx-auto max-w-[80%] text-3xl text-center">Find your path, start your post athletics
+        journey.</p>
     </div>
-  );
-}
+    <Outlet />
+  </div>
+});

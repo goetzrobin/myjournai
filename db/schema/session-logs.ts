@@ -4,7 +4,7 @@ import {sessions} from "./sessions";
 
 export const sessionLogs = pgTable('session_logs', {
     id: uuid('id').defaultRandom().primaryKey(),
-    voyager_id: uuid('voyager_id').notNull().references(() => users.id),
+    user_id: uuid('user_id').notNull().references(() => users.id),
     session_id: uuid('session_id').notNull().references(() => sessions.id),
     index: integer('index').notNull(),
     started_at: timestamp('started_at', {withTimezone: true}),

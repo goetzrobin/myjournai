@@ -15,9 +15,34 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "~myjournai/auth": ["libs/auth/src/index.ts"],
+      "@myjournai/auth-client": ["libs/auth/client/src/index.ts"],
+      "@myjournai/auth-server": ["libs/auth/server/src/index.ts"],
+      "@myjournai/user-client": ["libs/user/client/src/index.ts"],
+      "@myjournai/user-server": ["libs/user/server/src/index.ts"],
+      "@myjournai/user-shared": ["libs/user/shared/src/index.ts"],
+      "~db/client": ["db/client"],
+      "~db/schema/cohorts": ["db/schema/cohorts"],
+      "~db/schema/cohorts_users": ["db/schema/cohorts_users"],
+      "~db/schema/session-logs": ["db/schema/session-logs"],
+      "~db/schema/sessions": ["db/schema/sessions"],
+      "~db/schema/survey-question-responses": [
+        "db/schema/survey-question-responses"
+      ],
+      "~db/schema/survey-questions": ["db/schema/survey-questions"],
+      "~db/schema/survey-responses": ["db/schema/survey-responses"],
+      "~db/schema/surveys": ["db/schema/surveys"],
+      "~db/schema/cidi-survey-responses": ["db/schema/cidi-survey-responses"],
+      "~db/schema/users": ["db/schema/users"],
+      "~myjournai/auth-shared": ["libs/auth/shared/src/index.ts"],
+      "~myjournai/chat-client": ["libs/chat/client/src/index.ts"],
       "~myjournai/components": ["libs/ui/components/src/index.ts"],
-      "~myjournai/form-utils": ["libs/form-utils/src/index.ts"]
+      "~myjournai/form-utils": ["libs/form-utils/src/index.ts"],
+      "~myjournai/http-client": ["libs/http/client/src/index.ts"],
+      "~myjournai/onboarding-client": ["libs/onboarding/client/src/index.ts"],
+      "~myjournai/onboarding-server": ["libs/onboarding/server/src/index.ts"],
+      "~myjournai/onboarding-shared": ["libs/onboarding/shared/src/index.ts"],
+      "~myjournai/user-server": ["libs/user/server/src/index.ts"],
+      "~myjournai/user-shared": ["libs/user/shared/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

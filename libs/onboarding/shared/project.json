@@ -1,0 +1,19 @@
+{
+  "name": "onboarding-shared",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/onboarding/shared/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/onboarding/shared",
+        "main": "libs/onboarding/shared/src/index.ts",
+        "tsConfig": "libs/onboarding/shared/tsconfig.lib.json",
+        "assets": ["libs/onboarding/shared/*.md"]
+      }
+    }
+  }
+}

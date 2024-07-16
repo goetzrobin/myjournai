@@ -1,0 +1,9 @@
+{
+  "name": "onboarding-client",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/onboarding/client/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project onboarding-client --web",
+  "targets": {}
+}

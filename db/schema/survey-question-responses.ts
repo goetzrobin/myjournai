@@ -5,7 +5,7 @@ import {surveyQuestions} from "./survey-questions";
 
 export const surveyQuestionResponses = pgTable('survey_question_responses', {
     id: uuid('id').defaultRandom().primaryKey(),
-    voyager_id: uuid('voyager_id').notNull().references(() => users.id),
+    user_id: uuid('user_id').notNull().references(() => users.id),
     survey_question_id: uuid('survey_question_id').notNull().references(() => surveyQuestions.id),
     survey_response_id: uuid('survey_response_id').notNull().references(() => surveyResponses.id),
     string_value: text('string_value'),

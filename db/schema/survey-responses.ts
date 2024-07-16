@@ -5,7 +5,7 @@ import {sessionLogs} from "./session-logs";
 
 export const surveyResponses = pgTable('survey_responses', {
     id: uuid('id').defaultRandom().primaryKey(),
-    voyager_id: uuid('voyager_id').notNull().references(() => users.id),
+    user_id: uuid('user_id').notNull().references(() => users.id),
     survey_id: uuid('survey_id').notNull().references(() => surveys.id),
     session_log_id: uuid('session_log_id').references(() => sessionLogs.id),
     completed_at: timestamp('completed_at', {withTimezone: true}),

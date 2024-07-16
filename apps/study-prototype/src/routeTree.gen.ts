@@ -13,46 +13,85 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as SignUpImport } from './routes/sign-up'
-import { Route as SignInImport } from './routes/sign-in'
 import { Route as AuthImport } from './routes/_auth'
-import { Route as AuthAboutImport } from './routes/_auth/about'
+import { Route as AppImport } from './routes/_app'
+import { Route as AuthSignUpImport } from './routes/_auth/sign-up'
+import { Route as AuthSignInImport } from './routes/_auth/sign-in'
+import { Route as AppOnboardingImport } from './routes/_app/onboarding'
+import { Route as AppAboutImport } from './routes/_app/about'
+import { Route as AppOnboardingUserImport } from './routes/_app/onboarding/user'
+import { Route as AppOnboardingCareerIdentityConfusionSurveyImport } from './routes/_app/onboarding/career-identity-confusion/survey'
+import { Route as AppOnboardingCareerIdentityConfusionConvoImport } from './routes/_app/onboarding/career-identity-confusion/convo'
 
 // Create Virtual Routes
 
-const AuthIndexLazyImport = createFileRoute('/_auth/')()
+const AppIndexLazyImport = createFileRoute('/_app/')()
 
 // Create/Update Routes
-
-const SignUpRoute = SignUpImport.update({
-  path: '/sign-up',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const SignInRoute = SignInImport.update({
-  path: '/sign-in',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const AuthRoute = AuthImport.update({
   id: '/_auth',
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthIndexLazyRoute = AuthIndexLazyImport.update({
-  path: '/',
-  getParentRoute: () => AuthRoute,
-} as any).lazy(() => import('./routes/_auth/index.lazy').then((d) => d.Route))
+const AppRoute = AppImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRoute,
+} as any)
 
-const AuthAboutRoute = AuthAboutImport.update({
-  path: '/about',
+const AppIndexLazyRoute = AppIndexLazyImport.update({
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any).lazy(() => import('./routes/_app/index.lazy').then((d) => d.Route))
+
+const AuthSignUpRoute = AuthSignUpImport.update({
+  path: '/sign-up',
   getParentRoute: () => AuthRoute,
 } as any)
+
+const AuthSignInRoute = AuthSignInImport.update({
+  path: '/sign-in',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AppOnboardingRoute = AppOnboardingImport.update({
+  path: '/onboarding',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppAboutRoute = AppAboutImport.update({
+  path: '/about',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppOnboardingUserRoute = AppOnboardingUserImport.update({
+  path: '/user',
+  getParentRoute: () => AppOnboardingRoute,
+} as any)
+
+const AppOnboardingCareerIdentityConfusionSurveyRoute =
+  AppOnboardingCareerIdentityConfusionSurveyImport.update({
+    path: '/career-identity-confusion/survey',
+    getParentRoute: () => AppOnboardingRoute,
+  } as any)
+
+const AppOnboardingCareerIdentityConfusionConvoRoute =
+  AppOnboardingCareerIdentityConfusionConvoImport.update({
+    path: '/career-identity-confusion/convo',
+    getParentRoute: () => AppOnboardingRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AppImport
+      parentRoute: typeof rootRoute
+    }
     '/_auth': {
       id: '/_auth'
       path: ''
@@ -60,33 +99,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
-    '/sign-in': {
-      id: '/sign-in'
-      path: '/sign-in'
-      fullPath: '/sign-in'
-      preLoaderRoute: typeof SignInImport
-      parentRoute: typeof rootRoute
-    }
-    '/sign-up': {
-      id: '/sign-up'
-      path: '/sign-up'
-      fullPath: '/sign-up'
-      preLoaderRoute: typeof SignUpImport
-      parentRoute: typeof rootRoute
-    }
-    '/_auth/about': {
-      id: '/_auth/about'
+    '/_app/about': {
+      id: '/_app/about'
       path: '/about'
       fullPath: '/about'
-      preLoaderRoute: typeof AuthAboutImport
+      preLoaderRoute: typeof AppAboutImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/onboarding': {
+      id: '/_app/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
+    }
+    '/_auth/sign-in': {
+      id: '/_auth/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof AuthSignInImport
       parentRoute: typeof AuthImport
     }
-    '/_auth/': {
-      id: '/_auth/'
+    '/_auth/sign-up': {
+      id: '/_auth/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof AuthSignUpImport
+      parentRoute: typeof AuthImport
+    }
+    '/_app/': {
+      id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof AuthIndexLazyImport
-      parentRoute: typeof AuthImport
+      preLoaderRoute: typeof AppIndexLazyImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/onboarding/user': {
+      id: '/_app/onboarding/user'
+      path: '/user'
+      fullPath: '/onboarding/user'
+      preLoaderRoute: typeof AppOnboardingUserImport
+      parentRoute: typeof AppOnboardingImport
+    }
+    '/_app/onboarding/career-identity-confusion/convo': {
+      id: '/_app/onboarding/career-identity-confusion/convo'
+      path: '/career-identity-confusion/convo'
+      fullPath: '/onboarding/career-identity-confusion/convo'
+      preLoaderRoute: typeof AppOnboardingCareerIdentityConfusionConvoImport
+      parentRoute: typeof AppOnboardingImport
+    }
+    '/_app/onboarding/career-identity-confusion/survey': {
+      id: '/_app/onboarding/career-identity-confusion/survey'
+      path: '/career-identity-confusion/survey'
+      fullPath: '/onboarding/career-identity-confusion/survey'
+      preLoaderRoute: typeof AppOnboardingCareerIdentityConfusionSurveyImport
+      parentRoute: typeof AppOnboardingImport
     }
   }
 }
@@ -94,9 +161,16 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren({
-  AuthRoute: AuthRoute.addChildren({ AuthAboutRoute, AuthIndexLazyRoute }),
-  SignInRoute,
-  SignUpRoute,
+  AppRoute: AppRoute.addChildren({
+    AppAboutRoute,
+    AppOnboardingRoute: AppOnboardingRoute.addChildren({
+      AppOnboardingUserRoute,
+      AppOnboardingCareerIdentityConfusionConvoRoute,
+      AppOnboardingCareerIdentityConfusionSurveyRoute,
+    }),
+    AppIndexLazyRoute,
+  }),
+  AuthRoute: AuthRoute.addChildren({ AuthSignInRoute, AuthSignUpRoute }),
 })
 
 /* prettier-ignore-end */
@@ -107,31 +181,61 @@ export const routeTree = rootRoute.addChildren({
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/_auth",
-        "/sign-in",
-        "/sign-up"
+        "/_app",
+        "/_auth"
+      ]
+    },
+    "/_app": {
+      "filePath": "_app.tsx",
+      "children": [
+        "/_app/about",
+        "/_app/onboarding",
+        "/_app/"
       ]
     },
     "/_auth": {
       "filePath": "_auth.tsx",
       "children": [
-        "/_auth/about",
-        "/_auth/"
+        "/_auth/sign-in",
+        "/_auth/sign-up"
       ]
     },
-    "/sign-in": {
-      "filePath": "sign-in.tsx"
+    "/_app/about": {
+      "filePath": "_app/about.tsx",
+      "parent": "/_app"
     },
-    "/sign-up": {
-      "filePath": "sign-up.tsx"
+    "/_app/onboarding": {
+      "filePath": "_app/onboarding.tsx",
+      "parent": "/_app",
+      "children": [
+        "/_app/onboarding/user",
+        "/_app/onboarding/career-identity-confusion/convo",
+        "/_app/onboarding/career-identity-confusion/survey"
+      ]
     },
-    "/_auth/about": {
-      "filePath": "_auth/about.tsx",
+    "/_auth/sign-in": {
+      "filePath": "_auth/sign-in.tsx",
       "parent": "/_auth"
     },
-    "/_auth/": {
-      "filePath": "_auth/index.lazy.tsx",
+    "/_auth/sign-up": {
+      "filePath": "_auth/sign-up.tsx",
       "parent": "/_auth"
+    },
+    "/_app/": {
+      "filePath": "_app/index.lazy.tsx",
+      "parent": "/_app"
+    },
+    "/_app/onboarding/user": {
+      "filePath": "_app/onboarding/user.tsx",
+      "parent": "/_app/onboarding"
+    },
+    "/_app/onboarding/career-identity-confusion/convo": {
+      "filePath": "_app/onboarding/career-identity-confusion/convo.tsx",
+      "parent": "/_app/onboarding"
+    },
+    "/_app/onboarding/career-identity-confusion/survey": {
+      "filePath": "_app/onboarding/career-identity-confusion/survey.tsx",
+      "parent": "/_app/onboarding"
     }
   }
 }

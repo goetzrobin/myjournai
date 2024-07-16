@@ -8,7 +8,9 @@ import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 export default defineConfig({
   root: __dirname,
   cacheDir: '../../node_modules/.vite/apps/study-prototype',
-
+  esbuild: {
+    exclude: ['drizzle-orm', 'drizzle-orm/postgres-js', 'postgres', 'drizzle-orm/pg-core']
+  },
   server: {
     port: 4200,
     host: 'localhost',
