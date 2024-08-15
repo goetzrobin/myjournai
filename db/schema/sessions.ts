@@ -6,11 +6,11 @@ export const sessions = pgTable('sessions', {
     name: varchar('name'),
     description: text('description'),
     index: integer('index').notNull(),
-    estimated_completion_time: integer('estimated_completion_time'),
-    pre_survey_id: uuid('pre_survey_id').references(() => surveys.id),
-    post_survey_id: uuid('post_survey_id').references(() => surveys.id),
-    created_at: timestamp('created_at', {withTimezone: true}).defaultNow(),
-    updated_at: timestamp('updated_at', {withTimezone: true})
+    estimatedCompletionTime: integer('estimated_completion_time'),
+    preSurveyId: uuid('pre_survey_id').references(() => surveys.id),
+    postSurveyId: uuid('post_survey_id').references(() => surveys.id),
+    createdAt: timestamp('created_at', {withTimezone: true}).defaultNow(),
+    updatedAt: timestamp('updated_at', {withTimezone: true})
 });
 
 export type Session = typeof sessions.$inferSelect;

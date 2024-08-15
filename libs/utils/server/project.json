@@ -1,0 +1,19 @@
+{
+  "name": "utils-server",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/utils/server/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/utils/server",
+        "main": "libs/utils/server/src/index.ts",
+        "tsConfig": "libs/utils/server/tsconfig.lib.json",
+        "assets": ["libs/utils/server/*.md"]
+      }
+    }
+  }
+}

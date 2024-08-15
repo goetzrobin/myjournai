@@ -2,8 +2,10 @@ import React from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useUserSuspenseQuery } from '@myjournai/user-client';
 import { useAuthUserIdFromHeaders, useSignOutMutation } from '@myjournai/auth-client';
+import { useMobileNavShowing } from './mobile-nav.store';
 
 const MobileNav = () => {
+  const isShowingNav = useMobileNavShowing();
   const userQ = useUserSuspenseQuery(useAuthUserIdFromHeaders());
   const navigate = useNavigate();
   const signOutMut = useSignOutMutation(() =>
@@ -11,22 +13,22 @@ const MobileNav = () => {
       to: '/sign-in'
     })
   );
-  return !userQ.data?.onboarding_completed_at ? null : <>
+  return (!userQ.data?.onboardingCompletedAt || !isShowingNav) ? null : <>
     <ul className="mx-auto flex-none p-2 pb-8 flex gap-2">
       <li>
         <Link
           to="/"
           className="hover:underline data-[status='active']:font-semibold"
         >
-          Dashboard
+          Home
         </Link>
       </li>
       <li>
         <Link
-          to="/about"
+          to="/resources"
           className="hover:underline data-[status='active']:font-semibold"
         >
-          Invoices
+          Resources
         </Link>
       </li>
       <li>

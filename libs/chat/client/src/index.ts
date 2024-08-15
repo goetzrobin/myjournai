@@ -4,3 +4,6 @@ export * from './lib/message';
 export * from './lib/thinking-indicator';
 export * from './lib/ai-message';
 export * from './lib/user-message';
+export * from './lib/messages-container';
+export * from './lib/user-input-form';
+export * from './lib/chat-container';

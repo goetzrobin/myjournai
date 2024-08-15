@@ -19,5 +19,5 @@ export type OnboardingQuestion = {
 
 export type OnboardingSurvey = {
   questions: OnboardingQuestion[];
-  answers: OnboardingActualAnswer[];
+  answers: (OnboardingActualAnswer | undefined)[];
 }

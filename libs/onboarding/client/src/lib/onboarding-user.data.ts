@@ -1,4 +1,3 @@
-
 // Please select which group you belong:
 //   Current student-athlete, current Temple STHM undergraduate student, current Temple MSSB student (former student-athlete), former student-athlete (non-MSSB student)
 import { OnboardingQuestion, OnboardingSurvey } from './onboarding-survey';
@@ -74,7 +73,7 @@ const GENDER_IDENTITY_QUESTION: OnboardingQuestion = {
       type: 'fixed',
       value: 'prefer-not-to-say',
       label: 'Prefer not to say'
-    },
+    }
   ],
   question: 'What is your gender identity?',
   type: 'multiple-choice'
@@ -128,7 +127,7 @@ const ETHNICITY_QUESTION: OnboardingQuestion = {
       type: 'fixed',
       value: 'prefer-not-to-say',
       label: 'Prefer not to say'
-    },
+    }
   ],
   question: 'What is your race/ethnicity?',
   type: 'multiple-choice'
@@ -162,7 +161,7 @@ const DIVISION_QUESTION: OnboardingQuestion = {
       type: 'fixed',
       value: 'none',
       label: 'Not a (former) student athlete'
-    },
+    }
   ],
   question: 'If you are/were a student-athlete, what division did you participate in?',
   type: 'multiple-choice'
@@ -170,16 +169,16 @@ const DIVISION_QUESTION: OnboardingQuestion = {
 // What is your expected or actual graduation year?  (text box entry)
 const GRAD_YEAR_QUESTION: OnboardingQuestion = {
   index: 4,
-  possibleAnswers: [ {
+  possibleAnswers: [{
     type: 'custom',
     value: 'graduation-year',
     label: 'Graduation Year'
-  },],
+  }],
   question: ' What is your expected or actual graduation year?',
   type: 'number'
 };
 
 export const ONBOARDING_USER_SURVEY: OnboardingSurvey = {
   questions: [GROUP_QUESTION, GENDER_IDENTITY_QUESTION, ETHNICITY_QUESTION, DIVISION_QUESTION, GRAD_YEAR_QUESTION],
-  answers: []
+  answers: [undefined, undefined, undefined, undefined, { value: 2025, type: 'custom', customValue: 2025 }]
 };

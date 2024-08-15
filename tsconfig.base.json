@@ -21,8 +21,10 @@
       "@myjournai/user-server": ["libs/user/server/src/index.ts"],
       "@myjournai/user-shared": ["libs/user/shared/src/index.ts"],
       "~db/client": ["db/client"],
+      "~db/schema/cidi-survey-responses": ["db/schema/cidi-survey-responses"],
       "~db/schema/cohorts": ["db/schema/cohorts"],
       "~db/schema/cohorts_users": ["db/schema/cohorts_users"],
+      "~db/schema/onboarding-letters": ["db/schema/onboarding-letters"],
       "~db/schema/session-logs": ["db/schema/session-logs"],
       "~db/schema/sessions": ["db/schema/sessions"],
       "~db/schema/survey-question-responses": [
@@ -31,7 +33,7 @@
       "~db/schema/survey-questions": ["db/schema/survey-questions"],
       "~db/schema/survey-responses": ["db/schema/survey-responses"],
       "~db/schema/surveys": ["db/schema/surveys"],
-      "~db/schema/cidi-survey-responses": ["db/schema/cidi-survey-responses"],
+      "~db/schema/user-profiles": ["db/schema/user-profiles"],
       "~db/schema/users": ["db/schema/users"],
       "~myjournai/auth-shared": ["libs/auth/shared/src/index.ts"],
       "~myjournai/chat-client": ["libs/chat/client/src/index.ts"],
@@ -42,7 +44,8 @@
       "~myjournai/onboarding-server": ["libs/onboarding/server/src/index.ts"],
       "~myjournai/onboarding-shared": ["libs/onboarding/shared/src/index.ts"],
       "~myjournai/user-server": ["libs/user/server/src/index.ts"],
-      "~myjournai/user-shared": ["libs/user/shared/src/index.ts"]
+      "~myjournai/user-shared": ["libs/user/shared/src/index.ts"],
+      "~myjournai/utils-server": ["libs/utils/server/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

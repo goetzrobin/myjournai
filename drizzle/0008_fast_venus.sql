@@ -1,0 +1,1 @@
+ALTER TABLE "cidi_survey_responses" ADD COLUMN "question_3_0" integer;

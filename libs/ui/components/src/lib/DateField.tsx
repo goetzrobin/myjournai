@@ -9,7 +9,7 @@ import {
   ValidationResult
 } from 'react-aria-components';
 import { tv } from 'tailwind-variants';
-import { Description, FieldError, Label, fieldGroupStyles } from './Field';
+import { Description, FieldError, fieldGroupStyles, Label } from './Field';
 import { composeTailwindRenderProps } from './utils';
 
 export interface DateFieldProps<T extends DateValue> extends AriaDateFieldProps<T> {
@@ -24,7 +24,7 @@ export function DateField<T extends DateValue>(
   return (
     <AriaDateField {...props} className={composeTailwindRenderProps(props.className, 'flex flex-col gap-1')}>
       {label && <Label>{label}</Label>}
-      <DateInput />
+      <DateInput className="text-lg" />
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>
     </AriaDateField>

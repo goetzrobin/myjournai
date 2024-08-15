@@ -4,13 +4,13 @@ import {sessions} from "./sessions";
 
 export const sessionLogs = pgTable('session_logs', {
     id: uuid('id').defaultRandom().primaryKey(),
-    user_id: uuid('user_id').notNull().references(() => users.id),
-    session_id: uuid('session_id').notNull().references(() => sessions.id),
+    userId: uuid('user_id').notNull().references(() => users.id),
+    sessionId: uuid('session_id').notNull().references(() => sessions.id),
     index: integer('index').notNull(),
-    started_at: timestamp('started_at', {withTimezone: true}),
-    completed_at: timestamp('completed_at', {withTimezone: true}),
-    created_at: timestamp('created_at', {withTimezone: true}).defaultNow(),
-    updated_at: timestamp('updated_at', {withTimezone: true})
+    startedAt: timestamp('started_at', {withTimezone: true}),
+    completedAt: timestamp('completed_at', {withTimezone: true}),
+    createdAt: timestamp('created_at', {withTimezone: true}).defaultNow(),
+    updatedAt: timestamp('updated_at', {withTimezone: true})
 });
 
 export type SessionLog = typeof sessionLogs.$inferSelect;

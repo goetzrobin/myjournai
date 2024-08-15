@@ -6,8 +6,7 @@ import { QueryClient } from '@tanstack/react-query';
 export const redirectToUnfinishedOnboarding = async (location: ParsedLocation, queryClient: QueryClient) => {
   const session = useAuthSessionFromHeaders();
   const user = await ensureUserQuery(queryClient, session?.user?.id);
-  if (!location.pathname.startsWith('/onboarding') && !user?.onboarding_completed_at) {
-    console.log('root level redirecting to onboarding')
+  if (!location.pathname.startsWith('/onboarding') && !user?.onboardingCompletedAt) {
     throw redirect({
       to: '/onboarding'
     });

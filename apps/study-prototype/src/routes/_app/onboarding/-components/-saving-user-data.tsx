@@ -1,14 +1,19 @@
 import { Button } from '~myjournai/components';
 import { Link } from '@tanstack/react-router';
-import AlternatingMessages from './-alternating-messages';
 
-const SavingUserData = ({ isIdle }: { isIdle: boolean }) => {
-  const messages = ['Perfect and thank you so much!', 'The hardest part is done!', 'Getting started....', 'Ready to continue?'];
-  return <AlternatingMessages showing={isIdle} messages={messages}>
-    <Link to="/onboarding/career-identity-confusion/survey">
-      <Button className="w-full animate-in slide-in-from-bottom-2 fade-in-5">Continue onboarding</Button>
-    </Link>
-  </AlternatingMessages>;
+const SavingUserData = ({ status }: { status: 'pending' | 'success' | 'error' | 'idle' }) => {
+  return status === 'idle' ? null : <div
+    className="p-4 grid fade-in animate-in [animation-duration:500ms] -m-2 z-10 absolute inset-0 bg-background/80 backdrop-blur">
+    <div className="pt-8 relative">
+      <p className="text-sm font-semibold text-center mb-4">Next Section</p>
+      <h1 className="text-2xl font-medium text-center">Career Identity Confusion</h1>
+      <p className="mt-4 text-muted-foreground text-center">8 questions</p>
+
+      <Link className="absolute bottom-4 w-full" to="/onboarding/study/career-identity-confusion/survey">
+        <Button isDisabled={status !== 'success'} className="w-full animate-in slide-in-from-bottom-2 fade-in-5">Continue to questions</Button>
+      </Link>
+    </div>
+  </div>;
 };
 
 export default SavingUserData;

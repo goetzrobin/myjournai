@@ -1,12 +1,12 @@
 import {
   Slider as AriaSlider,
-  SliderProps as AriaSliderProps,
   SliderOutput,
+  SliderProps as AriaSliderProps,
   SliderThumb,
   SliderTrack
 } from 'react-aria-components';
 import { tv } from 'tailwind-variants';
-import { composeTailwindRenderProps, focusRing, Label } from '~myjournai/components';
+import { Button, composeTailwindRenderProps, focusRing, Label } from '~myjournai/components';
 
 const trackStyles = tv({
   base: 'rounded-full',
@@ -48,17 +48,17 @@ export function LikertScaleSlider<T extends number | number[]>(
   return (
     <>
       <div className="mb-8 flex items-end justify-between">
-        <div className={(value === 1 ? 'bg-blue-500' : 'bg-muted') + ' transition-colors w-3 rounded-full h-40'} />
-        <div className={(value === 2 ? 'bg-blue-500' : 'bg-muted') + ' transition-colors w-3 rounded-full h-32'} />
-        <div className={(value === 3 ? 'bg-blue-500' : 'bg-muted') + ' transition-colors w-3 rounded-full h-24'} />
-        <div className={(value === 4 ? 'bg-blue-500' : 'bg-muted') + ' transition-colors w-3 rounded-full h-32'} />
-        <div className={(value === 5 ? 'bg-blue-500' : 'bg-muted') + ' transition-colors w-3 rounded-full h-40'} />
+        <Button onPress={() => onChange(1)} className={(value === 1 ? 'bg-blue-500' : 'bg-muted') + ' transition-colors p-0 w-4 rounded-full h-40'} />
+        <Button onPress={() => onChange(2)} className={(value === 2 ? 'bg-blue-500' : 'bg-muted') + ' transition-colors p-0 w-4 rounded-full h-32'} />
+        <Button onPress={() => onChange(3)} className={(value === 3 ? 'bg-blue-500' : 'bg-muted') + ' transition-colors p-0 w-4 rounded-full h-24'} />
+        <Button onPress={() => onChange(4)} className={(value === 4 ? 'bg-blue-500' : 'bg-muted') + ' transition-colors p-0 w-4 rounded-full h-32'} />
+        <Button onPress={() => onChange(5)} className={(value === 5 ? 'bg-blue-500' : 'bg-muted') + ' transition-colors p-0 w-4 rounded-full h-40'} />
       </div>
       <AriaSlider {...props} value={value} onChange={onChange} minValue={1} maxValue={5} step={1}
                   className={composeTailwindRenderProps(props.className, '')}>
         <Label className="sr-only">{label}</Label>
         <SliderTrack
-          className="group col-span-2 orientation-horizontal:h-6 orientation-vertical:w-6 orientation-vertical:h-64 flex items-center">
+          className="mx-1.5 group col-span-2 orientation-horizontal:h-6 orientation-vertical:w-6 orientation-vertical:h-64 flex items-center">
           {({ state, ...renderProps }) => <>
             <div className={trackStyles(renderProps)} />
             {state.values.map((_, i) => <SliderThumb key={i} index={i} aria-label={thumbLabels?.[i]}

@@ -1,4 +1,3 @@
-import { queryUserBy } from '@myjournai/user-server';
 import { createError, readBody } from 'h3';
 import { UserOnboardingDataSchema } from '~myjournai/onboarding-shared';
 import { updateUserOnboardingAction } from '~myjournai/onboarding-server';

@@ -4,7 +4,6 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const queryClient = new QueryClient();
 const router = createRouter({
@@ -32,7 +31,6 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={false} />
         <RouterProvider router={router} />
       </QueryClientProvider>
     </StrictMode>

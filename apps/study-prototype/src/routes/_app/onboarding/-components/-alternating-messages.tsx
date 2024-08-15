@@ -10,6 +10,7 @@ const AlternatingMessages = ({ children, showing, messages, onComplete }: PropsW
   const [count, setCount] = useState(0);
   const currentMessage = messages[count];
   useEffect(() => {
+    if (!showing) return;
     const interval = setInterval(() => {
       setCount(count + 1);
     }, 2500);
@@ -17,12 +18,12 @@ const AlternatingMessages = ({ children, showing, messages, onComplete }: PropsW
     if (count === messages.length - 1) {
       clearInterval(interval);
       setTimeout(() => setShowingButton(true), 1000);
-      onComplete?.()
+      onComplete?.();
     }
     return () => clearInterval(interval);
-  }, [messages.length, count, onComplete]);
+  }, [showing, messages.length, count, onComplete]);
 
-  return (showing ? null :
+  return (!showing ? null :
     <div
       className="p-4 grid fade-in animate-in [animation-duration:500ms] -m-2 z-10 absolute inset-0 bg-background/20 backdrop-blur">
       <AnimatePresence mode="popLayout">

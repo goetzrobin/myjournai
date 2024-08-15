@@ -1,48 +1,25 @@
-import React, { PropsWithChildren, ReactNode } from 'react';
-import { Button, ProgressBar } from '~myjournai/components';
-import { LucideArrowRight, LucideChevronLeft } from 'lucide-react';
+import React, { PropsWithChildren, useEffect } from 'react';
+import { Button } from '~myjournai/components';
+import { Link } from '@tanstack/react-router';
+import { twMerge } from 'tailwind-merge';
+import { OnboardingStep, useOnboardingProgressActions } from '~myjournai/onboarding-client';
 
-const OnboardingWrapper = ({
-                             children,
-                             stepProgress,
-                             isFirstQuestion,
-                             moveToPreviousQuestion,
-                             canMoveToNextQuestion,
-                             onMoveToNextQuestionPressed,
-                             progressDescription
-                           }: PropsWithChildren<{
-  moveToPreviousQuestion: () => void;
-  onMoveToNextQuestionPressed: () => void;
-  stepProgress: number;
-  isFirstQuestion: boolean;
-  canMoveToNextQuestion: boolean;
-  progressDescription?: ReactNode
+const OnboardingWrapper = ({ children, currentStep, className, link }: PropsWithChildren<{
+  currentStep: OnboardingStep,
+  className?: string | null;
+  link?: { to: string; label: string }
 }>) => {
-  return (
-    <div className="isolate relative flex flex-col h-full pt-4">
-      <ProgressBar aria-label={`Progress through onboarding: ${stepProgress}%`} className="w-full"
-                   value={stepProgress} />
-      <div className="mt-4 flex justify-between items-center">
-        <Button isDisabled={isFirstQuestion} onPress={moveToPreviousQuestion}
-                className={isFirstQuestion ? 'invisible' : ''}
-                variant="icon">
-          <LucideChevronLeft className="text-muted-foreground/60 size-7" />
-          <span className="sr-only">Back to previous question</span>
-        </Button>
-        {progressDescription ? progressDescription : <div />}
-        <div className="w-10" />
-      </div>
-      <div className="flex-1 flex flex-col pt-10 pb-[50%] px-2">
-        {children}
-      </div>
-      <Button isDisabled={!canMoveToNextQuestion}
-              onPress={onMoveToNextQuestionPressed} variant="primary"
-              className="animate-in ease fade-in slide-in-from-bottom-2 absolute bottom-8 right-4 rounded-full size-12 p-0 grid">
-        <LucideArrowRight className="self-center justify-self-center size-7" />
-        <span className="sr-only">Move to next question</span>
-      </Button>
+  const { setLastStep } = useOnboardingProgressActions();
+  useEffect(() => {
+    return setLastStep(currentStep);
+  }, [currentStep, setLastStep]);
+  return <div className="h-full w-full relative">
+    <div className={twMerge('grid h-full w-full p-8', className)}>
+      {children}
     </div>
-  );
+    {!link ? null :
+      <Link to={link.to}><Button className="absolute bottom-4 left-0 right-0 w-full">{link.label}</Button></Link>}
+  </div>;
 };
 
 export default OnboardingWrapper;

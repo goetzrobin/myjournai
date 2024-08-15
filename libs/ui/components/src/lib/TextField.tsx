@@ -1,11 +1,10 @@
-import React, { forwardRef } from 'react';
 import {
   TextField as AriaTextField,
   TextFieldProps as AriaTextFieldProps,
   ValidationResult
 } from 'react-aria-components';
 import { tv } from 'tailwind-variants';
-import { Description, FieldError, Input, Label, fieldBorderStyles } from './Field';
+import { Description, fieldBorderStyles, FieldError, Input, Label } from './Field';
 import { composeTailwindRenderProps, focusRing } from './utils';
 import Textarea from 'react-textarea-autosize';
 
@@ -21,16 +20,18 @@ const inputStyles = tv({
 export interface TextFieldProps extends AriaTextFieldProps {
   label?: string;
   description?: string;
+  placeholder?: string;
+  inputClassName?: string;
   errorMessage?: string | ((validation: ValidationResult) => string);
 }
 
 export function TextField(
-  { label, description, errorMessage, ...props }: TextFieldProps
+  { label, placeholder, description, errorMessage, inputClassName, ...props }: TextFieldProps
 ) {
   return (
     <AriaTextField {...props} className={composeTailwindRenderProps(props.className, 'flex flex-col gap-1')}>
       {label && <Label>{label}</Label>}
-      <Input className={inputStyles} />
+      <Input placeholder={placeholder} className={composeTailwindRenderProps(inputStyles, inputClassName ?? '')} />
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>
     </AriaTextField>

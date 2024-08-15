@@ -1,17 +1,27 @@
-import { pgTable, integer, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { pgTable, integer, text, timestamp, uuid, varchar, date } from 'drizzle-orm/pg-core';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { z } from 'zod';
+import { cidiSurveyResponses } from './cidi-survey-responses';
 
 export const users = pgTable('users', {
   id: uuid('id').defaultRandom().primaryKey(),
   username: text('username').unique(),
   name: text('name'),
-  gender_identity: text('gender_identity'),
+  pronouns: varchar('pronouns'),
+  genderIdentity: text('gender_identity'),
   ethnicity: text('ethnicity'),
-  ncaa_division: text('ncaa_division'),
-  graduation_year: integer('graduation_year'),
-  onboarding_completed_at: timestamp('onboarding_completed_at', { withTimezone: true }),
-  created_at: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  updated_at: timestamp('updated_at', { withTimezone: true })
+  ncaaDivision: text('ncaa_division'),
+  graduationYear: integer('graduation_year'),
+  birthday: date('birthday'),
+  onboardingCompletedAt: timestamp('onboarding_completed_at', { withTimezone: true }),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
 });
 
-export type User = typeof users.$inferSelect;
-export type NewUser = typeof users.$inferInsert;
+export const selectUserSchema = createSelectSchema(users);
+export const insertUserSchema = createInsertSchema(users);
+export const updateUserSchema = selectUserSchema.omit({id: true});
+
+export type User = z.infer<typeof selectUserSchema>;
+export type NewUser = z.infer<typeof insertUserSchema>
+export type UpdateUser = z.infer<typeof updateUserSchema>
