@@ -71,6 +71,13 @@
       "when": 1723806427051,
       "tag": "0009_silly_pandemic",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1723806893063,
+      "tag": "0010_elite_liz_osborn",
+      "breakpoints": true
     }
   ]
 }

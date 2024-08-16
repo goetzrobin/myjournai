@@ -1,5 +1,6 @@
-import {pgTable, integer, text, timestamp, varchar, uuid} from "drizzle-orm/pg-core";
-import {surveys} from "./surveys";
+import { integer, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { z } from 'zod';
 
 export const sessions = pgTable('sessions', {
     id: uuid('id').defaultRandom().primaryKey(),
@@ -7,11 +8,12 @@ export const sessions = pgTable('sessions', {
     description: text('description'),
     index: integer('index').notNull(),
     estimatedCompletionTime: integer('estimated_completion_time'),
-    preSurveyId: uuid('pre_survey_id').references(() => surveys.id),
-    postSurveyId: uuid('post_survey_id').references(() => surveys.id),
     createdAt: timestamp('created_at', {withTimezone: true}).defaultNow(),
     updatedAt: timestamp('updated_at', {withTimezone: true})
 });
 
-export type Session = typeof sessions.$inferSelect;
-export type NewSession = typeof sessions.$inferInsert;
+export const selectSessionSchema = createSelectSchema(sessions);
+export const insertSessionSchema = createInsertSchema(sessions);
+
+export type Session = z.infer<typeof selectSessionSchema>;
+export type NewSession = z.infer<typeof insertSessionSchema>
