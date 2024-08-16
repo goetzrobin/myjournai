@@ -78,6 +78,13 @@
       "when": 1723806893063,
       "tag": "0010_elite_liz_osborn",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1723809059224,
+      "tag": "0011_majestic_bill_hollister",
+      "breakpoints": true
     }
   ]
 }
