@@ -1,0 +1,2 @@
+ALTER TABLE "session_logs" DROP CONSTRAINT "session_logs_session_id_version_unique";--> statement-breakpoint
+ALTER TABLE "session_logs" ADD CONSTRAINT "session_logs_user_id_session_id_version_unique" UNIQUE("user_id","session_id","version");

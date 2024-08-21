@@ -8,10 +8,10 @@ import {
   UserMessage
 } from '~myjournai/chat-client';
 import { useScrollAnchor } from '~myjournai/components';
-import { useStreamResponse } from '~myjournai/http-client';
+import { BaseMessageChunk, useStreamResponse } from '~myjournai/http-client';
 import { useEnterSubmit } from '~myjournai/form-utils';
-import { z, ZodIssueCode } from 'zod';
 import OnboardingWrapper from '../-components/-onboarding-wrapper';
+import { BaseMessage } from '~myjournai/chat-shared';
 
 const EndConvoOverlay = () => <div className="absolute inset-0 bg-background h-full w-full z-50">
   <OnboardingWrapper currentStep="meet-sam" link={{ to: '/', label: `Let's start our journey` }}>
@@ -25,8 +25,10 @@ const EndConvoOverlay = () => <div className="absolute inset-0 bg-background h-f
 </div>;
 
 
-const Chat = ({ userId, children }: PropsWithChildren<
+const Chat = ({ userId, messages, isMessageSuccess, children }: PropsWithChildren<
     {
+      messages: BaseMessage[];
+      isMessageSuccess: boolean;
       userId: string;
     }
   >) => {
@@ -48,46 +50,41 @@ const Chat = ({ userId, children }: PropsWithChildren<
     };
 
     useEffect(() => {
-      if (mutation.isIdle && !conversationInitialized.current) {
+      if (mutation.isIdle && !conversationInitialized.current && isMessageSuccess && messages.length === 0) {
         conversationInitialized.current = true;
-        setTimeout(() => startStream({ author: 'ai', message: 'The user has started the conversation' }), 100);
+        setTimeout(() => startStream({
+          type: 'ai-message',
+          scope: 'internal',
+          message: 'The user has started the conversation'
+        }), 100);
       }
-    }, [mutation.isIdle, conversationInitialized, startStream]);
+    }, [mutation.isIdle, conversationInitialized, startStream, isMessageSuccess, messages.length]);
 
-    const toolName = data.map(({ data }) => data.tool_call_chunks?.[0]?.name).join('');
-    const toolCall = data.map(({ data }) => data.tool_call_chunks?.[0]?.args).join('');
-    const parseJsonPreprocessor = (value: any, ctx: z.RefinementCtx) => {
-      if (typeof value === 'string') {
-        try {
-          return JSON.parse(value);
-        } catch (e) {
-          ctx.addIssue({
-            code: ZodIssueCode.custom,
-            message: (e as Error).message
-          });
-        }
-      }
-
-      return value;
-    };
     const [isEnded, setEnded] = useState(false);
-    const parsedCall = z.preprocess(parseJsonPreprocessor, z.object({ operation: z.enum(['end-conversation']) })).safeParse(toolCall);
-    useEffect(() => {
-      if (!isEnded && (toolName === 'end-conversation' || parsedCall.data)) {
-        setEnded(true);
-      }
-    }, [isEnded, parsedCall.data, toolName]);
-
-    const messagesById = data.reduce((p, c) => ({ ...p, [c.data.id]: [...(p[c.data.id] ?? []), c] }), {});
+    const messagesByDate = data.reduce((p, c) => ({
+      ...p,
+      [c.createdAt.toISOString()]: [...(p[c.createdAt.toISOString()] ?? []), c]
+    }), {} as Record<string, BaseMessageChunk[]>);
 
     return (
       <ChatContainer>
         <MessagesContainer messagesRef={messagesRef} scrollRef={scrollRef} visibilityRef={visibilityRef}>
           {children}
-          {Object.entries(messagesById).map(([key, value]) => (value as any)?.[0].type === 'ai' ?
-            <AIMessage key={key} content={(value as any).map(({ data }) => data.content).join('')} /> :
-            <UserMessage key={key} content={(value as any).map(({ data }) => data.content).join('')} />
-          )}
+          {messages.filter(m => !messagesByDate[m.createdAt as any])
+            .map(chunks => chunks.scope === 'internal' ? null :
+              chunks?.type === 'ai-message' ?
+                <AIMessage key={chunks.id + chunks.content.length} content={chunks.content} /> :
+                <UserMessage key={chunks.id + chunks.content.length} content={chunks.content} />)}
+          {Object.entries(messagesByDate)
+            // keys are iso dates
+            .sort(([key1], [key2]) => key1.localeCompare(key2))
+            .map(([key, chunks]) => chunks[0].scope === 'internal' ? null :
+              chunks[0]?.type === 'ai-message' ?
+                <AIMessage key={key + chunks.length}
+                           content={chunks.map((chunk) => chunk.textDelta).join('')} /> :
+                <UserMessage key={key + chunks.length}
+                             content={chunks.map((chunk) => chunk.textDelta).join('')} />
+            )}
           {(mutation.isPending && !isStreaming) ? <ThinkingIndicator /> : null}
           {!isEnded ? null : <EndConvoOverlay />}
         </MessagesContainer>

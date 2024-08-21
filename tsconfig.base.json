@@ -42,6 +42,8 @@
       "~db/schema/users": ["db/schema/users"],
       "~myjournai/auth-shared": ["libs/auth/shared/src/index.ts"],
       "~myjournai/chat-client": ["libs/chat/client/src/index.ts"],
+      "~myjournai/chat-server": ["libs/chat/server/src/index.ts"],
+      "~myjournai/chat-shared": ["libs/chat/shared/src/index.ts"],
       "~myjournai/components": ["libs/ui/components/src/index.ts"],
       "~myjournai/form-utils": ["libs/form-utils/src/index.ts"],
       "~myjournai/http-client": ["libs/http/client/src/index.ts"],

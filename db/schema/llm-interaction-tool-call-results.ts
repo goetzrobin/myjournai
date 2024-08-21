@@ -8,6 +8,7 @@ export const llmInteractionToolCallResults = pgTable('llm_interaction_tool_calls
   llmInteractionId: uuid('llm_interaction_id').notNull().references(() => llmInteractions.id),
   index: integer('index').default(0),
   name: varchar('name'),
+  type: varchar('type'),
   args: text('args'),
   result: text('result'),
 });

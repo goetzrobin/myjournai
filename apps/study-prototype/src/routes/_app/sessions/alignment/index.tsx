@@ -43,30 +43,7 @@ function Alignment() {
     }
   }, [mutation.isIdle, conversationInitialized, startStream]);
 
-  // const toolName = data.map(({ data }) => data.tool_call_chunks?.[0]?.name).join('');
-  // const toolCall = data.map(({ data }) => data.tool_call_chunks?.[0]?.args).join('');
-  // const parseJsonPreprocessor = (value: any, ctx: z.RefinementCtx) => {
-  //   if (typeof value === 'string') {
-  //     try {
-  //       return JSON.parse(value);
-  //     } catch (e) {
-  //       ctx.addIssue({
-  //         code: ZodIssueCode.custom,
-  //         message: (e as Error).message
-  //       });
-  //     }
-  //   }
-  //
-  //   return value;
-  // };
   const [isEnded, setEnded] = useState(false);
-  // const parsedCall = z.preprocess(parseJsonPreprocessor, z.object({ operation: z.enum(['end-conversation']) })).safeParse(toolCall);
-  // useEffect(() => {
-  //   if (!isEnded && (toolName === 'end-conversation' || parsedCall.data)) {
-  //     setEnded(true);
-  //   }
-  // }, [isEnded, parsedCall.data, toolName]);
-
   const messagesById = data.reduce((p, c) => ({ ...p, [c.id]: [...(p[c.id] ?? []), c] }), {});
 
 

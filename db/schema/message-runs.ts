@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { users } from './users';
@@ -9,6 +9,8 @@ export const messageRuns = pgTable('message_runs', {
   userId: uuid('user_id').notNull().references(() => users.id),
   sessionLogId: uuid('session_log_id').notNull().references(() => sessionLogs.id),
   userMessage: text('user_message'),
+  userMessageType: varchar('user_message_type'),
+  userMessageScope: varchar('user_message_scope'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   finishedAt: timestamp('finished_at', { withTimezone: true })
 });

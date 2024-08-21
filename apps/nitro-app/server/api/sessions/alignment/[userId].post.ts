@@ -1,28 +1,25 @@
 import { eventHandler } from 'h3';
 import { useRuntimeConfig } from 'nitropack/runtime';
-import { AIMessage, BaseMessage, HumanMessage } from '@langchain/core/messages';
-import { END, MemorySaver, MessageGraph, START } from '@langchain/langgraph';
+import { AIMessage, BaseMessage } from '@langchain/core/messages';
+import { END, MessageGraph, START } from '@langchain/langgraph';
 import { z } from 'zod';
 import { getUserInfoBlock, getUserProfileBlock } from '@myjournai/user-server';
 import { generateText, streamText, tool } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { pushChunksToStream } from '~myjournai/utils-server';
 import { createAnthropic } from '@ai-sdk/anthropic';
+import {
+  createFinalMessageAugmentationPrompt,
+  createInitialMessage,
+  createStepAnalyzerPromptFactory,
+  filterOutInternalMessages,
+  formatMessages
+} from '~myjournai/chat-server';
 
 const userMessageStepTracker: Record<string, number> = {};
-const memorySaver = new MemorySaver();
 
-const stepAnalyzerPrompt = (messages: string, currentStep: number) => `
-Objective: Assess whether to advance the conversation to the next step based on user interactions, ensuring seamless and accurate management of the conversation flow. Utilize the designated tool to increment the current step when criteria to advance are met.
-
-Process Overview:
-- The AI node continuously monitors user inputs and the context of the ongoing conversation.
-- The node must decide after each user interaction whether to:
-  1. Proceed to Next Step: Call the step increment tool to advance the conversation if all criteria for the current step are sufficiently met and return the keyword advance.
-  2. Stay on Current Step: Return the keyword stay.
-
-Step-Specific Criteria:
-${!(currentStep === 0 || currentStep === 1) ? '' : `1. Determine conversation style
+const stepAnalyzerPrompt = createStepAnalyzerPromptFactory(({ currentStep }) =>
+  `${!(currentStep === 0 || currentStep === 1) ? '' : `1. Determine conversation style
    - Criteria to Advance: User chose from question if convo should be laid back or more intense and be intellectually pushed. If met, call the step increment tool.
    - Criteria to Stay: User has yet to tell us if they'd like a laid back conversation or be pushed more.`}
 ${!(currentStep === 1 || currentStep === 2) ? '' : `2. Introduce Road Trip Metaphor
@@ -45,20 +42,8 @@ ${!(currentStep === 6 || currentStep === 7) ? '' : `7. Synthesize answers and pr
    - Criteria to Stay: Summary has not been verified as correct or there are unresolved issues or questions that need addressing before conclusion.`}
 ${!(currentStep === 7 || currentStep === 8) ? '' : `8. Guide Conversation to End
    - Criteria to Advance: N/A (this is the final step).
-   - Criteria to Stay: User has unresolved issues or questions that need addressing before conclusion.`}
-
-Implementation Tips:
-- Use linguistic cues, sentiment analysis, and contextual understanding to assess user responses accurately.
-- Maintain flexibility in handling unexpected user inputs or shifts in conversation direction.
-
-Current Step: ${currentStep}
-
-Current messages:
-${messages}
-
-Response format:
-You can only return a single word. Choose from: continue or stay
-`;
+   - Criteria to Stay: User has unresolved issues or questions that need addressing before conclusion.`}`
+);
 const executeStepPromptsAndTools = {
   1: {
     tools: {}, prompt: (messages: string, userInfo: string, userProfile: string) => `
@@ -386,44 +371,16 @@ ${messages}
 `
   }
 };
-const streamFinalMessagePrompt = (messages: string, message: string, userProfile: string, userInfo: string) => `
-Important info the user provided about themselves:
-${userInfo}
 
-Revolving profile of a 360 degree analysis of the user:
-${userProfile}
-
-Previous 5 messages: ${messages}
-
-You are given the following message: ${message}
-
-Your task is to refine the initial message.
-To do that you are using tactics and ideas from great modern philosophers like Alain de Button and writers like Stephen King.
-You only produce sentences a human would say in a dialog.
-You relentlessly cut out anything describing a scene or surroundings, all you output is human dialog.
-You are adding a layer of emotional intelligence and writing that feel inherently human and makes it effortless to read the response.
-For them reading the response should feel like somebody talking directly to them, but fit into the conversation well. Here's the twist.
-Everything you write should look and feel like a phone call with a trusted friend.
-The tone should be fairly informal and friendly, mimic the users own voice, but reflect the current state of the relationship between the AI mentor and the student:
-This is their first session together and the AI mentor is like a wise coach or therapist.
-Make sure the messages mimic natural speech patterns, can technically include some informal language and typical conversational fillers like 'um' and 'you know', but
-again are always appropriate for a mentor mentee relationship that is just starting out.
-Avoid starting with things like Hey, [USERNAME] unless it's the first message from AI to user.
-Keep it about the same length as the initial message.
-You don't change the intent of the initial message.
-`;
-
-const formatMessages = (messages: BaseMessage[]) => messages.map(m =>
-  m.id.startsWith('analyzer') ? `Step Analyzer (Internal Thought): ${m.content}` :
-    m.id.startsWith('execute-step') ? `Step Execution (Internal Thought): ${m.content}` :
-      m.id.startsWith('final-message') ? `AI Mentor: ${m.content}` : `User: ${m.content}`
-).join('\n');
+const alignmentFormatMessages = (messages: BaseMessage[]) => formatMessages(messages,
+  {
+    'analyzer': 'Step Analyzer (Internal Thought):',
+    'execute-step': 'Step Execution (Internal Thought):'
+  });
 
 export default eventHandler(async (event) => {
   const userId = getRouterParam(event, 'userId');
   const { openApiKey, anthropicApiKey, groqApiKey } = useRuntimeConfig(event);
-  const threadId = `${event.context.user?.id ?? 'unknown'}-onboarding-final-convo`;
-  const checkpointConfig = { configurable: { thread_id: threadId } };
 
   const abortController = new AbortController();
   //TODO: parse body
@@ -451,8 +408,8 @@ export default eventHandler(async (event) => {
   const [userInfo, userProfile] = await Promise.all([getUserInfoBlock(userId), getUserProfileBlock(userId)]);
 
   const stepAnalyzerNode = async (messages: BaseMessage[]) => {
-    const id = 'analyzer-' + crypto.randomUUID();
-    const messageString = formatMessages(messages.filter(m => !m.id.startsWith('execute-step-') && !m.id.startsWith('analyzer')));
+    const id = crypto.randomUUID();
+    const messageString = alignmentFormatMessages(filterOutInternalMessages((messages)));
     const currentStep = userMessageStepTracker[userId] ?? 1;
     const prompt = stepAnalyzerPrompt(messageString, currentStep);
     const { text } = await generateText({
@@ -467,12 +424,12 @@ export default eventHandler(async (event) => {
       }
       console.log('incrementing current step to', userMessageStepTracker[userId]);
     }
-    return new AIMessage({ id, content: text });
+    return new AIMessage({ id, content: text }, { type: 'analyzer', scope: 'internal' });
   };
 
   const executeStepNode = async (messages: BaseMessage[]) => {
-    const id = 'execute-step-' + crypto.randomUUID();
-    const messageString = formatMessages(messages);
+    const id = crypto.randomUUID();
+    const messageString = alignmentFormatMessages(messages);
     const currentStep = userMessageStepTracker[userId] ?? 1;
     console.log('current step is', currentStep);
     const currentPromptAndTools = executeStepPromptsAndTools[currentStep];
@@ -485,22 +442,22 @@ export default eventHandler(async (event) => {
       abortSignal: abortController.signal
     });
     console.log(text);
-    return new AIMessage({ id, content: text });
+    return new AIMessage({ id, content: text }, { type: 'execute-step', scope: 'internal' });
   };
 
   const streamFinalMessageNode = async (messages: BaseMessage[]) => {
     const id = 'final-message-' + crypto.randomUUID();
-    const messageString = formatMessages(messages.slice(messages.length - 5, messages.length).filter(m => !m.id.startsWith('execute-step-') && !m.id.startsWith('analyzer')));
+    const messageString = alignmentFormatMessages(filterOutInternalMessages(messages.slice(messages.length - 5, messages.length)));
     const lastMessage = messages[messages.length - 1].content as string;
     const finalStream = await streamText({
       model: anthropic('claude-3-5-sonnet-20240620'),
-      prompt: streamFinalMessagePrompt(messageString, lastMessage, userInfo, userProfile),
+      prompt: createFinalMessageAugmentationPrompt(messageString, lastMessage, userInfo, userProfile),
       abortSignal: abortController.signal
     });
     const generatedMessage = await pushChunksToStream(id, eventStream, finalStream.fullStream, abortController);
 
     console.log(generatedMessage);
-    return new AIMessage({ id, content: generatedMessage });
+    return new AIMessage({ id, content: generatedMessage }, { type: 'ai-message', scope: 'external' });
   };
 
   // Define the graph
@@ -511,18 +468,12 @@ export default eventHandler(async (event) => {
     .addEdge(START, 'step-analyzer')
     .addEdge('step-analyzer', 'execute-step')
     .addEdge('execute-step', 'stream-final')
-    .addEdge('stream-final', END)
-  ;
+    .addEdge('stream-final', END);
 
-  const app = workflow.compile({ checkpointer: memorySaver });
+  const app = workflow.compile();
 
-  const messageFields = { id: crypto.randomUUID(), content: body.message };
-  const graphInput = body.author === 'ai' ? new AIMessage(messageFields) : new HumanMessage(messageFields);
-  app.invoke(graphInput, checkpointConfig)
-    // TODO: checkpointer should persist to postgres
-    .then(async () => {
-      // console.log(await app.getState(checkpointConfig));
-    });
+  const graphInput = createInitialMessage(body.type, body.message);
+  app.invoke(graphInput).then(() => console.log('completed stepping through graph'));
 
   console.log('sending stream');
   return eventStream.send();

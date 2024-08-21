@@ -1,0 +1,1 @@
+ALTER TABLE "message_runs" ADD COLUMN "user_message_type" varchar;

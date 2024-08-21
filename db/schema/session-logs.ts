@@ -24,7 +24,7 @@ export const sessionLogs = pgTable('session_logs', {
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true })
   }, (t) => ({
-    unq: unique().on(t.sessionId, t.version)
+    unq: unique().on(t.userId, t.sessionId, t.version)
   })
 );
 

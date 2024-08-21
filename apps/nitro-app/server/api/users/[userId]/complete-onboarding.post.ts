@@ -1,9 +1,15 @@
 import { createError } from 'h3';
-import { createUserProfile } from '@myjournai/user-server';
+import { createUserProfile, queryUserProfileBy } from '@myjournai/user-server';
 import { likertScale, queryUserCidiSurveyResponsesBy } from '~myjournai/onboarding-server';
 import { useRuntimeConfig } from 'nitropack/runtime';
+import { db } from '~db/client';
+import { users } from '~db/schema/users';
+import { and, desc, eq } from 'drizzle-orm';
+import { sessions } from '~db/schema/sessions';
+import { sessionLogs } from '~db/schema/session-logs';
 
 export default defineEventHandler(async (event) => {
+  const { openApiKey } = useRuntimeConfig(event);
   const userId = getRouterParam(event, 'userId');
   if (userId !== event.context.user?.id) {
     throw createError({
@@ -13,7 +19,36 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const cidiResponse = await queryUserCidiSurveyResponsesBy({userId})
+  // find session by slug onboarding-v0
+  const [session] = await db.select().from(sessions).where(eq(sessions.slug, 'onboarding-v0'));
+  if (!session) {
+    throw createError({
+      status: 500,
+      statusMessage: 'Session blueprint does not exist.',
+      message: 'Please reach out to our support team.'
+    });
+  }
+  // create session log for that session with id
+  const [existingSessionLog] = await db.select().from(sessionLogs).where(
+    and(
+      eq(sessionLogs.sessionId, session.id),
+      eq(sessionLogs.userId, userId)
+    )
+  ).orderBy(desc(sessionLogs.version));
+
+  if (existingSessionLog.status !== 'IN_PROGRESS') {
+    await db.insert(sessionLogs).values({
+      userId: userId,
+      sessionId: session.id,
+      version: existingSessionLog?.version !== undefined ? existingSessionLog.version + 1 : 0
+    });
+  }
+
+  // mark onboarding as complete
+  await db.update(users).set({ onboardingCompletedAt: new Date(), updatedAt: new Date() }).where(eq(users.id, userId));
+
+  // create user profile
+  const cidiResponse = await queryUserCidiSurveyResponsesBy({ userId });
   const cidiResults = `
 Feel confused as to who I really am when it comes to my career: ${likertScale[cidiResponse.question10 ?? 3]}
 Am uncertain about the kind of work I could perform well: ${likertScale[cidiResponse.question11 ?? 3]}
@@ -43,7 +78,10 @@ My career of interest gives meaning to my life: ${likertScale[cidiResponse.quest
 My career plans match my true interests and values: ${likertScale[cidiResponse.question53 ?? 3]}
   `;
 
-  const { openApiKey } = useRuntimeConfig(event);
-  const [newProfile] = await createUserProfile(userId, cidiResults, openApiKey);
-  return newProfile;
+  const existingProfile = await queryUserProfileBy({ userId });
+  if (!existingProfile) {
+    const [newProfile] = await createUserProfile(userId, cidiResults, openApiKey);
+    return newProfile;
+  }
+  return existingProfile;
 });

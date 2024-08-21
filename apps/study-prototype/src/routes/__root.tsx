@@ -14,8 +14,8 @@ export const Route = createRootRouteWithContext<{
     <AxiosInterceptor>
       <Outlet />
       <Suspense>
-        {/*<ReactQueryDevtools buttonPosition="top-right" initialIsOpen={false} />*/}
-        {/*<TanStackRouterDevtools position="top-left" initialIsOpen={false} />*/}
+        <ReactQueryDevtools buttonPosition="top-right" initialIsOpen={false} />
+        <TanStackRouterDevtools position="top-left" initialIsOpen={false} />
       </Suspense>
     </AxiosInterceptor>
   )
