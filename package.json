@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "create-db-migrations": "drizzle-kit generate",
-    "run-db-migrations": "tsx ./db/migrate.ts"
+    "run-db-migrations": "tsx ./db/migrate.ts",
+    "build": "nx run study-prototype:build && nx run nitro-app:build"
   },
   "private": true,
   "engines": {

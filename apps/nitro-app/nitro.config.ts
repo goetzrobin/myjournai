@@ -12,12 +12,12 @@ export default defineNitroConfig({
   },
   publicAssets: [{
     baseURL: '',
-    dir: `${__dirname}/public`
+    dir: join(workspaceRoot, 'dist', 'apps', 'study-prototype')
   }],
   runtimeConfig: {
     openApiKey: process.env.NITRO_OPENAI_API_KEY,
     anthropicApiKey: process.env.NITRO_ANTHROPIC_API_KEY,
     groqApiKey: process.env.NITRO_GROQ_API_KEY
   },
-  modules: ['./modules/tsconfig-paths-to-aliases.ts']
+  modules: ['./modules/tsconfig-paths-to-aliases.ts'],
 });
