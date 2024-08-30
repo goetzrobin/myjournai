@@ -15,7 +15,7 @@ import { sessions, sessionsRelations } from './schema/sessions';
 import { userProfiles } from './schema/user-profiles';
 import { users } from './schema/users';
 
-const connectionString = process.env['DIRECT_DATABASE_URL']!;
+const connectionString = process.env['NITRO_DATABASE_URL']!;
 
 // Disable prefetch as it is not supported for "Transaction" pool mode
 export const client = postgres(connectionString, { prepare: false });
