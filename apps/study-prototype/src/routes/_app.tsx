@@ -2,7 +2,6 @@ import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { authenticateRoute } from '@myjournai/auth-client';
 import { redirectToUnfinishedOnboarding } from '@myjournai/user-client';
 import MobileNav from './-nav/mobile-nav';
-import { useState } from 'react';
 
 export const Route = createFileRoute('/_app')({
   beforeLoad: authenticateRoute,
@@ -11,7 +10,6 @@ export const Route = createFileRoute('/_app')({
 });
 
 function AppLayout() {
-const [isShowingNav] = useState(false);
   return (
     <div className="flex flex-col-reverse mx-auto max-w-screen-sm h-full">
       <MobileNav />

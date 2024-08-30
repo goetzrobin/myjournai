@@ -1,6 +1,6 @@
 import { createError, readBody } from 'h3';
 import { UserOnboardingDataSchema } from '~myjournai/onboarding-shared';
-import { updateUserOnboardingAction } from '~myjournai/onboarding-server';
+import { updateUserOnboardingCommand } from '~myjournai/onboarding-server';
 
 export default defineEventHandler(async (event) => {
   const userId = getRouterParam(event, 'userId');
@@ -12,6 +12,6 @@ export default defineEventHandler(async (event) => {
       message: parsedRequest.error.message
     });
   }
-  await updateUserOnboardingAction(userId, parsedRequest.data);
+  await updateUserOnboardingCommand(userId, parsedRequest.data);
   return parsedRequest;
 });

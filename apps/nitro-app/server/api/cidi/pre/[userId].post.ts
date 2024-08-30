@@ -1,9 +1,9 @@
-import { createOrUpdateUserCidiResponse, createUserCidiResponseRequestSchema } from '~myjournai/onboarding-server';
 import { createError } from 'h3';
+import { createOrUpdateUserCidiResponseUsecase, createUserCidiResponseCommandSchema } from '@myjournai/user-server';
 
 export default defineEventHandler(async (event) => {
   const userId = getRouterParam(event, 'userId');
-  const parsedRequest = createUserCidiResponseRequestSchema.safeParse(await readBody(event));
+  const parsedRequest = createUserCidiResponseCommandSchema.safeParse(await readBody(event));
   if (parsedRequest.error) {
     throw createError({
       status: 400,
@@ -18,5 +18,5 @@ export default defineEventHandler(async (event) => {
       message: 'User can only create response for themselves'
     });
   }
-  return await createOrUpdateUserCidiResponse(parsedRequest.data);
+  return await createOrUpdateUserCidiResponseUsecase(parsedRequest.data);
 });

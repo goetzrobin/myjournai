@@ -1,4 +1,4 @@
-export const BaseMessageTypes = ['ai-message', 'user-message', 'analyzer', 'execute-step'] as const;
+export const BaseMessageTypes = ['ai-message', 'tool-call', 'user-message', 'analyzer', 'execute-step'] as const;
 export type BaseMessageType = typeof BaseMessageTypes[number];
 
 export const BaseMessageScopes = ['internal', 'external'] as const;

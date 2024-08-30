@@ -25,7 +25,6 @@
       }
     },
     "preview": {
-      "dependsOn": ["^build"],
       "command":  "node dist/apps/nitro-app/.output/server/index.mjs"
     }
   }

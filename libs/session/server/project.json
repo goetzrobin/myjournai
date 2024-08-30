@@ -1,0 +1,19 @@
+{
+  "name": "session-server",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/session/server/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/session/server",
+        "main": "libs/session/server/src/index.ts",
+        "tsConfig": "libs/session/server/tsconfig.lib.json",
+        "assets": ["libs/session/server/*.md"]
+      }
+    }
+  }
+}

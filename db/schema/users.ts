@@ -1,7 +1,6 @@
-import { pgTable, integer, text, timestamp, uuid, varchar, date } from 'drizzle-orm/pg-core';
+import { date, integer, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
-import { cidiSurveyResponses } from './cidi-survey-responses';
 
 export const users = pgTable('users', {
   id: uuid('id').defaultRandom().primaryKey(),

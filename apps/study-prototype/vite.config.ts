@@ -3,13 +3,14 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { VitePWA } from 'vite-plugin-pwa';
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 
 export default defineConfig({
   root: __dirname,
   cacheDir: '../../node_modules/.vite/apps/study-prototype',
   esbuild: {
-    exclude: ['drizzle-orm', 'drizzle-orm/postgres-js', 'postgres', 'drizzle-orm/pg-core']
+    exclude: [
+      'drizzle-orm', 'drizzle-orm/postgres-js', 'postgres']
   },
   server: {
     port: 4200,

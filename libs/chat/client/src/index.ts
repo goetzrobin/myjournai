@@ -7,3 +7,8 @@ export * from './lib/user-message';
 export * from './lib/messages-container';
 export * from './lib/user-input-form';
 export * from './lib/chat-container';
+export * from './lib/map-message-type-to-component';
+export * from './lib/use-stream-response';
+export * from './lib/use-end-conversation-on-toolcall-chunk';
+export * from './lib/use-chat-enter-submit';
+export * from './lib/use-auto-start-message';

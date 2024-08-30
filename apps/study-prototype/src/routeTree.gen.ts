@@ -25,7 +25,7 @@ import { Route as AppOnboardingPronounsImport } from './routes/_app/onboarding/p
 import { Route as AppOnboardingNameImport } from './routes/_app/onboarding/name'
 import { Route as AppOnboardingMeetSamImport } from './routes/_app/onboarding/meet-sam'
 import { Route as AppOnboardingBdayImport } from './routes/_app/onboarding/bday'
-import { Route as AppSessionsAlignmentIndexImport } from './routes/_app/sessions/alignment/index'
+import { Route as AppSessionsAlignmentV0IndexImport } from './routes/_app/sessions/alignment-v0/index'
 import { Route as AppOnboardingOneMoreThingIndexImport } from './routes/_app/onboarding/one-more-thing/index'
 import { Route as AppOnboardingFinalConvoIndexImport } from './routes/_app/onboarding/final-convo/index'
 import { Route as AppOnboardingStudyUserImport } from './routes/_app/onboarding/study/user'
@@ -107,10 +107,11 @@ const AppOnboardingBdayRoute = AppOnboardingBdayImport.update({
   getParentRoute: () => AppOnboardingRoute,
 } as any)
 
-const AppSessionsAlignmentIndexRoute = AppSessionsAlignmentIndexImport.update({
-  path: '/sessions/alignment/',
-  getParentRoute: () => AppRoute,
-} as any)
+const AppSessionsAlignmentV0IndexRoute =
+  AppSessionsAlignmentV0IndexImport.update({
+    path: '/sessions/alignment-v0/',
+    getParentRoute: () => AppRoute,
+  } as any)
 
 const AppOnboardingOneMoreThingIndexRoute =
   AppOnboardingOneMoreThingIndexImport.update({
@@ -289,11 +290,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppOnboardingOneMoreThingIndexImport
       parentRoute: typeof AppOnboardingImport
     }
-    '/_app/sessions/alignment/': {
-      id: '/_app/sessions/alignment/'
-      path: '/sessions/alignment'
-      fullPath: '/sessions/alignment'
-      preLoaderRoute: typeof AppSessionsAlignmentIndexImport
+    '/_app/sessions/alignment-v0/': {
+      id: '/_app/sessions/alignment-v0/'
+      path: '/sessions/alignment-v0'
+      fullPath: '/sessions/alignment-v0'
+      preLoaderRoute: typeof AppSessionsAlignmentV0IndexImport
       parentRoute: typeof AppImport
     }
     '/_app/onboarding/study/career-commitment-quality/survey': {
@@ -357,7 +358,7 @@ export const routeTree = rootRoute.addChildren({
     }),
     AppResourcesRoute,
     AppIndexLazyRoute,
-    AppSessionsAlignmentIndexRoute,
+    AppSessionsAlignmentV0IndexRoute,
   }),
   AuthRoute: AuthRoute.addChildren({ AuthSignInRoute, AuthSignUpRoute }),
 })
@@ -380,7 +381,7 @@ export const routeTree = rootRoute.addChildren({
         "/_app/onboarding",
         "/_app/resources",
         "/_app/",
-        "/_app/sessions/alignment/"
+        "/_app/sessions/alignment-v0/"
       ]
     },
     "/_auth": {
@@ -467,8 +468,8 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_app/onboarding/one-more-thing/index.tsx",
       "parent": "/_app/onboarding"
     },
-    "/_app/sessions/alignment/": {
-      "filePath": "_app/sessions/alignment/index.tsx",
+    "/_app/sessions/alignment-v0/": {
+      "filePath": "_app/sessions/alignment-v0/index.tsx",
       "parent": "/_app"
     },
     "/_app/onboarding/study/career-commitment-quality/survey": {

@@ -7,22 +7,22 @@ const GROUP_QUESTION: OnboardingQuestion = {
   possibleAnswers: [
     {
       type: 'fixed',
-      value: 'Current student-athlete',
+      value: 'current-athlete',
       label: 'Current student-athlete'
     },
     {
       type: 'fixed',
-      value: 'Current Temple STHM undergraduate student',
+      value: 'current-sthm',
       label: 'Current Temple STHM undergraduate student'
     },
     {
       type: 'fixed',
-      value: 'Current Temple MSSB student (former student-athlete)',
+      value: 'former-athlete-current-mssb',
       label: 'Current Temple MSSB student (former student-athlete)'
     },
     {
       type: 'fixed',
-      value: 'Former student-athlete (non-MSSB student)',
+      value: 'former-athlete-non-mssb',
       label: 'Former student-athlete (non-MSSB student)'
     },
     {

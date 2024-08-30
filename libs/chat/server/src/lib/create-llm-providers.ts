@@ -6,7 +6,7 @@ import { createAnthropic } from '@ai-sdk/anthropic';
 export const createLLMProviders = (event: H3Event) => {
   const { openApiKey, anthropicApiKey, groqApiKey } = useRuntimeConfig(event as any);
   const openai = createOpenAI({
-    apiKey: openApiKey
+    apiKey: openApiKey,
   });
   const groq = createOpenAI({
     baseURL: 'https://api.groq.com/openai/v1',

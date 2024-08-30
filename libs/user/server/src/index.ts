@@ -1,8 +1,12 @@
-export * from './lib/update-user-action';
-export * from './lib/user.queryhandler';
-export * from './lib/get-user-info-block';
-export * from './lib/get-user-profile-block';
+export * from './lib/use-cases/update-user.usecase';
+export * from './lib/queries/user.queries';
+export * from './lib/queries/query-user-info-block';
+export * from './lib/queries/query-user-profile-block';
 
-export * from './lib/profile/create-user-profile';
-export * from './lib/profile/user-profile.queryhandler';
+export * from './lib/use-cases/user-profile.usecase';
+export * from './lib/queries/user-profile.queries';
 
+export * from './lib/queries/user-cidi.queries';
+export * from './lib/use-cases/user-cidi.usecases';
+
+export * from './lib/likert-utils';

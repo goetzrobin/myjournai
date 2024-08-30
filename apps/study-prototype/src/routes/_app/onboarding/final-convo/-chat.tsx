@@ -1,15 +1,17 @@
-import React, { FormEvent, PropsWithChildren, useEffect, useRef, useState } from 'react';
+import React, { PropsWithChildren } from 'react';
 import {
-  AIMessage,
   ChatContainer,
+  mapChunksToChatComponents,
+  mapNonStreamedDBMessagesToChatComponents,
   MessagesContainer,
   ThinkingIndicator,
+  useAutoStartMessage,
+  useChatEnterSubmit,
+  useEndConversationOnToolcallChunk,
   UserInputForm,
-  UserMessage
+  useStreamResponse
 } from '~myjournai/chat-client';
 import { useScrollAnchor } from '~myjournai/components';
-import { BaseMessageChunk, useStreamResponse } from '~myjournai/http-client';
-import { useEnterSubmit } from '~myjournai/form-utils';
 import OnboardingWrapper from '../-components/-onboarding-wrapper';
 import { BaseMessage } from '~myjournai/chat-shared';
 
@@ -24,76 +26,41 @@ const EndConvoOverlay = () => <div className="absolute inset-0 bg-background h-f
   </OnboardingWrapper>
 </div>;
 
-
-const Chat = ({ userId, messages, isMessageSuccess, children }: PropsWithChildren<
+const Chat = ({ userId, messages, isMessageSuccess, isShowingUserInput, children }: PropsWithChildren<
     {
       messages: BaseMessage[];
       isMessageSuccess: boolean;
       userId: string;
+      isShowingUserInput: boolean;
     }
   >) => {
-    const conversationInitialized = useRef(false);
-    const { data, mutation, startStream, isStreaming, abort } = useStreamResponse({
-      url: `/api/onboarding/final-convos/${userId}`
+    const { chunks, mutation, startStream, isStreaming, messageChunksByTimestamp } = useStreamResponse({
+      userId,
+      url: `/api/sessions/slug/onboarding-v0`
     });
-    const { formRef, onKeyDown } = useEnterSubmit();
-    const { messagesRef, scrollRef, visibilityRef, isAtBottom, scrollToBottom } = useScrollAnchor();
-    const [input, setInput] = useState('');
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      const trimmed = input.trim();
-      if (trimmed.length === 0) {
-        return;
-      }
-      startStream({ message: input });
-      setInput('');
-    };
+    useAutoStartMessage({
+      isSessionLogExists: true,
+      isIdle: mutation.isIdle,
+      isMessageSuccess,
+      isNoMessages: messages.length === 0,
+      startStream
+    });
+    const { messagesRef, scrollRef, visibilityRef } = useScrollAnchor();
+    const { onKeyDown, formRef, handleSubmit, input, setInput } = useChatEnterSubmit(startStream);
+    const { isEnded } = useEndConversationOnToolcallChunk(chunks);
 
-    useEffect(() => {
-      if (mutation.isIdle && !conversationInitialized.current && isMessageSuccess && messages.length === 0) {
-        conversationInitialized.current = true;
-        setTimeout(() => startStream({
-          type: 'ai-message',
-          scope: 'internal',
-          message: 'The user has started the conversation'
-        }), 100);
-      }
-    }, [mutation.isIdle, conversationInitialized, startStream, isMessageSuccess, messages.length]);
-
-    const [isEnded, setEnded] = useState(false);
-    const messagesByDate = data.reduce((p, c) => ({
-      ...p,
-      [c.createdAt.toISOString()]: [...(p[c.createdAt.toISOString()] ?? []), c]
-    }), {} as Record<string, BaseMessageChunk[]>);
-
-    return (
-      <ChatContainer>
-        <MessagesContainer messagesRef={messagesRef} scrollRef={scrollRef} visibilityRef={visibilityRef}>
-          {children}
-          {messages.filter(m => !messagesByDate[m.createdAt as any])
-            .map(chunks => chunks.scope === 'internal' ? null :
-              chunks?.type === 'ai-message' ?
-                <AIMessage key={chunks.id + chunks.content.length} content={chunks.content} /> :
-                <UserMessage key={chunks.id + chunks.content.length} content={chunks.content} />)}
-          {Object.entries(messagesByDate)
-            // keys are iso dates
-            .sort(([key1], [key2]) => key1.localeCompare(key2))
-            .map(([key, chunks]) => chunks[0].scope === 'internal' ? null :
-              chunks[0]?.type === 'ai-message' ?
-                <AIMessage key={key + chunks.length}
-                           content={chunks.map((chunk) => chunk.textDelta).join('')} /> :
-                <UserMessage key={key + chunks.length}
-                             content={chunks.map((chunk) => chunk.textDelta).join('')} />
-            )}
-          {(mutation.isPending && !isStreaming) ? <ThinkingIndicator /> : null}
-          {!isEnded ? null : <EndConvoOverlay />}
-        </MessagesContainer>
+    return <ChatContainer>
+      <MessagesContainer messagesRef={messagesRef} scrollRef={scrollRef} visibilityRef={visibilityRef}>
+        {children}
+        {mapNonStreamedDBMessagesToChatComponents(messageChunksByTimestamp, messages)}
+        {mapChunksToChatComponents(messageChunksByTimestamp)}
+        {(mutation.isPending && !isStreaming) ? <ThinkingIndicator /> : null}
+        {!isEnded ? null : <EndConvoOverlay />}
+      </MessagesContainer>
+      {!isShowingUserInput ? null :
         <UserInputForm formRef={formRef} input={input} setInput={setInput} onKeyDown={onKeyDown}
-                       handleSubmit={handleSubmit} />
-      </ChatContainer>
-
-    )
-      ;
+                       handleSubmit={handleSubmit} />}
+    </ChatContainer>;
   }
 ;
 

@@ -1,4 +1,4 @@
-import { updateUserAction } from '@myjournai/user-server';
+import { updateUserUsecase } from '@myjournai/user-server';
 import { userUpdateRequestSchema } from '@myjournai/user-shared';
 
 export default defineEventHandler(async (event) => {
@@ -19,5 +19,5 @@ export default defineEventHandler(async (event) => {
       message: 'User can only update their own data'
     });
   }
-  return await updateUserAction(userId, parsedRequest.data);
+  return await updateUserUsecase(userId, parsedRequest.data);
 });

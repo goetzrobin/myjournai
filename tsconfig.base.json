@@ -24,9 +24,15 @@
       "~db/schema/cidi-survey-responses": ["db/schema/cidi-survey-responses"],
       "~db/schema/cohorts": ["db/schema/cohorts"],
       "~db/schema/cohorts-users": ["db/schema/cohorts-users"],
-      "~db/schema/llm-interaction-tool-call-results": ["db/schema/llm-interaction-tool-call-results"],
-      "~db/schema/llm-interaction-tool-calls": ["db/schema/llm-interaction-tool-calls"],
-      "~db/schema/llm-interaction-warnings": ["db/schema/llm-interaction-warnings"],
+      "~db/schema/llm-interaction-tool-call-results": [
+        "db/schema/llm-interaction-tool-call-results"
+      ],
+      "~db/schema/llm-interaction-tool-calls": [
+        "db/schema/llm-interaction-tool-calls"
+      ],
+      "~db/schema/llm-interaction-warnings": [
+        "db/schema/llm-interaction-warnings"
+      ],
       "~db/schema/llm-interactions": ["db/schema/llm-interactions"],
       "~db/schema/message-runs": ["db/schema/message-runs"],
       "~db/schema/onboarding-letters": ["db/schema/onboarding-letters"],
@@ -47,9 +53,15 @@
       "~myjournai/components": ["libs/ui/components/src/index.ts"],
       "~myjournai/form-utils": ["libs/form-utils/src/index.ts"],
       "~myjournai/http-client": ["libs/http/client/src/index.ts"],
+      "~myjournai/messagerun-server": ["libs/messagerun/server/src/index.ts"],
       "~myjournai/onboarding-client": ["libs/onboarding/client/src/index.ts"],
       "~myjournai/onboarding-server": ["libs/onboarding/server/src/index.ts"],
       "~myjournai/onboarding-shared": ["libs/onboarding/shared/src/index.ts"],
+      "~myjournai/session-client": ["libs/session/client/src/index.ts"],
+      "~myjournai/session-server": ["libs/session/server/src/index.ts"],
+      "~myjournai/session-shared": ["libs/session/shared/src/index.ts"],
+      "~myjournai/sessionlog-server": ["libs/sessionlog/server/src/index.ts"],
+      "~myjournai/sessionlog-shared": ["libs/sessionlog/shared/src/index.ts"],
       "~myjournai/user-server": ["libs/user/server/src/index.ts"],
       "~myjournai/user-shared": ["libs/user/shared/src/index.ts"],
       "~myjournai/utils-server": ["libs/utils/server/src/index.ts"]

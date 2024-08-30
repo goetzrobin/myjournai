@@ -1,8 +1,9 @@
-import { integer, pgEnum, pgTable, timestamp, unique, uuid } from 'drizzle-orm/pg-core';
+import { integer, pgEnum, pgTable, text, timestamp, unique, uuid } from 'drizzle-orm/pg-core';
 import { users } from './users';
 import { sessions } from './sessions';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
+import { relations } from 'drizzle-orm';
 
 export const sessionLogStatus = pgEnum('session_log_status', ['IN_PROGRESS', 'COMPLETED', 'ABORTED']);
 
@@ -17,6 +18,7 @@ export const sessionLogs = pgTable('session_logs', {
     postMotivationScore: integer('post_motivation_score'),
     postAnxietyScore: integer('post_anxiety_score'),
     version: integer('version').default(0),
+    summary: text('summary'),
     status:
       sessionLogStatus('status').default('IN_PROGRESS'),
     startedAt: timestamp('started_at', { withTimezone: true }),
@@ -27,6 +29,14 @@ export const sessionLogs = pgTable('session_logs', {
     unq: unique().on(t.userId, t.sessionId, t.version)
   })
 );
+
+
+export const sessionLogRelations = relations(sessionLogs, ({ one }) => ({
+  session: one(sessions, {
+    fields: [sessionLogs.sessionId],
+    references: [sessions.id]
+  })
+}));
 
 export const selectSessionLogSchema = createSelectSchema(sessionLogs);
 export const insertSessionLogSchema = createInsertSchema(sessionLogs);

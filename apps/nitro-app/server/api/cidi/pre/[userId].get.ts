@@ -1,6 +1,6 @@
-import { queryCidiSurveyResponsesBy } from '~myjournai/onboarding-server';
+import { queryUserCidiSurveyResponsesBy } from '@myjournai/user-server';
 
 export default defineEventHandler(async (event) => {
   const userId = getRouterParam(event, 'userId');
-  return await queryCidiSurveyResponsesBy({ userId, type: 'PRE' });
+  return await queryUserCidiSurveyResponsesBy({ userId, type: 'PRE' });
 });

@@ -1,0 +1,19 @@
+{
+  "name": "sessionlog-server",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/sessionlog/server/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/sessionlog/server",
+        "main": "libs/sessionlog/server/src/index.ts",
+        "tsConfig": "libs/sessionlog/server/tsconfig.lib.json",
+        "assets": ["libs/sessionlog/server/*.md"]
+      }
+    }
+  }
+}

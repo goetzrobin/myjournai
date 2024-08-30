@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAxios } from '~myjournai/http-client';
-import { CreateUserCidiResponseRequest } from '~myjournai/onboarding-server';
 import { OnboardingActualAnswer } from '../../onboarding-survey';
 import { cidiQKF } from './query-key.factory';
+import { CreateUserCidiResponseRequest } from '@myjournai/user-shared';
 
 export const useOnboardingCidiDataMutation = (userId: string | null | undefined, onSuccess?: () => void) => {
   const axios = useAxios();

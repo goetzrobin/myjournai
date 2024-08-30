@@ -1,0 +1,1 @@
+ALTER TABLE "cohorts_users" ADD COLUMN "other_name" text;

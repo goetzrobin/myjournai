@@ -1,9 +1,4 @@
-import {
-  QueryClient,
-  queryOptions,
-  useQuery,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
+import { QueryClient, queryOptions, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { userQKF } from './query-key.factory';
 import { UserQR } from '@myjournai/user-shared';
 import { useAxios } from '~myjournai/http-client';
@@ -12,7 +7,7 @@ export const userQueryOptions = (userId?: string | null) => {
   const axios = useAxios();
   return queryOptions({
     queryKey: userQKF.detail(userId),
-    queryFn: () => axios.get<UserQR | undefined>(`/api/users/${userId}`).then(({data}) => data),
+    queryFn: () => axios.get<UserQR>(`/api/users/${userId}`).then(({ data }) => data),
     enabled: !!userId,
   });
 }
