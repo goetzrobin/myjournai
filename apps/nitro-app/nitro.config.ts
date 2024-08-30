@@ -10,7 +10,7 @@ export default defineNitroConfig({
   output: {
     dir: normalizePath(resolve(workspaceRoot, '.vercel', 'output')),
     publicDir: normalizePath(
-      resolve(workspaceRoot, '.vercel', 'output/static')
+      resolve(workspaceRoot, '.vercel', 'output', 'static')
     )
   },
   publicAssets: [{
