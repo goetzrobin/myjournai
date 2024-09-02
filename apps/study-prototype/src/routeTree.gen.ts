@@ -15,6 +15,9 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AppImport } from './routes/_app'
+import { Route as PublicTermsImport } from './routes/_public/terms'
+import { Route as PublicPrivacyPolicyImport } from './routes/_public/privacy-policy'
+import { Route as AuthStartImport } from './routes/_auth/start'
 import { Route as AuthSignUpImport } from './routes/_auth/sign-up'
 import { Route as AuthSignInImport } from './routes/_auth/sign-in'
 import { Route as AppResourcesImport } from './routes/_app/resources'
@@ -56,6 +59,21 @@ const AppIndexLazyRoute = AppIndexLazyImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any).lazy(() => import('./routes/_app/index.lazy').then((d) => d.Route))
+
+const PublicTermsRoute = PublicTermsImport.update({
+  path: '/terms',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PublicPrivacyPolicyRoute = PublicPrivacyPolicyImport.update({
+  path: '/privacy-policy',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthStartRoute = AuthStartImport.update({
+  path: '/start',
+  getParentRoute: () => AuthRoute,
+} as any)
 
 const AuthSignUpRoute = AuthSignUpImport.update({
   path: '/sign-up',
@@ -213,6 +231,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignUpImport
       parentRoute: typeof AuthImport
     }
+    '/_auth/start': {
+      id: '/_auth/start'
+      path: '/start'
+      fullPath: '/start'
+      preLoaderRoute: typeof AuthStartImport
+      parentRoute: typeof AuthImport
+    }
+    '/_public/privacy-policy': {
+      id: '/_public/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PublicPrivacyPolicyImport
+      parentRoute: typeof rootRoute
+    }
+    '/_public/terms': {
+      id: '/_public/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof PublicTermsImport
+      parentRoute: typeof rootRoute
+    }
     '/_app/': {
       id: '/_app/'
       path: '/'
@@ -360,7 +399,13 @@ export const routeTree = rootRoute.addChildren({
     AppIndexLazyRoute,
     AppSessionsAlignmentV0IndexRoute,
   }),
-  AuthRoute: AuthRoute.addChildren({ AuthSignInRoute, AuthSignUpRoute }),
+  AuthRoute: AuthRoute.addChildren({
+    AuthSignInRoute,
+    AuthSignUpRoute,
+    AuthStartRoute,
+  }),
+  PublicPrivacyPolicyRoute,
+  PublicTermsRoute,
 })
 
 /* prettier-ignore-end */
@@ -372,7 +417,9 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/_app",
-        "/_auth"
+        "/_auth",
+        "/_public/privacy-policy",
+        "/_public/terms"
       ]
     },
     "/_app": {
@@ -388,7 +435,8 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_auth.tsx",
       "children": [
         "/_auth/sign-in",
-        "/_auth/sign-up"
+        "/_auth/sign-up",
+        "/_auth/start"
       ]
     },
     "/_app/onboarding": {
@@ -423,6 +471,16 @@ export const routeTree = rootRoute.addChildren({
     "/_auth/sign-up": {
       "filePath": "_auth/sign-up.tsx",
       "parent": "/_auth"
+    },
+    "/_auth/start": {
+      "filePath": "_auth/start.tsx",
+      "parent": "/_auth"
+    },
+    "/_public/privacy-policy": {
+      "filePath": "_public/privacy-policy.tsx"
+    },
+    "/_public/terms": {
+      "filePath": "_public/terms.tsx"
     },
     "/_app/": {
       "filePath": "_app/index.lazy.tsx",

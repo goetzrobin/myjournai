@@ -1,6 +1,6 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useSignUpMutation } from '@myjournai/auth-client';
-import { Button, Form, TextField } from '~myjournai/components';
+import { Form, Link, TextField } from '~myjournai/components';
 import { parseFormData } from '~myjournai/form-utils';
 import SmoothButton from './-components/smooth-button';
 import { LucideLoader } from 'lucide-react';
@@ -13,7 +13,8 @@ function SignUp() {
   const navigate = useNavigate();
   const mut = useSignUpMutation(() => setTimeout(() => navigate({ to: '/' }), 500));
   return (
-    <>
+    <div className="">
+      <h2 className="text-center mb-8 text-muted-foreground font-medium">Join us and start your journey!</h2>
       <Form onSubmit={(e) => mut.mutate(parseFormData(e))}>
         <TextField label="Email" name="email" type="email" isRequired />
         <TextField
@@ -22,18 +23,15 @@ function SignUp() {
           type="password"
           isRequired
         />
-        <div className="flex gap-2">
-          <SmoothButton buttonState={mut.status}>
-            {mut.status !== 'idle' ? null : 'Sign up'}
-            {mut.status !== 'pending' ? null : <LucideLoader className="size-5 animate-spin"/>}
-            {mut.status !== 'success' ? null : 'You\'re signed up!'}
-            {mut.status !== 'error' ? null : 'Something went wrong... Try again!'}
-          </SmoothButton>
-        </div>
+        <SmoothButton className="mt-8" buttonState={mut.status}>
+          {mut.status !== 'idle' ? null : 'Sign up'}
+          {mut.status !== 'pending' ? null : <LucideLoader className="size-5 animate-spin" />}
+          {mut.status !== 'success' ? null : 'You\'re ready to start your journey!'}
+          {mut.status !== 'error' ? null : 'Something went wrong... Try again!'}
+        </SmoothButton>
       </Form>
-      <p className="text-center text-sm text-muted-foreground font-bold mt-4 mb-8">OR</p>
-      <Button className="w-full" variant="secondary"><Link className="block text-center" to="/sign-in">Sign
-        In</Link></Button>
-    </>
+      <Link className="text-sm text-muted-foreground mt-2 block text-center" to="/sign-in">I have an account
+        already</Link>
+    </div>
   );
 }

@@ -1,12 +1,11 @@
-import { composeTailwindRenderProps } from './utils';
+import { twMerge } from 'tailwind-merge';
 
 export const JournaiJ = (props: { className?: string }) => {
- const bla = composeTailwindRenderProps(props.className, 'size-4');
   return <svg
     viewBox="0 0 122 158"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className={typeof bla === 'function' ? bla('') : bla}
+    className={twMerge('size-4', props.className)}
   >
     <path
       d="M121.9 56.7998V114.9C121.9 118 120.1 120.8 117.3 122.1L42.9998 156.7C40.8998 157.7 38.3998 157.7 36.2998 156.7L5.39984 142.3C2.59984 141 0.799805 138.2 0.799805 135.1V112.4C0.799805 106.6 6.79979 102.7 12.0998 105.2L62.4998 128.6C67.7998 131 73.7998 127.2 73.7998 121.4V104C73.7998 100.9 71.9998 98.0998 69.1998 96.7998L5.39984 66.9999C2.59984 65.6999 0.799805 62.8998 0.799805 59.7998V8.09986C0.799805 2.29986 6.79979 -1.60015 12.0998 0.899851L44.3998 15.8999C47.1998 17.1999 48.9998 19.9999 48.9998 23.0999V65.7998C48.9998 71.5998 54.9998 75.4999 60.2998 72.9999L110.6 49.4999C115.9 47.0999 121.9 50.9998 121.9 56.7998Z"

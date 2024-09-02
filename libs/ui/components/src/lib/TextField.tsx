@@ -10,7 +10,7 @@ import Textarea from 'react-textarea-autosize';
 
 const inputStyles = tv({
   extend: focusRing,
-  base: 'border-2 rounded-md',
+  base: 'border rounded-md',
   variants: {
     isFocused: fieldBorderStyles.variants.isFocusWithin,
     ...fieldBorderStyles.variants

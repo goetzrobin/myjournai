@@ -5,7 +5,10 @@
   "scripts": {
     "create-db-migrations": "drizzle-kit generate",
     "run-db-migrations": "tsx ./db/migrate.ts",
-    "build": "nx run study-prototype:build && nx run nitro-app:build"
+    "build": "nx run study-prototype:build && nx run nitro-app:build --skip-nx-cache",
+    "preview": "node .vercel/output/server/index.mjs",
+    "generate-pwa-assets": "pwa-assets-generator -r apps/study-prototype --preset minimal-2023 public/journai.svg"
+
   },
   "private": true,
   "engines": {
@@ -85,6 +88,7 @@
     "@typescript-eslint/eslint-plugin": "^7.3.0",
     "@typescript-eslint/parser": "^7.3.0",
     "@vercel/kv": "^2.0.0",
+    "@vite-pwa/assets-generator": "^0.2.4",
     "@vitejs/plugin-react": "^4.2.0",
     "@vitest/coverage-v8": "^1.0.4",
     "@vitest/ui": "^1.3.1",

@@ -1,13 +1,13 @@
 import React, { PropsWithChildren } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '~myjournai/components';
+import { twMerge } from 'tailwind-merge';
 
-const SmoothButton = ({ buttonState, children }: PropsWithChildren<{
+const SmoothButton = ({ buttonState, className, children }: PropsWithChildren<{
   className?: string;
   buttonState: 'idle' | 'pending' | 'success' | 'error'
 }>) => {
-  return <Button className="w-full" type="submit">
+  return <Button className={twMerge("w-full",className)} type="submit">
     <AnimatePresence mode="popLayout" initial={false}>
       <motion.span
         className="block w-fit mx-auto"
