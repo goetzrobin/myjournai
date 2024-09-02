@@ -18,8 +18,8 @@ function SignIn() {
 
   useEffect(() => {
     if (!isStartScreenShown) {
-      setStartScreenShown(true);
       localStorage.setItem('isStartScreenShown', 'true');
+      setStartScreenShown(true);
       void navigate({ to: '/start' });
     }
   }, [isStartScreenShown]);
