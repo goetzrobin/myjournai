@@ -21,7 +21,7 @@ import { Route as AuthStartImport } from './routes/_auth/start'
 import { Route as AuthSignUpImport } from './routes/_auth/sign-up'
 import { Route as AuthSignInImport } from './routes/_auth/sign-in'
 import { Route as AppResourcesImport } from './routes/_app/resources'
-import { Route as AppOnboardingImport } from './routes/_app/onboarding'
+import { Route as AppOnboardingIndexImport } from './routes/_app/onboarding/index'
 import { Route as AppOnboardingSurveyIntroImport } from './routes/_app/onboarding/survey-intro'
 import { Route as AppOnboardingStartImport } from './routes/_app/onboarding/start'
 import { Route as AppOnboardingPronounsImport } from './routes/_app/onboarding/pronouns'
@@ -42,6 +42,7 @@ import { Route as AppOnboardingStudyCareerCommitmentQualitySurveyImport } from '
 // Create Virtual Routes
 
 const AppIndexLazyImport = createFileRoute('/_app/')()
+const AppProfileIndexLazyImport = createFileRoute('/_app/profile/')()
 
 // Create/Update Routes
 
@@ -90,39 +91,46 @@ const AppResourcesRoute = AppResourcesImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 
-const AppOnboardingRoute = AppOnboardingImport.update({
-  path: '/onboarding',
+const AppProfileIndexLazyRoute = AppProfileIndexLazyImport.update({
+  path: '/profile/',
+  getParentRoute: () => AppRoute,
+} as any).lazy(() =>
+  import('./routes/_app/profile/index.lazy').then((d) => d.Route),
+)
+
+const AppOnboardingIndexRoute = AppOnboardingIndexImport.update({
+  path: '/onboarding/',
   getParentRoute: () => AppRoute,
 } as any)
 
 const AppOnboardingSurveyIntroRoute = AppOnboardingSurveyIntroImport.update({
-  path: '/survey-intro',
-  getParentRoute: () => AppOnboardingRoute,
+  path: '/onboarding/survey-intro',
+  getParentRoute: () => AppRoute,
 } as any)
 
 const AppOnboardingStartRoute = AppOnboardingStartImport.update({
-  path: '/start',
-  getParentRoute: () => AppOnboardingRoute,
+  path: '/onboarding/start',
+  getParentRoute: () => AppRoute,
 } as any)
 
 const AppOnboardingPronounsRoute = AppOnboardingPronounsImport.update({
-  path: '/pronouns',
-  getParentRoute: () => AppOnboardingRoute,
+  path: '/onboarding/pronouns',
+  getParentRoute: () => AppRoute,
 } as any)
 
 const AppOnboardingNameRoute = AppOnboardingNameImport.update({
-  path: '/name',
-  getParentRoute: () => AppOnboardingRoute,
+  path: '/onboarding/name',
+  getParentRoute: () => AppRoute,
 } as any)
 
 const AppOnboardingMeetSamRoute = AppOnboardingMeetSamImport.update({
-  path: '/meet-sam',
-  getParentRoute: () => AppOnboardingRoute,
+  path: '/onboarding/meet-sam',
+  getParentRoute: () => AppRoute,
 } as any)
 
 const AppOnboardingBdayRoute = AppOnboardingBdayImport.update({
-  path: '/bday',
-  getParentRoute: () => AppOnboardingRoute,
+  path: '/onboarding/bday',
+  getParentRoute: () => AppRoute,
 } as any)
 
 const AppSessionsAlignmentV0IndexRoute =
@@ -133,56 +141,56 @@ const AppSessionsAlignmentV0IndexRoute =
 
 const AppOnboardingOneMoreThingIndexRoute =
   AppOnboardingOneMoreThingIndexImport.update({
-    path: '/one-more-thing/',
-    getParentRoute: () => AppOnboardingRoute,
+    path: '/onboarding/one-more-thing/',
+    getParentRoute: () => AppRoute,
   } as any)
 
 const AppOnboardingFinalConvoIndexRoute =
   AppOnboardingFinalConvoIndexImport.update({
-    path: '/final-convo/',
-    getParentRoute: () => AppOnboardingRoute,
+    path: '/onboarding/final-convo/',
+    getParentRoute: () => AppRoute,
   } as any)
 
 const AppOnboardingStudyUserRoute = AppOnboardingStudyUserImport.update({
-  path: '/study/user',
-  getParentRoute: () => AppOnboardingRoute,
+  path: '/onboarding/study/user',
+  getParentRoute: () => AppRoute,
 } as any)
 
 const AppOnboardingStudyCompleteRoute = AppOnboardingStudyCompleteImport.update(
   {
-    path: '/study/complete',
-    getParentRoute: () => AppOnboardingRoute,
+    path: '/onboarding/study/complete',
+    getParentRoute: () => AppRoute,
   } as any,
 )
 
 const AppOnboardingStudyPastCareerExplorationBreadthSelfSurveyRoute =
   AppOnboardingStudyPastCareerExplorationBreadthSelfSurveyImport.update({
-    path: '/study/past-career-exploration-breadth-self/survey',
-    getParentRoute: () => AppOnboardingRoute,
+    path: '/onboarding/study/past-career-exploration-breadth-self/survey',
+    getParentRoute: () => AppRoute,
   } as any)
 
 const AppOnboardingStudyCareerIdentityConfusionSurveyRoute =
   AppOnboardingStudyCareerIdentityConfusionSurveyImport.update({
-    path: '/study/career-identity-confusion/survey',
-    getParentRoute: () => AppOnboardingRoute,
+    path: '/onboarding/study/career-identity-confusion/survey',
+    getParentRoute: () => AppRoute,
   } as any)
 
 const AppOnboardingStudyCareerExplorationDepthSelfSurveyRoute =
   AppOnboardingStudyCareerExplorationDepthSelfSurveyImport.update({
-    path: '/study/career-exploration-depth-self/survey',
-    getParentRoute: () => AppOnboardingRoute,
+    path: '/onboarding/study/career-exploration-depth-self/survey',
+    getParentRoute: () => AppRoute,
   } as any)
 
 const AppOnboardingStudyCareerExplorationBreadthSelfSurveyRoute =
   AppOnboardingStudyCareerExplorationBreadthSelfSurveyImport.update({
-    path: '/study/career-exploration-breadth-self/survey',
-    getParentRoute: () => AppOnboardingRoute,
+    path: '/onboarding/study/career-exploration-breadth-self/survey',
+    getParentRoute: () => AppRoute,
   } as any)
 
 const AppOnboardingStudyCareerCommitmentQualitySurveyRoute =
   AppOnboardingStudyCareerCommitmentQualitySurveyImport.update({
-    path: '/study/career-commitment-quality/survey',
-    getParentRoute: () => AppOnboardingRoute,
+    path: '/onboarding/study/career-commitment-quality/survey',
+    getParentRoute: () => AppRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -202,13 +210,6 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
-    }
-    '/_app/onboarding': {
-      id: '/_app/onboarding'
-      path: '/onboarding'
-      fullPath: '/onboarding'
-      preLoaderRoute: typeof AppOnboardingImport
-      parentRoute: typeof AppImport
     }
     '/_app/resources': {
       id: '/_app/resources'
@@ -261,73 +262,87 @@ declare module '@tanstack/react-router' {
     }
     '/_app/onboarding/bday': {
       id: '/_app/onboarding/bday'
-      path: '/bday'
+      path: '/onboarding/bday'
       fullPath: '/onboarding/bday'
       preLoaderRoute: typeof AppOnboardingBdayImport
-      parentRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
     }
     '/_app/onboarding/meet-sam': {
       id: '/_app/onboarding/meet-sam'
-      path: '/meet-sam'
+      path: '/onboarding/meet-sam'
       fullPath: '/onboarding/meet-sam'
       preLoaderRoute: typeof AppOnboardingMeetSamImport
-      parentRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
     }
     '/_app/onboarding/name': {
       id: '/_app/onboarding/name'
-      path: '/name'
+      path: '/onboarding/name'
       fullPath: '/onboarding/name'
       preLoaderRoute: typeof AppOnboardingNameImport
-      parentRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
     }
     '/_app/onboarding/pronouns': {
       id: '/_app/onboarding/pronouns'
-      path: '/pronouns'
+      path: '/onboarding/pronouns'
       fullPath: '/onboarding/pronouns'
       preLoaderRoute: typeof AppOnboardingPronounsImport
-      parentRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
     }
     '/_app/onboarding/start': {
       id: '/_app/onboarding/start'
-      path: '/start'
+      path: '/onboarding/start'
       fullPath: '/onboarding/start'
       preLoaderRoute: typeof AppOnboardingStartImport
-      parentRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
     }
     '/_app/onboarding/survey-intro': {
       id: '/_app/onboarding/survey-intro'
-      path: '/survey-intro'
+      path: '/onboarding/survey-intro'
       fullPath: '/onboarding/survey-intro'
       preLoaderRoute: typeof AppOnboardingSurveyIntroImport
-      parentRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/onboarding/': {
+      id: '/_app/onboarding/'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AppOnboardingIndexImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/profile/': {
+      id: '/_app/profile/'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AppProfileIndexLazyImport
+      parentRoute: typeof AppImport
     }
     '/_app/onboarding/study/complete': {
       id: '/_app/onboarding/study/complete'
-      path: '/study/complete'
+      path: '/onboarding/study/complete'
       fullPath: '/onboarding/study/complete'
       preLoaderRoute: typeof AppOnboardingStudyCompleteImport
-      parentRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
     }
     '/_app/onboarding/study/user': {
       id: '/_app/onboarding/study/user'
-      path: '/study/user'
+      path: '/onboarding/study/user'
       fullPath: '/onboarding/study/user'
       preLoaderRoute: typeof AppOnboardingStudyUserImport
-      parentRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
     }
     '/_app/onboarding/final-convo/': {
       id: '/_app/onboarding/final-convo/'
-      path: '/final-convo'
+      path: '/onboarding/final-convo'
       fullPath: '/onboarding/final-convo'
       preLoaderRoute: typeof AppOnboardingFinalConvoIndexImport
-      parentRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
     }
     '/_app/onboarding/one-more-thing/': {
       id: '/_app/onboarding/one-more-thing/'
-      path: '/one-more-thing'
+      path: '/onboarding/one-more-thing'
       fullPath: '/onboarding/one-more-thing'
       preLoaderRoute: typeof AppOnboardingOneMoreThingIndexImport
-      parentRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
     }
     '/_app/sessions/alignment-v0/': {
       id: '/_app/sessions/alignment-v0/'
@@ -338,38 +353,38 @@ declare module '@tanstack/react-router' {
     }
     '/_app/onboarding/study/career-commitment-quality/survey': {
       id: '/_app/onboarding/study/career-commitment-quality/survey'
-      path: '/study/career-commitment-quality/survey'
+      path: '/onboarding/study/career-commitment-quality/survey'
       fullPath: '/onboarding/study/career-commitment-quality/survey'
       preLoaderRoute: typeof AppOnboardingStudyCareerCommitmentQualitySurveyImport
-      parentRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
     }
     '/_app/onboarding/study/career-exploration-breadth-self/survey': {
       id: '/_app/onboarding/study/career-exploration-breadth-self/survey'
-      path: '/study/career-exploration-breadth-self/survey'
+      path: '/onboarding/study/career-exploration-breadth-self/survey'
       fullPath: '/onboarding/study/career-exploration-breadth-self/survey'
       preLoaderRoute: typeof AppOnboardingStudyCareerExplorationBreadthSelfSurveyImport
-      parentRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
     }
     '/_app/onboarding/study/career-exploration-depth-self/survey': {
       id: '/_app/onboarding/study/career-exploration-depth-self/survey'
-      path: '/study/career-exploration-depth-self/survey'
+      path: '/onboarding/study/career-exploration-depth-self/survey'
       fullPath: '/onboarding/study/career-exploration-depth-self/survey'
       preLoaderRoute: typeof AppOnboardingStudyCareerExplorationDepthSelfSurveyImport
-      parentRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
     }
     '/_app/onboarding/study/career-identity-confusion/survey': {
       id: '/_app/onboarding/study/career-identity-confusion/survey'
-      path: '/study/career-identity-confusion/survey'
+      path: '/onboarding/study/career-identity-confusion/survey'
       fullPath: '/onboarding/study/career-identity-confusion/survey'
       preLoaderRoute: typeof AppOnboardingStudyCareerIdentityConfusionSurveyImport
-      parentRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
     }
     '/_app/onboarding/study/past-career-exploration-breadth-self/survey': {
       id: '/_app/onboarding/study/past-career-exploration-breadth-self/survey'
-      path: '/study/past-career-exploration-breadth-self/survey'
+      path: '/onboarding/study/past-career-exploration-breadth-self/survey'
       fullPath: '/onboarding/study/past-career-exploration-breadth-self/survey'
       preLoaderRoute: typeof AppOnboardingStudyPastCareerExplorationBreadthSelfSurveyImport
-      parentRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
     }
   }
 }
@@ -378,26 +393,26 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   AppRoute: AppRoute.addChildren({
-    AppOnboardingRoute: AppOnboardingRoute.addChildren({
-      AppOnboardingBdayRoute,
-      AppOnboardingMeetSamRoute,
-      AppOnboardingNameRoute,
-      AppOnboardingPronounsRoute,
-      AppOnboardingStartRoute,
-      AppOnboardingSurveyIntroRoute,
-      AppOnboardingStudyCompleteRoute,
-      AppOnboardingStudyUserRoute,
-      AppOnboardingFinalConvoIndexRoute,
-      AppOnboardingOneMoreThingIndexRoute,
-      AppOnboardingStudyCareerCommitmentQualitySurveyRoute,
-      AppOnboardingStudyCareerExplorationBreadthSelfSurveyRoute,
-      AppOnboardingStudyCareerExplorationDepthSelfSurveyRoute,
-      AppOnboardingStudyCareerIdentityConfusionSurveyRoute,
-      AppOnboardingStudyPastCareerExplorationBreadthSelfSurveyRoute,
-    }),
     AppResourcesRoute,
     AppIndexLazyRoute,
+    AppOnboardingBdayRoute,
+    AppOnboardingMeetSamRoute,
+    AppOnboardingNameRoute,
+    AppOnboardingPronounsRoute,
+    AppOnboardingStartRoute,
+    AppOnboardingSurveyIntroRoute,
+    AppOnboardingIndexRoute,
+    AppProfileIndexLazyRoute,
+    AppOnboardingStudyCompleteRoute,
+    AppOnboardingStudyUserRoute,
+    AppOnboardingFinalConvoIndexRoute,
+    AppOnboardingOneMoreThingIndexRoute,
     AppSessionsAlignmentV0IndexRoute,
+    AppOnboardingStudyCareerCommitmentQualitySurveyRoute,
+    AppOnboardingStudyCareerExplorationBreadthSelfSurveyRoute,
+    AppOnboardingStudyCareerExplorationDepthSelfSurveyRoute,
+    AppOnboardingStudyCareerIdentityConfusionSurveyRoute,
+    AppOnboardingStudyPastCareerExplorationBreadthSelfSurveyRoute,
   }),
   AuthRoute: AuthRoute.addChildren({
     AuthSignInRoute,
@@ -425,10 +440,26 @@ export const routeTree = rootRoute.addChildren({
     "/_app": {
       "filePath": "_app.tsx",
       "children": [
-        "/_app/onboarding",
         "/_app/resources",
         "/_app/",
-        "/_app/sessions/alignment-v0/"
+        "/_app/onboarding/bday",
+        "/_app/onboarding/meet-sam",
+        "/_app/onboarding/name",
+        "/_app/onboarding/pronouns",
+        "/_app/onboarding/start",
+        "/_app/onboarding/survey-intro",
+        "/_app/onboarding/",
+        "/_app/profile/",
+        "/_app/onboarding/study/complete",
+        "/_app/onboarding/study/user",
+        "/_app/onboarding/final-convo/",
+        "/_app/onboarding/one-more-thing/",
+        "/_app/sessions/alignment-v0/",
+        "/_app/onboarding/study/career-commitment-quality/survey",
+        "/_app/onboarding/study/career-exploration-breadth-self/survey",
+        "/_app/onboarding/study/career-exploration-depth-self/survey",
+        "/_app/onboarding/study/career-identity-confusion/survey",
+        "/_app/onboarding/study/past-career-exploration-breadth-self/survey"
       ]
     },
     "/_auth": {
@@ -437,27 +468,6 @@ export const routeTree = rootRoute.addChildren({
         "/_auth/sign-in",
         "/_auth/sign-up",
         "/_auth/start"
-      ]
-    },
-    "/_app/onboarding": {
-      "filePath": "_app/onboarding.tsx",
-      "parent": "/_app",
-      "children": [
-        "/_app/onboarding/bday",
-        "/_app/onboarding/meet-sam",
-        "/_app/onboarding/name",
-        "/_app/onboarding/pronouns",
-        "/_app/onboarding/start",
-        "/_app/onboarding/survey-intro",
-        "/_app/onboarding/study/complete",
-        "/_app/onboarding/study/user",
-        "/_app/onboarding/final-convo/",
-        "/_app/onboarding/one-more-thing/",
-        "/_app/onboarding/study/career-commitment-quality/survey",
-        "/_app/onboarding/study/career-exploration-breadth-self/survey",
-        "/_app/onboarding/study/career-exploration-depth-self/survey",
-        "/_app/onboarding/study/career-identity-confusion/survey",
-        "/_app/onboarding/study/past-career-exploration-breadth-self/survey"
       ]
     },
     "/_app/resources": {
@@ -488,43 +498,51 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/onboarding/bday": {
       "filePath": "_app/onboarding/bday.tsx",
-      "parent": "/_app/onboarding"
+      "parent": "/_app"
     },
     "/_app/onboarding/meet-sam": {
       "filePath": "_app/onboarding/meet-sam.tsx",
-      "parent": "/_app/onboarding"
+      "parent": "/_app"
     },
     "/_app/onboarding/name": {
       "filePath": "_app/onboarding/name.tsx",
-      "parent": "/_app/onboarding"
+      "parent": "/_app"
     },
     "/_app/onboarding/pronouns": {
       "filePath": "_app/onboarding/pronouns.tsx",
-      "parent": "/_app/onboarding"
+      "parent": "/_app"
     },
     "/_app/onboarding/start": {
       "filePath": "_app/onboarding/start.tsx",
-      "parent": "/_app/onboarding"
+      "parent": "/_app"
     },
     "/_app/onboarding/survey-intro": {
       "filePath": "_app/onboarding/survey-intro.tsx",
-      "parent": "/_app/onboarding"
+      "parent": "/_app"
+    },
+    "/_app/onboarding/": {
+      "filePath": "_app/onboarding/index.tsx",
+      "parent": "/_app"
+    },
+    "/_app/profile/": {
+      "filePath": "_app/profile/index.lazy.tsx",
+      "parent": "/_app"
     },
     "/_app/onboarding/study/complete": {
       "filePath": "_app/onboarding/study/complete.tsx",
-      "parent": "/_app/onboarding"
+      "parent": "/_app"
     },
     "/_app/onboarding/study/user": {
       "filePath": "_app/onboarding/study/user.tsx",
-      "parent": "/_app/onboarding"
+      "parent": "/_app"
     },
     "/_app/onboarding/final-convo/": {
       "filePath": "_app/onboarding/final-convo/index.tsx",
-      "parent": "/_app/onboarding"
+      "parent": "/_app"
     },
     "/_app/onboarding/one-more-thing/": {
       "filePath": "_app/onboarding/one-more-thing/index.tsx",
-      "parent": "/_app/onboarding"
+      "parent": "/_app"
     },
     "/_app/sessions/alignment-v0/": {
       "filePath": "_app/sessions/alignment-v0/index.tsx",
@@ -532,23 +550,23 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/onboarding/study/career-commitment-quality/survey": {
       "filePath": "_app/onboarding/study/career-commitment-quality/survey.tsx",
-      "parent": "/_app/onboarding"
+      "parent": "/_app"
     },
     "/_app/onboarding/study/career-exploration-breadth-self/survey": {
       "filePath": "_app/onboarding/study/career-exploration-breadth-self/survey.tsx",
-      "parent": "/_app/onboarding"
+      "parent": "/_app"
     },
     "/_app/onboarding/study/career-exploration-depth-self/survey": {
       "filePath": "_app/onboarding/study/career-exploration-depth-self/survey.tsx",
-      "parent": "/_app/onboarding"
+      "parent": "/_app"
     },
     "/_app/onboarding/study/career-identity-confusion/survey": {
       "filePath": "_app/onboarding/study/career-identity-confusion/survey.tsx",
-      "parent": "/_app/onboarding"
+      "parent": "/_app"
     },
     "/_app/onboarding/study/past-career-exploration-breadth-self/survey": {
       "filePath": "_app/onboarding/study/past-career-exploration-breadth-self/survey.tsx",
-      "parent": "/_app/onboarding"
+      "parent": "/_app"
     }
   }
 }

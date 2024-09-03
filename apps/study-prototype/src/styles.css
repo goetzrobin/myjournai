@@ -83,7 +83,7 @@ html, body, #root {
     @apply border-border;
   }
   body {
-    @apply dark bg-background text-foreground;
+    @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
     min-height: calc(100% + env(safe-area-inset-top));
   }

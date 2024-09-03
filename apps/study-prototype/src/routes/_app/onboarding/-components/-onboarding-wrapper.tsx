@@ -5,12 +5,13 @@ import { twMerge } from 'tailwind-merge';
 import { OnboardingStep, useOnboardingProgressActions } from '~myjournai/onboarding-client';
 
 const OnboardingWrapper = ({ children, currentStep, className, link }: PropsWithChildren<{
-  currentStep: OnboardingStep,
+  currentStep?: OnboardingStep,
   className?: string | null;
   link?: { to: string; label: string }
 }>) => {
   const { setLastStep } = useOnboardingProgressActions();
   useEffect(() => {
+    if (!currentStep) return;
     return setLastStep(currentStep);
   }, [currentStep, setLastStep]);
   return <div className="h-full w-full relative">

@@ -17,7 +17,7 @@ export const UserInputForm = ({ formRef, handleSubmit, input, setInput, onKeyDow
     className="flex [&_textarea::placeholder]:text-muted-foreground [&_textarea:active::placeholder]:text-muted-foreground relative z-10 animate-in slide-in-from-bottom-1/2 [animation-duration:300ms] fade-in bg-background shadow-lg px-4 py-2.5 border rounded-xl">
     <TextArea onChange={e => setInput(e.target.value)} value={input}
               name="message"
-              className="resize-none outline-0 w-[calc(100%-1.7rem)]"
+              className="bg-transparent resize-none outline-0 w-[calc(100%-1.7rem)]"
               placeholder="Share with Sam..."
               onKeyDown={onKeyDown}
               aria-label="Send chat to Sam" />

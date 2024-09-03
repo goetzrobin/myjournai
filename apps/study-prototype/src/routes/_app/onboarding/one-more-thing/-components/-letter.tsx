@@ -30,12 +30,13 @@ export const Letter = ({ letterContent, setLetterContent, name }: { letterConten
   const currentQuestion = questions[Math.min((sentenceCount), questions.length - 1) % questions.length];
   return (
     <div
-      className="pb-28 relative flex items-start p-8 w-full text-xl h-[88vh] pressed:bg-muted bg-background text-muted-foreground border rounded-xl"
+      className="isolate pb-28 bg-background relative flex items-start p-8 w-full text-xl h-[88vh] pressed:bg-muted text-muted-foreground border rounded-xl"
     >
+      <div className="inset-0 bg-muted/20 h-full w-full absolute -z-10"/>
       <TextArea value={letterContent} onChange={e => setLetterContent(e.target.value)}
-                className="min-h-full w-full outline-none"
+                className="min-h-full bg-transparent w-full outline-none"
                 placeholder={`${name ? name + ',' : 'Please'} introduce yourself...`} />
-      <div className="px-4 absolute bottom-4 left-0 right-0">
+      <div className="px-4 absolute bottom-0 left-0 right-0 [margin-bottom:calc(20px + env(keyboard-inset-height))]">
         <div
           className="text-sm bg-background text-left shadow-lg px-4 py-2.5 border rounded-xl inline-flex justify-between w-full items-center">
           <span className="max-w-[200px] sm:max-w-[400px]">{currentQuestion}</span>

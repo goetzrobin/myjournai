@@ -24,10 +24,10 @@ const trackStyles = tv({
 
 const thumbStyles = tv({
   extend: focusRing,
-  base: 'size-8 group-orientation-horizontal:mt-8 shadow-lg group-orientation-vertical:ml-3 rounded-full bg-blue-500 dark:bg-zinc-900 border-4 border-blue-50 dark:border-gray-300',
+  base: 'size-8 group-orientation-horizontal:mt-8 shadow-lg group-orientation-vertical:ml-3 rounded-full bg-blue-500 border-4 border-blue-50 dark:border-gray-300',
   variants: {
     isDragging: {
-      true: 'bg-blue-700 dark:bg-gray-300 forced-colors:bg-[ButtonBorder]'
+      true: 'bg-blue-700 forced-colors:bg-[ButtonBorder]'
     },
     isDisabled: {
       true: 'border-blue-300 dark:border-zinc-700 forced-colors:border-[GrayText]'

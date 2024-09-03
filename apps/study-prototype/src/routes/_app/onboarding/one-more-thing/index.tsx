@@ -3,7 +3,7 @@ import OnboardingWrapper from '../-components/-onboarding-wrapper';
 import { useUserQuery } from '@myjournai/user-client';
 import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
 import { Button } from '~myjournai/components';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Letter } from './-components/-letter';
 import { useOnboardingLetterMutation, useOnboardingLetterQuery } from '~myjournai/onboarding-client';
 
@@ -22,10 +22,10 @@ function OneMoreThing() {
   const [letterContent, setLetterContent] = useState('');
   const letterLength = letterContent.trim().length;
 
-  const existingLetter = useOnboardingLetterQuery(userId).data?.content
+  const existingLetter = useOnboardingLetterQuery(userId).data?.content;
   const hasExistingLetterContent = (existingLetter?.length ?? 0) > 0;
-  const onboardingLetterMut = useOnboardingLetterMutation(userId)
-  const navAway = () => navigate({to: '/onboarding/final-convo'});
+  const onboardingLetterMut = useOnboardingLetterMutation(userId);
+  const navAway = () => navigate({ to: '/onboarding/final-convo' });
   const onStartJournaiPress = () => {
     if (!userId) return;
     onboardingLetterMut.mutate({
@@ -33,17 +33,17 @@ function OneMoreThing() {
       content: letterContent
     }, {
       onSuccess: navAway
-    })
-  }
-  const onContinuePress= () => {
+    });
+  };
+  const onContinuePress = () => {
     if (!userId || !hasExistingLetterContent) return;
     onboardingLetterMut.mutate({
       userId: userId,
       content: existingLetter
     }, {
       onSuccess: navAway
-    })
-  }
+    });
+  };
   return <OnboardingWrapper currentStep="one-more-thing">
     <div className="-mt-60 place-self-center w-full">
       {!writingLetter ? null :
@@ -56,10 +56,13 @@ function OneMoreThing() {
       <div
         className={(writingLetter ? '!scale-100 max-w-none !rotate-0 !translate-y-10' : '') + ' top-10 translate-y-40 absolute flex items-center justify-center left-0 right-0 origin-center transition-transform scale-50 rotate-[-10deg]'}>
         {writingLetter ? <Letter letterContent={letterContent} setLetterContent={setLetterContent} name={userName} /> :
-          <Button isDisabled={writingLetter || hasExistingLetterContent} onPress={() => setWritingLetter(p => !p)} variant="secondary"
-                  className="overflow-hidden relative text-left animate-in zoom-in-50 fade-in-0 flex items-start p-8 w-full text-xl h-[70vh] pressed:bg-muted bg-background text-muted-foreground border rounded-xl">
+          <Button isDisabled={writingLetter || hasExistingLetterContent} onPress={() => setWritingLetter(p => !p)}
+                  variant="secondary"
+                  className="isolate overflow-hidden relative text-left animate-in zoom-in-50 fade-in-0 flex items-start p-8 w-full text-xl h-[70vh] pressed:!bg-muted !bg-background text-muted-foreground border border-border/80 rounded-xl">
+            <div className="inset-0 bg-muted/10 h-full w-full absolute -z-10" />
             {letterLength > 0 ? letterContent : (hasExistingLetterContent ? existingLetter : `${userName}, introduce yourself...`)}
-            <span className="absolute left-0 right-0 w-full bottom-0 h-8 bg-gradient-to-b to-background from-transparent" />
+            <span
+              className="absolute left-0 right-0 w-full bottom-0 h-8 bg-gradient-to-b to-background from-transparent" />
           </Button>}
       </div>
     </div>

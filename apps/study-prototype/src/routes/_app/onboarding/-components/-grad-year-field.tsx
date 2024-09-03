@@ -1,16 +1,13 @@
 import { LucideMinus, LucidePlus } from 'lucide-react';
 import React from 'react';
 import {
+  ButtonProps,
+  Group,
   NumberField as AriaNumberField,
   NumberFieldProps as AriaNumberFieldProps,
-  ButtonProps,
-  ValidationResult, Group
+  ValidationResult
 } from 'react-aria-components';
-import {
-  Input,
-  Label,
-  Button
-} from '~myjournai/components';
+import { Button, Input, Label } from '~myjournai/components';
 
 export interface NumberFieldProps extends AriaNumberFieldProps {
   label?: string;
@@ -31,7 +28,7 @@ export function GradYearField(
           <StepperButton slot="decrement">
             <LucideMinus aria-hidden className="size-8 place-self-center" />
           </StepperButton>
-          <Input className="tabular-nums py-8 text-7xl text-center" />
+          <Input className="tabular-nums py-8 text-7xl border-0 text-center" />
           <StepperButton slot="increment">
             <LucidePlus aria-hidden className="size-8 place-self-center" />
           </StepperButton>

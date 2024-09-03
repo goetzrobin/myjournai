@@ -3,8 +3,8 @@ import { useNavigate } from '@tanstack/react-router';
 import { useUserSuspenseQuery } from '@myjournai/user-client';
 import { useAuthUserIdFromHeaders, useSignOutMutation } from '@myjournai/auth-client';
 import { useMobileNavShowing } from './mobile-nav.store';
-import { Button, Link } from '~myjournai/components';
-import { LucideBookMarked, LucideLogOut, LucideMountainSnow } from 'lucide-react';
+import { Link } from '~myjournai/components';
+import { LucideBookMarked, LucideMountainSnow, PersonStanding } from 'lucide-react';
 
 const MobileNav = () => {
   const isShowingNav = useMobileNavShowing();
@@ -16,15 +16,15 @@ const MobileNav = () => {
     })
   );
   return (!userQ.data?.onboardingCompletedAt || !isShowingNav) ? null : <>
-    <ul className="mx-auto flex-none p-2 pb-8 flex gap-8">
+    <ul className="flex-none p-2 flex justify-around">
       <li>
         <Link
           variant="icon"
           to="/"
           className="flex flex-col data-[status='active']:text-foreground"
         >
-          <LucideMountainSnow/>
-          <span className="text-[.6rem] mt-1">Journey</span>
+          <LucideMountainSnow className="size-6"/>
+          <span className="text-[.6rem] mt-0.5">Journey</span>
         </Link>
       </li>
       <li>
@@ -33,20 +33,19 @@ const MobileNav = () => {
           className="flex flex-col data-[status='active']:text-foreground"
           to="/resources"
         >
-          <LucideBookMarked />
-          <span className="text-[.6rem] mt-1">Resources</span>
+          <LucideBookMarked className="size-6" />
+          <span className="text-[.6rem] mt-0.5">Resources</span>
         </Link>
       </li>
       <li>
-        <Button
+        <Link
           variant="icon"
-          type="button"
           className="flex flex-col data-[status='active']:text-foreground"
-          onPress={() => signOutMut.mutate()}
+          to="/profile"
         >
-          <LucideLogOut />
-          <span className="text-[.6rem] mt-1">Sign out</span>
-        </Button>
+          <PersonStanding className="size-6"/>
+          <span className="text-[.6rem] mt-0.5">{userQ.data?.name}</span>
+        </Link>
       </li>
     </ul>
     <hr />
