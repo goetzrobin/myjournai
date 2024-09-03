@@ -1,7 +1,11 @@
 import React from 'react';
 import { TextArea } from 'react-aria-components';
 
-export const Letter = ({ letterContent, setLetterContent, name }: { letterContent: string, setLetterContent: (c: string) => void; name: string | null | undefined }) => {
+export const Letter = ({ letterContent, setLetterContent, name }: {
+  letterContent: string,
+  setLetterContent: (c: string) => void;
+  name: string | null | undefined
+}) => {
   const sentenceCount = ((letterContent ?? '').match(/\(?[^.?!\n]+[.!?\n]\)?/g) ?? []).length;
   const questions = [
     'What sport do you play?',
@@ -29,18 +33,21 @@ export const Letter = ({ letterContent, setLetterContent, name }: { letterConten
   ];
   const currentQuestion = questions[Math.min((sentenceCount), questions.length - 1) % questions.length];
   return (
-    <div
-      className="isolate pb-28 bg-background relative flex items-start p-8 w-full text-xl h-[88vh] pressed:bg-muted text-muted-foreground border rounded-xl"
-    >
-      <div className="inset-0 bg-muted/20 h-full w-full absolute -z-10"/>
-      <TextArea value={letterContent} onChange={e => setLetterContent(e.target.value)}
-                className="min-h-full bg-transparent w-full outline-none"
-                placeholder={`${name ? name + ',' : 'Please'} introduce yourself...`} />
-      <div className="px-4 absolute bottom-0 left-0 right-0 [margin-bottom:calc(20px + env(keyboard-inset-height))]">
+    <div className="-mt-5 flex flex-col w-full bg-background/80">
+      <div className="h-20 mb-1 px-4 w-full">
         <div
           className="text-sm bg-background text-left shadow-lg px-4 py-2.5 border rounded-xl inline-flex justify-between w-full items-center">
-          <span className="max-w-[200px] sm:max-w-[400px]">{currentQuestion}</span>
+          <span className="max-w-[250px] sm:max-w-[400px]">{currentQuestion}</span>
         </div>
+      </div>
+      <div
+        className="overflow-hidden bg-background p-4 w-full text-xl h-[88vh] pressed:bg-muted text-muted-foreground border rounded-xl"
+      >
+        <div className="inset-0 bg-muted/20 h-full w-full absolute -z-10" />
+        <TextArea value={letterContent} onChange={e => setLetterContent(e.target.value)}
+                  className="min-h-full bg-transparent w-full outline-none"
+                  placeholder={`${name ? name + ',' : 'Please'} introduce yourself...`} />
+
       </div>
     </div>
   );
