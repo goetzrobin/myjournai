@@ -45,7 +45,7 @@ function OneMoreThing() {
     });
   };
   return <OnboardingWrapper currentStep="one-more-thing">
-    <div className="-mt-60 place-self-center w-full">
+    <div className="-mt-60 h-fit place-self-center w-full">
       {!writingLetter ? null :
         <Button onPress={() => setWritingLetter(false)} variant="secondary"
                 className="animate-in fade-in absolute top-4 right-4">Done</Button>}
@@ -54,7 +54,7 @@ function OneMoreThing() {
         by writing a short letter.</p>
 
       <div
-        className={(writingLetter ? '!scale-100 max-w-none !rotate-0 !translate-y-10' : '') + ' top-10 translate-y-40 absolute flex items-center justify-center left-0 right-0 origin-center transition-transform scale-50 rotate-[-10deg]'}>
+        className={(writingLetter ? '!scale-100 max-w-none !rotate-0 !translate-y-10' : '') + ' top-10 translate-y-40 absolute flex items-center justify-center left-0 right-0 h-full origin-center transition-transform scale-50 rotate-[-10deg]'}>
         {writingLetter ? <Letter letterContent={letterContent} setLetterContent={setLetterContent} name={userName} /> :
           <Button isDisabled={writingLetter || hasExistingLetterContent} onPress={() => setWritingLetter(p => !p)}
                   variant="secondary"

@@ -33,7 +33,7 @@ export const Letter = ({ letterContent, setLetterContent, name }: {
   ];
   const currentQuestion = questions[Math.min((sentenceCount), questions.length - 1) % questions.length];
   return (
-    <div className="-mt-5 flex flex-col w-full bg-background/80">
+    <div className="h-full -mt-5 flex flex-col w-full bg-background/80">
       <div className="h-20 mb-1 px-4 w-full">
         <div
           className="text-sm bg-background text-left shadow-lg px-4 py-2.5 border rounded-xl inline-flex justify-between w-full items-center">
@@ -41,7 +41,7 @@ export const Letter = ({ letterContent, setLetterContent, name }: {
         </div>
       </div>
       <div
-        className="overflow-hidden bg-background p-4 w-full text-xl h-[88vh] pressed:bg-muted text-muted-foreground border rounded-xl"
+        className="overflow-hidden bg-background p-4 w-full text-xl h-[50%] pressed:bg-muted text-muted-foreground border rounded-xl"
       >
         <div className="inset-0 bg-muted/20 h-full w-full absolute -z-10" />
         <TextArea value={letterContent} onChange={e => setLetterContent(e.target.value)}
