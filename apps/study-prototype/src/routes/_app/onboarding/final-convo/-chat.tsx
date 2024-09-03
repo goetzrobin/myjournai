@@ -26,20 +26,22 @@ const EndConvoOverlay = () => <div className="absolute inset-0 bg-background h-f
   </OnboardingWrapper>
 </div>;
 
-const Chat = ({ userId, messages, isMessageSuccess, isShowingUserInput, children }: PropsWithChildren<
+const Chat = ({ userId, messages, isMessageSuccess, isShowingUserInput, isSessionLogExists, children }: PropsWithChildren<
     {
       messages: BaseMessage[];
       isMessageSuccess: boolean;
       userId: string;
       isShowingUserInput: boolean;
+      isSessionLogExists: boolean;
     }
   >) => {
     const { chunks, mutation, startStream, isStreaming, messageChunksByTimestamp } = useStreamResponse({
       userId,
       url: `/api/sessions/slug/onboarding-v0`
     });
+    console.log(isSessionLogExists, messages, mutation)
     useAutoStartMessage({
-      isSessionLogExists: true,
+      isSessionLogExists,
       isIdle: mutation.isIdle,
       isMessageSuccess,
       isNoMessages: messages.length === 0,

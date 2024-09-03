@@ -15,7 +15,7 @@ const styles = tv({
   variants: {
     variant: {
       ghost: 'shadow-none text-blue-600 dark:text-blue-500 underline decoration-blue-600/60 hover:decoration-blue-600 dark:decoration-blue-500/60 dark:hover:decoration-blue-500',
-      underline: 'shadow-none underline disabled:no-underline disabled:cursor-default transition rounded',
+      underline: 'border-transparent shadow-none underline disabled:no-underline disabled:cursor-default transition rounded',
       icon: ''
     }
   },
