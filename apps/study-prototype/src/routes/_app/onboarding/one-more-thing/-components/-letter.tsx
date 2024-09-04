@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { TextArea } from 'react-aria-components';
 
 export const Letter = ({ letterContent, setLetterContent, name }: {
@@ -32,6 +32,17 @@ export const Letter = ({ letterContent, setLetterContent, name }: {
     'Thank you so much! You’ve answered all my questions, for now!'
   ];
   const currentQuestion = questions[Math.min((sentenceCount), questions.length - 1) % questions.length];
+
+  const inputElement = useRef(null);
+
+  useEffect(() => {
+    if (!inputElement.current) return;
+    (inputElement.current as any).onfocus = () => {
+      window.scrollTo(0, 0);
+      document.body.scrollTop = 0;
+    };
+  }, [inputElement.current]);
+
   return (
     <div className="h-full -mt-5 flex flex-col w-full bg-background/80">
       <div className="h-20 mb-1 px-4 w-full">
@@ -44,7 +55,7 @@ export const Letter = ({ letterContent, setLetterContent, name }: {
         className="overflow-hidden bg-background p-4 w-full text-xl h-[50%] pressed:bg-muted text-muted-foreground border rounded-xl"
       >
         <div className="inset-0 bg-muted/20 h-full w-full absolute -z-10" />
-        <TextArea value={letterContent} onChange={e => setLetterContent(e.target.value)}
+        <TextArea ref={inputElement} value={letterContent} onChange={e => setLetterContent(e.target.value)}
                   className="min-h-full bg-transparent w-full outline-none"
                   placeholder={`${name ? name + ',' : 'Please'} introduce yourself...`} />
 
