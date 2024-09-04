@@ -4,8 +4,10 @@ import { updateUserOnboardingCommand } from '~myjournai/onboarding-server';
 
 export default defineEventHandler(async (event) => {
   const userId = getRouterParam(event, 'userId');
-  const parsedRequest = UserOnboardingDataSchema.safeParse(await readBody(event));
+  const body = await readBody(event)
+  const parsedRequest = UserOnboardingDataSchema.safeParse(body);
   if (parsedRequest.error) {
+    console.error('failed to parse body', body, parsedRequest.error.message)
     throw createError({
       status: 400,
       statusMessage: 'Bad Request',
