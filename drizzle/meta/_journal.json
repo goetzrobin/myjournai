@@ -148,6 +148,34 @@
       "when": 1725046551991,
       "tag": "0020_icy_robin_chapel",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1725446285001,
+      "tag": "0022_furry_ares",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1725446297019,
+      "tag": "0023_safe_tyger_tiger",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1725446630387,
+      "tag": "0024_spotty_black_cat",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1725446788370,
+      "tag": "0025_lean_tiger_shark",
+      "breakpoints": true
     }
   ]
 }

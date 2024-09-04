@@ -9,6 +9,7 @@ export const sessions = pgTable('sessions', {
   slug: varchar('slug'),
   name: varchar('name'),
   description: text('description'),
+  imageUrl: varchar('image_url'),
   index: integer('index').notNull(),
   estimatedCompletionTime: integer('estimated_completion_time'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),

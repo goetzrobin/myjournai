@@ -39,7 +39,6 @@ const Chat = ({ userId, messages, isMessageSuccess, isShowingUserInput, isSessio
       userId,
       url: `/api/sessions/slug/onboarding-v0`
     });
-    console.log(isSessionLogExists, messages, mutation)
     useAutoStartMessage({
       isSessionLogExists,
       isIdle: mutation.isIdle,

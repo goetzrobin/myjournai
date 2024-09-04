@@ -11,11 +11,20 @@ export const Route = createLazyFileRoute('/_app/')({
   component: Index
 });
 
-const MenuItem = ({ children, onPress }: PropsWithChildren<{ onPress?: () => void }>) => <Button
-  isDisabled={!onPress}
-  onPress={onPress}
-  variant="secondary"
-  className="min-h-40 w-full rounded-xl p-4 shadow-xl border">{children}</Button>;
+const MenuItem = ({ session, onPress }: PropsWithChildren<{ session: SessionWithLogs; onPress?: () => void }>) => <div className="bg-background shadow-xl overflow-hidden relative px-8 pb-8 pt-44 rounded-xl border">
+    <img
+      className="absolute left-0 top-0 h-40 object-cover"
+      src={`/sessions/${session.imageUrl}`}
+      width={800}
+      height={500}
+      alt="Picture of the author"
+    />
+    <h4 className="text-2xl font-serif text-center mb-4">{session?.name}</h4>
+    <p className="text-muted-foreground text-lg text-center">{session?.description}</p>
+    <Button isDisabled={!onPress} onPress={onPress} className="w-full mt-8" variant="secondary">
+      {session.logs.some(l => l.status === 'IN_PROGRESS') ? 'Continue' : 'Start'}
+    </Button>
+  </div>;
 
 function Index() {
   const userQ = useUserQuery(useAuthUserIdFromHeaders());
@@ -24,15 +33,19 @@ function Index() {
   const nav = useNavigate();
 
   const createOnPress = (s: SessionWithLogs) => {
-    if (s.slug === 'onboarding-v0') return () => nav({to: '/onboarding/final-convo'})
+    if (s.slug === 'onboarding-v0') return () => nav({ to: '/onboarding/final-convo' })
     return () => nav({ to: `/sessions/${s.slug}` });
   };
 
   return <WithMobileNav>
-    <div className="pt-8 space-y-8 flex flex-col h-full w-full">
-      {sessions.map(s => <MenuItem
-        onPress={s.logs.length > 0 && s.logs.every(l => l.status !== 'IN_PROGRESS') ? undefined : createOnPress(s)}
-        key={s.id}>{s.name}</MenuItem>)}
+    <div className="flex flex-col h-full w-full">
+      <div className="overflow-auto pb-20 pt-8 space-y-8">
+        {!sessionsQ.isPending ? null : <p>Loading sessions</p>}
+        {sessions.map(s => <MenuItem
+          session={s}
+          onPress={s.logs.length > 0 && s.logs.every(l => l.status !== 'IN_PROGRESS') ? undefined : createOnPress(s)}
+          key={s.id}>{s.name}</MenuItem>)}
+      </div>
     </div>
   </WithMobileNav>
     ;

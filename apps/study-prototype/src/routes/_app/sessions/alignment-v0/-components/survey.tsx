@@ -44,34 +44,19 @@ export const Survey = ({
 
   switch (view) {
     case 'feeling':
-      return <><FeelingIndicator value={preFeelingScore} setValue={setPreFeelingScore}
+      return <FeelingIndicator value={preFeelingScore} setValue={setPreFeelingScore}
                                  onNextClick={() => setView('motivation')} />
-        <pre>{preAnxietyScore + ';' +
-          preFeelingScore + ';' +
-          preMotivationScore}</pre>
-      </>;
     case 'motivation':
-      return <><MotivationIndicator value={preMotivationScore} setValue={setPreMotivationScore}
+      return <MotivationIndicator value={preMotivationScore} setValue={setPreMotivationScore}
                                     onNextClick={() => setView('anxiety')} />;
-        <pre>{preAnxietyScore + ';' +
-          preFeelingScore + ';' +
-          preMotivationScore}</pre>;
-      </>
-        ;
+
     case 'anxiety':
-      return <><AnxietyIndicator value={preAnxietyScore} setValue={setPreAnxietyScore}
+      return <AnxietyIndicator value={preAnxietyScore} setValue={setPreAnxietyScore}
                                  onNextClick={() => setView('start')} />
-        <pre>{preAnxietyScore + ';' +
-          preFeelingScore + ';' +
-          preMotivationScore}</pre>
-      </>;
     case 'start':
       return <div className="pt-4">
         <h3 className="pb-4 uppercase tracking-tight font-semibold">Thanks for sharing!</h3>
         <p className="text-muted-foreground mb-8">Let's start today's session! Sam's already waiting for you!</p>
-        <pre>{preAnxietyScore + ';' +
-          preFeelingScore + ';' +
-          preMotivationScore}</pre>
         <Button
           className="w-full"
           onPress={onStartClicked}>Start Session</Button></div>;

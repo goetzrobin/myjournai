@@ -49,7 +49,7 @@ export default function FamilyDrawer({ onStart }: {
         />
         <Drawer.Content
           asChild
-          className="fixed inset-x-4 bottom-4 z-10 mx-auto max-w-[361px] overflow-hidden rounded-[36px] bg-[#FEFFFE] outline-none md:mx-auto md:w-full"
+          className="fixed inset-x-4 bottom-4 z-10 mx-auto max-w-[361px] overflow-hidden rounded-[36px] bg-background outline-none md:mx-auto md:w-full"
         >
           <motion.div
             animate={{
@@ -65,7 +65,7 @@ export default function FamilyDrawer({ onStart }: {
                 variant="icon"
                 onPress={() => navigate({ to: '/' })}
                 data-vaul-no-drag=""
-                className="absolute right-8 top-7 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-[#F7F8F9] text-[#949595] transition-transform focus:scale-95 focus-visible:shadow-focus-ring-button active:scale-75"
+                className="absolute right-8 top-7 z-10 flex h-8 w-8 items-center justify-center rounded-full"
               >
                 <LucideX />
               </Button>

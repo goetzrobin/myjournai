@@ -10,19 +10,19 @@ export const AnxietyIndicator = ({ value, setValue, onNextClick }: {
   return (
     <div className="pt-12">
       <h3 className="pb-8 uppercase tracking-tight font-semibold">Do you feel anxious right now?</h3>
-      <div className="pb-12 flex items-center justify-between">
+      <div className="pb-12 gap-2 flex items-center justify-between">
         <ToggleButton onPress={() => setValue(0)} isSelected={value === 0} className="p-0">
-          <AnxietyNoneIcon className="size-16" />
+          <AnxietyNoneIcon className="size-14" />
           <span className="text-xs text-center">Not at All</span></ToggleButton>
         <ToggleButton onPress={() => setValue(1)} isSelected={value === 1} className="p-0">
-          <AnxietySlightlyIcon className="size-16" />
+          <AnxietySlightlyIcon className="size-14" />
           <span className="text-xs text-center">Slightly</span></ToggleButton>
         <ToggleButton onPress={() => setValue(2)} isSelected={value === 2} className="p-0">
-          <AnxietyQuiteIcon className="size-16" />
+          <AnxietyQuiteIcon className="size-14" />
           <span className="text-xs text-center">Quite</span>
         </ToggleButton>
         <ToggleButton onPress={() => setValue(3)} isSelected={value === 3} className="p-0">
-          <AnxietyHighlyIcon className="size-16" />
+          <AnxietyHighlyIcon className="size-14" />
           <span className="text-xs text-center">Extremely</span>
         </ToggleButton>
       </div>

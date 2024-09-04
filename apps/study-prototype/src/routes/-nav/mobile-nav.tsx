@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useUserSuspenseQuery } from '@myjournai/user-client';
-import { useAuthUserIdFromHeaders, useSignOutMutation } from '@myjournai/auth-client';
+import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
 import { useMobileNavShowing } from './mobile-nav.store';
 import { Link } from '~myjournai/components';
 import { LucideBookMarked, LucideMountainSnow, PersonStanding } from 'lucide-react';
@@ -10,13 +10,8 @@ const MobileNav = () => {
   const isShowingNav = useMobileNavShowing();
   const userQ = useUserSuspenseQuery(useAuthUserIdFromHeaders());
   const navigate = useNavigate();
-  const signOutMut = useSignOutMutation(() =>
-    navigate({
-      to: '/sign-in'
-    })
-  );
   return (!userQ.data?.onboardingCompletedAt || !isShowingNav) ? null : <>
-    <ul className="flex-none p-2 flex justify-around">
+    <ul className="flex-none bg-background p-2 flex justify-around">
       <li>
         <Link
           variant="icon"
