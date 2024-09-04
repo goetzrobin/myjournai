@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { TextArea } from 'react-aria-components';
 
 export const Letter = ({ letterContent, setLetterContent, name }: {
@@ -34,14 +34,12 @@ export const Letter = ({ letterContent, setLetterContent, name }: {
   const currentQuestion = questions[Math.min((sentenceCount), questions.length - 1) % questions.length];
 
   const inputElement = useRef(null);
-
-  useEffect(() => {
-    if (!inputElement.current) return;
+  if (inputElement.current) {
     (inputElement.current as any).onfocus = () => {
       window.scrollTo(0, 0);
       document.body.scrollTop = 0;
     };
-  }, []);
+  }
 
   return (
     <div className="h-full -mt-5 flex flex-col w-full bg-background/80">
