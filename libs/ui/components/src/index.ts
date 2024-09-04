@@ -7,6 +7,7 @@ export * from './lib/DateField';
 export * from './lib/DatePicker';
 export * from './lib/DateRangePicker';
 export * from './lib/Dialog';
+export * from './lib/Drawer';
 export * from './lib/Field';
 export * from './lib/Form';
 export * from './lib/GridList';

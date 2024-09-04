@@ -1,7 +1,15 @@
-// @ts-ignore
-
 import React from 'react';
-import classes from './reload-prompt.module.css';
+import {
+  Button,
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle
+} from '~myjournai/components';
+
 // @ts-ignore
 import { useRegisterSW } from 'virtual:pwa-register/react';
 
@@ -40,22 +48,22 @@ function ReloadPrompt() {
     setNeedRefresh(false);
   };
 
-  return (
-    <div className={classes.ReloadPromptContainer}>
-      {(offlineReady || needRefresh)
-        && <div className={classes.ReloadPromptToast}>
-          <div className={classes.ReloadPromptToastMessage}>
-            {offlineReady
-              ? <span>App ready to work offline</span>
-              : <span>New content available, click on reload button to update.</span>
-            }
-          </div>
-          {needRefresh && <button className={classes.ReloadPromptToastButton}
-                                  onClick={() => updateServiceWorker(true)}>Reload</button>}
-          <button className={classes.ReloadPromptToastButton} onClick={() => close()}>Close</button>
-        </div>
-      }
-    </div>
+  const reload = async () => await updateServiceWorker(true)
+
+  return (<Drawer open={(offlineReady || needRefresh)}>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>journai just got better!</DrawerTitle>
+          <DrawerDescription>Reload the application to get the newest sessions we have added!</DrawerDescription>
+        </DrawerHeader>
+        <DrawerFooter>
+          <Button onPress={reload}>Reload App</Button>
+          <DrawerClose>
+            <Button className="w-full" onPress={close} variant="secondary">Cancel</Button>
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }
 
