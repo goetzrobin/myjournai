@@ -3,7 +3,7 @@ import OnboardingWrapper from './-components/-onboarding-wrapper';
 import { Button } from '~myjournai/components';
 
 export const Route = createFileRoute('/_app/onboarding/survey-intro')({
-  component: () => <OnboardingWrapper currentStep="one-more-thing">
+  component: () => <OnboardingWrapper currentStep="survey-intro">
     <div className="place-self-center w-full">
       <h1 className="text-2xl text-center">Let's start with a quick survey</h1>
       <p className="mt-4 text-muted-foreground text-center">As part of our research with Temple we are collecting
