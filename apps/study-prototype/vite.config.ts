@@ -5,6 +5,10 @@ import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa';
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 
+const commitHash = require('child_process')
+  .execSync('git rev-parse --short HEAD')
+  .toString();
+
 const pwaOptions: Partial<VitePWAOptions> = {
   mode: 'development',
   base: '/',
@@ -47,6 +51,10 @@ export default defineConfig({
     exclude: [
       'drizzle-orm', 'drizzle-orm/postgres-js', 'postgres']
   },
+  define: {
+    'import.meta.env.VITE_APP_VERSION': JSON.stringify(commitHash),
+  },
+
   server: {
     port: 4200,
     host: 'localhost',

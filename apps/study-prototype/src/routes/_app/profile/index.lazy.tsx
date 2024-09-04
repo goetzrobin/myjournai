@@ -17,6 +17,9 @@ export const Route = createLazyFileRoute('/_app/profile/')({
                   onPress={() => signOutMut.mutate(undefined, { onSuccess: () => nav({ to: '/sign-in' }) })}>Sign
             out</Button>
         </div>
+        <p className="text-center mt-4 text-muted-foreground text-xs">
+          Version - {import.meta.env.VITE_APP_VERSION}
+        </p>
       </div>
     </WithMobileNav>;
   }
