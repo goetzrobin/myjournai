@@ -41,7 +41,7 @@ export const Letter = ({ letterContent, setLetterContent, name }: {
       window.scrollTo(0, 0);
       document.body.scrollTop = 0;
     };
-  }, [inputElement.current]);
+  }, []);
 
   return (
     <div className="h-full -mt-5 flex flex-col w-full bg-background/80">
