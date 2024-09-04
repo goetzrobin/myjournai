@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { TextArea } from 'react-aria-components';
 
 export const Letter = ({ letterContent, setLetterContent, name }: {
@@ -33,13 +33,11 @@ export const Letter = ({ letterContent, setLetterContent, name }: {
   ];
   const currentQuestion = questions[Math.min((sentenceCount), questions.length - 1) % questions.length];
 
-  const inputElement = useRef(null);
-  if (inputElement.current) {
-    (inputElement.current as any).onFocus = () => {
-      window.scrollTo(0, 0);
-      document.body.scrollTop = 0;
-    };
-  }
+  const preventWindowScroll = () => {
+    console.log('trying to prevent on window scroll')
+    window.scrollTo(0, 0);
+    document.body.scrollTop = 0;
+  };
 
   return (
     <div className="h-full -mt-5 flex flex-col w-full bg-background/80">
@@ -53,7 +51,7 @@ export const Letter = ({ letterContent, setLetterContent, name }: {
         className="overflow-hidden bg-background p-4 w-full text-xl h-[50%] pressed:bg-muted text-muted-foreground border rounded-xl"
       >
         <div className="inset-0 bg-muted/20 h-full w-full absolute -z-10" />
-        <TextArea ref={inputElement} value={letterContent} onChange={e => setLetterContent(e.target.value)}
+        <TextArea onFocus={preventWindowScroll} value={letterContent} onChange={e => setLetterContent(e.target.value)}
                   className="min-h-full bg-transparent w-full outline-none"
                   placeholder={`${name ? name + ',' : 'Please'} introduce yourself...`} />
 
