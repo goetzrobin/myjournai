@@ -135,7 +135,13 @@ export async function executeStepThroughMessageRun<Tools>({
     const messagesAfterRun = await streamFinalMessageNode(messagesAfterStepExecution);
     console.log('completed graph execution');
     await kv.set(messagesBySessionLogIdKey, messagesAfterRun);
-  })().then(async () => {
+  })().then(async () => console.log('stream done'));
+
+  eventStream.onClosed(async () => {
+    console.log('stream closed aborting all llm calls');
+    abortController.abort();
+    await eventStream.push('[DONE]');
+    await eventStream.close();
     console.log(`storing message run in db ${runId}`);
     await storeMessageRunUsecase({
       runCreatedAt,
@@ -145,13 +151,6 @@ export async function executeStepThroughMessageRun<Tools>({
       runId,
       initialMessage
     });
-  });
-
-  eventStream.onClosed(async () => {
-    console.log('stream closed aborting all llm calls');
-    abortController.abort();
-    await eventStream.push('[DONE]');
-    await eventStream.close();
   });
 
   console.log('sending stream');
