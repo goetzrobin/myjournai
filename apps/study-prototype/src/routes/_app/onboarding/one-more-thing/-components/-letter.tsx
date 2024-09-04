@@ -35,7 +35,7 @@ export const Letter = ({ letterContent, setLetterContent, name }: {
 
   const inputElement = useRef(null);
   if (inputElement.current) {
-    (inputElement.current as any).onfocus = () => {
+    (inputElement.current as any).onFocus = () => {
       window.scrollTo(0, 0);
       document.body.scrollTop = 0;
     };
