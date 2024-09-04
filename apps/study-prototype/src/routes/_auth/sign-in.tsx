@@ -43,6 +43,9 @@ function SignIn() {
         </SmoothButton>
       </Form>
       <Link className="text-sm text-muted-foreground mt-2 block text-center" to="/sign-up">I need an account</Link>
+      <p className="text-center mt-4 text-muted-foreground text-xs">
+        {import.meta.env.VITE_APP_VERSION}
+      </p>
     </>
   );
 }

@@ -32,6 +32,9 @@ function SignUp() {
       </Form>
       <Link className="text-sm text-muted-foreground mt-2 block text-center" to="/sign-in">I have an account
         already</Link>
+      <p className="text-center mt-4 text-muted-foreground text-xs">
+        {import.meta.env.VITE_APP_VERSION}
+      </p>
     </div>
   );
 }
