@@ -22,5 +22,10 @@ export default defineNitroConfig({
     anthropicApiKey: process.env.NITRO_ANTHROPIC_API_KEY,
     groqApiKey: process.env.NITRO_GROQ_API_KEY
   },
-  modules: ['./modules/tsconfig-paths-to-aliases.ts']
+  modules: ['./modules/tsconfig-paths-to-aliases.ts'],
+  vercel: {
+    functions: {
+      maxDuration: 60
+    }
+  }
 });
