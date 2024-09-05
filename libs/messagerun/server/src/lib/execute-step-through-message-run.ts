@@ -140,8 +140,6 @@ export async function executeStepThroughMessageRun<Tools>({
   eventStream.onClosed(async () => {
     console.log('stream closed aborting all llm calls');
     abortController.abort();
-    await eventStream.push('[DONE]');
-    await eventStream.close();
     console.log(`storing message run in db ${runId}`);
     await storeMessageRunUsecase({
       runCreatedAt,
@@ -151,6 +149,7 @@ export async function executeStepThroughMessageRun<Tools>({
       runId,
       initialMessage
     });
+    console.log(`finished storing message run in db ${runId}`)
   });
 
   console.log('sending stream');
