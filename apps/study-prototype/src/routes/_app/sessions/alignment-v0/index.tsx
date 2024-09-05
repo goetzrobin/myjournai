@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import {
   ChatContainer,
+  ChatError,
   mapChunksToChatComponents,
   mapNonStreamedDBMessagesToChatComponents,
   MessagesContainer,
@@ -103,7 +104,8 @@ export default function FamilyDrawer({ onStart }: {
   );
 }
 export const Route = createFileRoute('/_app/sessions/alignment-v0/')({
-  component: Alignment
+  component: Alignment,
+  errorComponent: ChatError,
 });
 
 

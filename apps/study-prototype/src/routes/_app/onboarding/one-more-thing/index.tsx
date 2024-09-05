@@ -9,7 +9,7 @@ import { useOnboardingLetterMutation, useOnboardingLetterQuery } from '~myjourna
 
 
 export const Route = createFileRoute('/_app/onboarding/one-more-thing/')({
-  component: OneMoreThing
+  component: OneMoreThing,
 });
 
 function OneMoreThing() {

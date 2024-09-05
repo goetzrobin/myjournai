@@ -1,3 +1,4 @@
+export * from './lib/chat-error';
 export * from './lib/code-block';
 export * from './lib/markdown';
 export * from './lib/message';

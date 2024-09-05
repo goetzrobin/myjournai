@@ -6,9 +6,11 @@ import Chat from './-chat';
 import { useUserCompleteOnboardingMutation } from '@myjournai/user-client';
 import { useOnboardingLetterQuery } from '~myjournai/onboarding-client';
 import { useLatestSessionLogBySlugQuery, useSessionLogMessagesQuery } from '~myjournai/session-client';
+import { ChatError } from '~myjournai/chat-client';
 
 export const Route = createFileRoute('/_app/onboarding/final-convo/')({
-  component: FinalConvo
+  component: FinalConvo,
+  errorComponent: ChatError,
 });
 
 
