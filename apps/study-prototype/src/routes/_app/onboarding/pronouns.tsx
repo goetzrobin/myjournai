@@ -34,7 +34,7 @@ export const Route = createFileRoute('/_app/onboarding/pronouns')({
         <div className="w-full">
           <h1 className="text-2xl text-center">What's are your pronouns?</h1>
           <p className="mt-4 text-muted-foreground text-center">Specifying your pronouns helps Sam tu actually understand your identity.</p>
-          <TextField inputClassName="text-xl text-center" value={pronouns} onChange={setPronouns} className="mt-8" aria-label="Name" />
+          <TextField placeholder="e.g. She/Her" inputClassName="text-xl text-center" value={pronouns} onChange={setPronouns} className="mt-8" aria-label="Pronouns" />
         </div>
         <Button type="submit" className="absolute left-0 right-0 bottom-4">Continue</Button>
       </form>

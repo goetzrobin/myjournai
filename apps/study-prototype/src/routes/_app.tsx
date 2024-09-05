@@ -6,7 +6,7 @@ import ReloadPrompt from './-reload/reload-prompt';
 
 export const Route = createFileRoute('/_app')({
   beforeLoad: authenticateRoute,
-  loader: async ({ context, location }) => await redirectToUnfinishedOnboarding(location, context.queryClient),
+  loader: async ({ context, location }) => await redirectToUnfinishedOnboarding(location, context?.queryClient),
   component: AppLayout
 });
 
