@@ -2,7 +2,7 @@ import { useAxios } from '~myjournai/http-client';
 import { useQuery } from '@tanstack/react-query';
 import { BaseMessage } from '~myjournai/chat-shared';
 import { sessionQKF } from './query-key.factory';
-import { SessionLog } from '~myjournai/sessionlog-shared';
+import { SessionLogWithSession } from '~db/schema/session-logs';
 
 export const useSessionLogMessagesQuery = (sessionLogId: string | undefined) => {
   const axios = useAxios();
@@ -21,7 +21,7 @@ export const useLatestSessionLogBySlugQuery = ({ slug, userId }: {
   const axios = useAxios();
   return useQuery({
     queryKey: sessionQKF.logDetailBySlug(slug, userId),
-    queryFn: () => axios.get<SessionLog | undefined>(`/api/users/${userId}/sessions/slug/${slug}/session-logs/latest`).then(({ data }) => data),
+    queryFn: () => axios.get<SessionLogWithSession | undefined>(`/api/users/${userId}/sessions/slug/${slug}/session-logs/latest`).then(({ data }) => data),
     enabled: !!slug && !!userId
   });
 };

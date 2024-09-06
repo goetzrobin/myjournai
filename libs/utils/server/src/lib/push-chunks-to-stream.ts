@@ -1,5 +1,6 @@
 import { EventStream } from 'h3';
 import { BaseMessageChunk, BaseMessageScope, BaseMessageType } from '~myjournai/chat-shared';
+import { CurrentStepInfo } from '~myjournai/chat-server';
 
 export const pushChunksToStream = async ({
                                            eventStream,
@@ -10,7 +11,8 @@ export const pushChunksToStream = async ({
                                            scope,
                                            type,
                                            createdAt,
-                                           abortController
+                                           abortController,
+                                           currentStepInfo,
                                          }: {
   id: string,
   runId: string,
@@ -20,7 +22,8 @@ export const pushChunksToStream = async ({
   abortController: AbortController,
   type?: BaseMessageType,
   scope?: BaseMessageScope,
-  additionalChunks?: BaseMessageChunk[]
+  additionalChunks?: BaseMessageChunk[],
+  currentStepInfo?: CurrentStepInfo
 }): Promise<string> => {
   type ??= 'ai-message';
   scope ??= 'external';
@@ -35,7 +38,7 @@ export const pushChunksToStream = async ({
       if (chunk.textDelta && chunk.textDelta.length > 0) {
         content += chunk.textDelta;
       }
-      await eventStream.push(JSON.stringify({ ...chunk, chunkType: chunk.type, id, runId, scope, type, createdAt }));
+      await eventStream.push(JSON.stringify({ ...chunk, chunkType: chunk.type, id, runId, scope, type, createdAt, ...currentStepInfo }));
     }
   } catch (err) {
     console.error(err);

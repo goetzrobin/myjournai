@@ -23,7 +23,9 @@ export const llmInteractions = pgTable('llm_interactions', {
   rawResponseText: text('raw_response'),
   promptTokens: integer('prompt_tokens'),
   completionTokens: integer('completion_tokens'),
-  totalTokens: integer('total_tokens')
+  totalTokens: integer('total_tokens'),
+  currentStep: integer('current_step'),
+  stepRepetitions: integer('step_repetitions'),
 });
 
 export const llmInteractionFinishReasonEnumSchema = z.enum(llmInteractionFinishReason.enumValues);

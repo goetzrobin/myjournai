@@ -6,7 +6,7 @@ import { OpenAIProvider } from '@ai-sdk/openai';
 import { StoreLLMInteractionArgs } from '../store-llm-interaction';
 import { CurrentStepInfo } from './step-analyzer-node-factory';
 
-export type PromptProps = { messages: string, userInfo: string, userProfile: string; roundtrips: number };
+export type PromptProps = { messages: string, userInfo: string, userProfile: string; stepRepetitions: number };
 export type ToolProps = {
   additionalChunks: BaseMessageChunk[];
   llmInteractionId: string,
@@ -56,13 +56,13 @@ export const executeStepNodeFactory = <Tools>({
 
   let currentStep = (await kv.get(currentStepBySessionLogIdKey) ?? {
     currentStep: 1,
-    roundtrips: 0
+    stepRepetitions: 0
   }) as CurrentStepInfo;
 
   console.log(`executing current step ${currentStep}`);
   if (currentStep.currentStep > maxSteps) {
     console.warn(`current step greater than available, resetting to max step ${maxSteps}`);
-    currentStep = { currentStep: maxSteps, roundtrips: currentStep.roundtrips + 1 };
+    currentStep = { currentStep: maxSteps, stepRepetitions: currentStep.stepRepetitions + 1 };
   }
 
   const messageString = formatMessages(messages);
@@ -73,7 +73,7 @@ export const executeStepNodeFactory = <Tools>({
     messages: messageString,
     userInfo,
     userProfile,
-    roundtrips: currentStep.roundtrips
+    stepRepetitions: currentStep.stepRepetitions
   } as any);
   const tools = currentToolFactory({
     additionalChunks,

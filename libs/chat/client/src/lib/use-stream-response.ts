@@ -110,6 +110,20 @@ export function useStreamResponse({
     [c.createdAt.toISOString()]: [...(p[c.createdAt.toISOString()] ?? []), c]
   }), {} as Record<string, BaseMessageChunk[]>), [chunks]);
 
+  const currentStepInfo = useMemo(() => {
+    const potentialEntry = ((Object.entries(messageChunksByTimestamp) ?? [])
+        // from ai responses
+      .filter(([_, chunks]) => chunks[0]?.type === 'ai-message')
+      // take the most recent one
+      .sort(([key1], [key2]) => key2.localeCompare(key1)))
+      // and use it to get the chunks
+      [0]
+
+    const potentialChunks = potentialEntry?.[1] ?? [];
+    // any chunk has current step info
+    return {currentStep: potentialChunks[0]?.currentStep ?? 1, stepRepetitions: potentialChunks[0]?.stepRepetitions ?? 1}
+    }, [messageChunksByTimestamp])
+
   return {
     chunks,
     mutation,
@@ -117,6 +131,7 @@ export function useStreamResponse({
     isStreaming,
     abort: () => abortController.abort(),
     temporaryId,
-    messageChunksByTimestamp
+    messageChunksByTimestamp,
+    currentStepInfo
   };
 }

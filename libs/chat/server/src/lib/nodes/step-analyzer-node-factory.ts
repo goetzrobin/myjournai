@@ -6,7 +6,7 @@ import { filterOutInternalMessages } from '../filter-out-internal-messages';
 import { OpenAIProvider } from '@ai-sdk/openai';
 import { StoreLLMInteractionArgs } from '../store-llm-interaction';
 
-export type CurrentStepInfo = {currentStep: number; roundtrips: number}
+export type CurrentStepInfo = {currentStep: number; stepRepetitions: number}
 
 export const stepAnalyzerNodeFactory = ({
                                           userId,
@@ -39,7 +39,7 @@ export const stepAnalyzerNodeFactory = ({
   model = model ??= 'gpt-4o';
   const createdAt = new Date();
 
-  let currentStepInfo = (await kv.get(currentStepBySessionLogIdKey) ?? {currentStep: 1, roundtrips: 0}) as CurrentStepInfo;
+  let currentStepInfo = (await kv.get(currentStepBySessionLogIdKey) ?? {currentStep: 1, stepRepetitions: 0}) as CurrentStepInfo;
 
   const messageString = formatMessages(filterOutInternalMessages((messages)));
   const prompt = stepAnalyzerPrompt(messageString, currentStepInfo);
@@ -51,14 +51,14 @@ export const stepAnalyzerNodeFactory = ({
   });
 
   if (result.text.trim() === 'advance') {
-    currentStepInfo = {currentStep: currentStepInfo.currentStep + 1, roundtrips: 0};
+    currentStepInfo = {currentStep: currentStepInfo.currentStep + 1, stepRepetitions: 0};
     if (currentStepInfo.currentStep === maxSteps) {
       console.log('end conversation here');
       onConversationEnd?.();
     }
     console.log('incrementing current step to', JSON.stringify(currentStepInfo));
   } else {
-    currentStepInfo = {currentStep: currentStepInfo.currentStep, roundtrips: currentStepInfo.roundtrips + 1};
+    currentStepInfo = {currentStep: currentStepInfo.currentStep, stepRepetitions: currentStepInfo.stepRepetitions + 1};
     console.log(`remaining on step ${JSON.stringify(currentStepInfo)}`);
   }
 

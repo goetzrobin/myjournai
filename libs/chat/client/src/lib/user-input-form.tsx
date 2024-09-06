@@ -2,15 +2,17 @@ import React, { Dispatch, FormEvent, KeyboardEventHandler, Ref, SetStateAction }
 import { Button, TextArea } from '~myjournai/components';
 import { LucideArrowUp } from 'lucide-react';
 
-export const UserInputForm = ({ formRef, handleSubmit, input, setInput, onKeyDown }: {
+export const UserInputForm = ({ formRef, handleSubmit, input, setInput, onKeyDown, stepsRemaining, onEndConversationPressed }: {
+  stepsRemaining: number;
   formRef: Ref<HTMLFormElement>,
   input: string,
   setInput: Dispatch<SetStateAction<string>>
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
   onKeyDown: KeyboardEventHandler<HTMLTextAreaElement>;
+  onEndConversationPressed: () => void;
 }) => <div className="flex-none isolate relative pb-3">
   <div
-    className="bg-gradient-to-b from-transparent -m-[1px] to-55% to-background absolute h-8 left-0 right-0 -top-[1.3rem]" />
+    className="-z-10 bg-gradient-to-b from-transparent -m-[1px] to-55% to-background absolute h-8 left-0 right-0 -top-[1.3rem]" />
   <form
     ref={formRef}
     onSubmit={handleSubmit}
@@ -28,4 +30,5 @@ export const UserInputForm = ({ formRef, handleSubmit, input, setInput, onKeyDow
       <LucideArrowUp />
     </Button>}
   </form>
+  {stepsRemaining > 0 ? null : <Button onPress={onEndConversationPressed} variant="ghost" className="mt-2 w-full animate-in fade-in [animation-duration:300ms]">End Conversation</Button>}
 </div>;

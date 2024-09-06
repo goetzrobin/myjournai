@@ -100,6 +100,7 @@ export async function executeStepThroughMessageRun<Tools>({
     userId,
     runId,
     messagesBySessionLogIdKey,
+    currentStepBySessionLogIdKey,
     anthropic,
     abortController,
     maxSteps,

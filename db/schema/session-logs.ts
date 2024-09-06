@@ -1,6 +1,6 @@
 import { integer, pgEnum, pgTable, text, timestamp, unique, uuid } from 'drizzle-orm/pg-core';
 import { users } from './users';
-import { sessions } from './sessions';
+import { Session, sessions } from './sessions';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { relations } from 'drizzle-orm';
@@ -43,3 +43,5 @@ export const insertSessionLogSchema = createInsertSchema(sessionLogs);
 
 export type SessionLog = z.infer<typeof selectSessionLogSchema>;
 export type NewSessionLog = z.infer<typeof insertSessionLogSchema>
+export type SessionLogWithSession = SessionLog & {session: Session}
+

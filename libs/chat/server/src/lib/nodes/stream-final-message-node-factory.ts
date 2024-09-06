@@ -8,10 +8,12 @@ import { kv } from '@vercel/kv';
 import { StoreLLMInteractionArgs } from '../store-llm-interaction';
 import { AnthropicProvider } from '@ai-sdk/anthropic';
 import { EventStream } from 'h3';
+import { CurrentStepInfo } from './step-analyzer-node-factory';
 
 export const streamFinalMessageNodeFactory = ({
                                                 userId,
                                                 runId,
+                                                currentStepBySessionLogIdKey,
                                                 messagesBySessionLogIdKey,
                                                 anthropic,
                                                 model,
@@ -26,6 +28,7 @@ export const streamFinalMessageNodeFactory = ({
   runId: string;
   userId: string;
   model?: string;
+  currentStepBySessionLogIdKey: string;
   messagesBySessionLogIdKey: string;
   anthropic: AnthropicProvider;
   abortController: AbortController;
@@ -46,6 +49,7 @@ export const streamFinalMessageNodeFactory = ({
   const messageString = formatMessages(filterOutInternalMessages(messages.slice(messages.length - 5, messages.length)));
   const lastMessage = messages[messages.length - 1].content as string;
   const prompt = createFinalMessageAugmentationPrompt(messageString, lastMessage, userInfo, userProfile, additionalPrompt);
+  let currentStepInfo = (await kv.get(currentStepBySessionLogIdKey) ?? {currentStep: 1, stepRepetitions: 0}) as CurrentStepInfo;
 
   const finalStream = await streamText({
     model: anthropic(model),
@@ -62,7 +66,8 @@ export const streamFinalMessageNodeFactory = ({
         type,
         scope,
         createdAt,
-        prompt
+        prompt,
+        ...currentStepInfo
       });
     }
   });
@@ -73,7 +78,8 @@ export const streamFinalMessageNodeFactory = ({
     eventStream,
     aiStream: finalStream.fullStream,
     abortController,
-    additionalChunks
+    additionalChunks,
+    currentStepInfo
   });
 
   messages.push({

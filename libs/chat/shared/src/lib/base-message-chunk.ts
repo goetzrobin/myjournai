@@ -12,4 +12,6 @@ export type BaseMessageChunk = {
   toolName?: string;
   args?: any;
   result?: any;
+  currentStep?: number;
+  stepRepetitions?: number;
 }

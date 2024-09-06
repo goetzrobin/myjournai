@@ -19,7 +19,7 @@ const OnboardingWrapper = ({ children, currentStep, className, link }: PropsWith
       {children}
     </div>
     {!link ? null :
-      <Link to={link.to}><Button className="absolute bottom-6 left-0 right-0 w-full">{link.label}</Button></Link>}
+      <Link to={link.to}><Button className="absolute bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-0 right-0 w-full">{link.label}</Button></Link>}
   </div>;
 };
 

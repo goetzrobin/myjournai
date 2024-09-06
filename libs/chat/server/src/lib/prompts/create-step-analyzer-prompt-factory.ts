@@ -3,8 +3,8 @@ import { CurrentStepInfo } from '../nodes/step-analyzer-node-factory';
 export const createStepAnalyzerPromptFactory = (specificCriteriaCreator: (args: {
   currentStep: number,
   messages: string,
-  roundtrips: number
-}) => string) => (messages: string, { currentStep, roundtrips }: CurrentStepInfo) => `
+  stepRepetitions: number
+}) => string) => (messages: string, { currentStep, stepRepetitions }: CurrentStepInfo) => `
 Objective: Assess whether to advance the conversation to the next step based on user interactions, ensuring seamless and accurate management of the conversation flow. Utilize the designated tool to increment the current step when criteria to advance are met.
 
 Process Overview:
@@ -14,7 +14,7 @@ Process Overview:
   2. Stay on Current Step: Return the keyword stay.
 
 Step-Specific Criteria:
-${specificCriteriaCreator({ currentStep, roundtrips, messages })}
+${specificCriteriaCreator({ currentStep, stepRepetitions, messages })}
 
 Implementation Tips:
 - Use linguistic cues, sentiment analysis, and contextual understanding to assess user responses accurately.
@@ -23,7 +23,7 @@ Implementation Tips:
 
 Current Step: ${currentStep}
 
-Amount of times this step has been repeated: ${roundtrips}
+Amount of times this step has been repeated: ${stepRepetitions}
 
 Current messages:
 ${messages}

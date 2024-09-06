@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import {
   ChatContainer,
   mapChunksToChatComponents,
@@ -7,7 +7,6 @@ import {
   ThinkingIndicator,
   useAutoStartMessage,
   useChatEnterSubmit,
-  useEndConversationOnToolcallChunk,
   UserInputForm,
   useStreamResponse
 } from '~myjournai/chat-client';
@@ -26,16 +25,17 @@ const EndConvoOverlay = () => <div className="absolute inset-0 bg-background h-f
   </OnboardingWrapper>
 </div>;
 
-const Chat = ({ userId, messages, isMessageSuccess, isShowingUserInput, isSessionLogExists, children }: PropsWithChildren<
+const Chat = ({ userId, messages, isMessageSuccess, isShowingUserInput, isSessionLogExists, sessionStepCount, children }: PropsWithChildren<
     {
       messages: BaseMessage[];
       isMessageSuccess: boolean;
       userId: string;
       isShowingUserInput: boolean;
       isSessionLogExists: boolean;
+      sessionStepCount: number
     }
   >) => {
-    const { chunks, mutation, startStream, isStreaming, messageChunksByTimestamp } = useStreamResponse({
+    const { chunks, mutation, startStream, isStreaming, messageChunksByTimestamp, currentStepInfo} = useStreamResponse({
       userId,
       url: `/api/sessions/slug/onboarding-v0`
     });
@@ -48,8 +48,7 @@ const Chat = ({ userId, messages, isMessageSuccess, isShowingUserInput, isSessio
     });
     const { messagesRef, scrollRef, visibilityRef } = useScrollAnchor();
     const { onKeyDown, formRef, handleSubmit, input, setInput } = useChatEnterSubmit(startStream);
-    const { isEnded } = useEndConversationOnToolcallChunk(chunks);
-
+const [isEnded, setIsEnded] = useState(false);
     return <ChatContainer>
       <MessagesContainer messagesRef={messagesRef} scrollRef={scrollRef} visibilityRef={visibilityRef}>
         {children}
@@ -59,7 +58,7 @@ const Chat = ({ userId, messages, isMessageSuccess, isShowingUserInput, isSessio
         {!isEnded ? null : <EndConvoOverlay />}
       </MessagesContainer>
       {!isShowingUserInput ? null :
-        <UserInputForm formRef={formRef} input={input} setInput={setInput} onKeyDown={onKeyDown}
+        <UserInputForm onEndConversationPressed={() => setIsEnded(true)} stepsRemaining={sessionStepCount - currentStepInfo.currentStep} formRef={formRef} input={input} setInput={setInput} onKeyDown={onKeyDown}
                        handleSubmit={handleSubmit} />}
     </ChatContainer>;
   }

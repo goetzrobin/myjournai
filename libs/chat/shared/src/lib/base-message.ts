@@ -14,4 +14,6 @@ export interface BaseMessage {
   scope: BaseMessageScope;
   createdAt: Date;
   formatVersion: BaseMessageFormatVersion;
+  currentStep?: number;
+  stepRepetitions?: number;
 }

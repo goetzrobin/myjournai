@@ -1,6 +1,6 @@
 import { CoreTool, GenerateTextResult } from 'ai';
 import { db } from '~db/client';
-import { llmInteractions, LLMInteractionScope } from '~db/schema/llm-interactions';
+import { llmInteractions, LLMInteractionScope, NewLLMInteraction } from '~db/schema/llm-interactions';
 import { llmInteractionWarnings } from '~db/schema/llm-interaction-warnings';
 import { llmInteractionToolCalls } from '~db/schema/llm-interaction-tool-calls';
 import { llmInteractionToolCallResults } from '~db/schema/llm-interaction-tool-call-results';
@@ -17,6 +17,8 @@ export type StoreLLMInteractionArgs<TOOLS extends Record<string, CoreTool>> = Op
   createdAt: Date;
   prompt: string;
   tools?: TOOLS;
+  currentStep?: number;
+  stepRepetitions?: number;
 }, 'responseMessages' | 'roundtrips' | 'logprobs'>, 'toolCalls' | 'toolResults' | 'warnings'>;
 
 export const storeLlmInteraction = async <TOOLS extends Record<string, CoreTool>>({
@@ -35,12 +37,14 @@ export const storeLlmInteraction = async <TOOLS extends Record<string, CoreTool>
                                                                                     tools,
                                                                                     warnings,
                                                                                     toolCalls,
-                                                                                    toolResults
+                                                                                    toolResults,
+                                                                                    currentStep,
+                                                                                    stepRepetitions
                                                                                   }: StoreLLMInteractionArgs<TOOLS>) => {
   const stringifiedTools = JSON.stringify(tools ?? {});
   const finishedAt = new Date();
   const rawResponseText = JSON.stringify(rawResponse);
-  const values = {
+  const values: NewLLMInteraction = {
     id: llmInteractionId,
     userId,
     messageRunId: runId,
@@ -56,9 +60,11 @@ export const storeLlmInteraction = async <TOOLS extends Record<string, CoreTool>
     rawResponseText,
     promptTokens: isNaN(usage?.promptTokens) ? undefined : usage?.promptTokens,
     completionTokens: isNaN(usage?.completionTokens) ? undefined : usage?.completionTokens,
-    totalTokens: isNaN(usage?.totalTokens) ? undefined : usage?.totalTokens
-  }
-  console.log('inserting this bad boy', usage)
+    totalTokens: isNaN(usage?.totalTokens) ? undefined : usage?.totalTokens,
+    currentStep: !currentStep || isNaN(currentStep) ? undefined : currentStep,
+    stepRepetitions: !stepRepetitions || isNaN(stepRepetitions) ? undefined : stepRepetitions,
+  };
+  console.log('inserting this bad boy', usage);
   await db.insert(llmInteractions).values(values);
   for (const warning of (warnings ?? [])) {
     const index = (warnings ?? []).indexOf(warning);
@@ -94,6 +100,6 @@ export const storeLlmInteraction = async <TOOLS extends Record<string, CoreTool>
       result: JSON.stringify(result.result)
     });
   }
-  console.log('inserted this bad boy successfully', llmInteractionId)
+  console.log('inserted this bad boy successfully', llmInteractionId);
 
 };

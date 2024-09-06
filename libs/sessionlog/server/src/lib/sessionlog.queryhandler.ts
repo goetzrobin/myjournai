@@ -1,5 +1,5 @@
 import { db } from '~db/client';
-import { SessionLog, sessionLogs } from '~db/schema/session-logs';
+import { SessionLog, sessionLogs, SessionLogWithSession } from '~db/schema/session-logs';
 import { sessions } from '~db/schema/sessions';
 import { and, desc, eq, sql } from 'drizzle-orm';
 import { BaseMessage } from '~myjournai/chat-shared';
@@ -24,7 +24,7 @@ export const queryMostRecentSessionLogBy = async ({ sessionSlug, sessionId, user
   sessionSlug?: string;
   sessionId?: string;
   userId: string
-}): Promise<SessionLog | undefined> => {
+}): Promise<SessionLogWithSession | undefined> => {
   const [potentialSessionLog] = await db.select()
     .from(sessionLogs)
     .innerJoin(sessions, eq(sessions.id, sessionLogs.sessionId))
@@ -37,7 +37,7 @@ export const queryMostRecentSessionLogBy = async ({ sessionSlug, sessionId, user
     ).orderBy(desc(sessionLogs.version))
     .limit(1);
   console.log('found', potentialSessionLog);
-  return potentialSessionLog?.session_logs;
+  return {...potentialSessionLog?.session_logs, session: potentialSessionLog?.sessions};
 };
 
 export const querySessionLogMessagesBy = async ({ sessionLogId }: { sessionLogId: string }): Promise<(BaseMessage & {

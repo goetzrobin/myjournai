@@ -15,7 +15,7 @@ export const ChatError = () => {
         <p className="text-muted-foreground">
           We're sorry, but it seems there was an error loading the chat. Please try reloading the page.
         </p>
-        <Button onPress={handleReload} className="w-full max-w-xs mx-auto">
+        <Button onPress={handleReload} className="w-full flex items-center max-w-xs mx-auto">
           <RefreshCw className="mr-2 h-4 w-4" />
           Reload Page
         </Button>
