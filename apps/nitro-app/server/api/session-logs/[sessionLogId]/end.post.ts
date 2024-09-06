@@ -4,10 +4,11 @@ import { useRuntimeConfig } from 'nitropack/runtime';
 
 export default defineEventHandler(async (event) => {
   const sessionLogId = getRouterParam(event, 'sessionLogId');
+  const userId = event.context.user?.id;
   const body = await readBody(event);
   const { openApiKey } = useRuntimeConfig(event);
 
-  const endSessionCommand = endSessionCommandSchema.safeParse({ id: sessionLogId, apiKey: openApiKey, ...body });
+  const endSessionCommand = endSessionCommandSchema.safeParse({ id: sessionLogId, apiKey: openApiKey, userId, ...body });
   if (endSessionCommand.error) {
     throw createError({
       status: 400,

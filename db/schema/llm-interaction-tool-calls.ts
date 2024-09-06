@@ -5,6 +5,7 @@ import { llmInteractions } from './llm-interactions';
 
 export const llmInteractionToolCalls = pgTable('llm_interaction_tool_calls', {
   id: uuid('id').defaultRandom().primaryKey(),
+  toolCallId: text('tool_call_id'),
   llmInteractionId: uuid('llm_interaction_id').notNull().references(() => llmInteractions.id),
   index: integer('index').default(0),
   type: varchar('type'),

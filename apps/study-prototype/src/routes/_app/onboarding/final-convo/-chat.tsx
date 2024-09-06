@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren } from 'react';
 import {
   ChatContainer,
   mapChunksToChatComponents,
@@ -25,17 +25,27 @@ const EndConvoOverlay = () => <div className="absolute inset-0 bg-background h-f
   </OnboardingWrapper>
 </div>;
 
-const Chat = ({ userId, messages, isMessageSuccess, isShowingUserInput, isSessionLogExists, sessionStepCount, children }: PropsWithChildren<
+const Chat = ({
+                userId,
+                messages,
+                isMessageSuccess,
+                isShowingUserInput,
+                isSessionLogExists,
+                sessionStepCount,
+                onEndConversation,
+                children
+              }: PropsWithChildren<
     {
       messages: BaseMessage[];
       isMessageSuccess: boolean;
       userId: string;
       isShowingUserInput: boolean;
       isSessionLogExists: boolean;
-      sessionStepCount: number
+      sessionStepCount: number;
+      onEndConversation: () => void;
     }
   >) => {
-    const { chunks, mutation, startStream, isStreaming, messageChunksByTimestamp, currentStepInfo} = useStreamResponse({
+    const { mutation, startStream, isStreaming, messageChunksByTimestamp, currentStepInfo } = useStreamResponse({
       userId,
       url: `/api/sessions/slug/onboarding-v0`
     });
@@ -48,17 +58,18 @@ const Chat = ({ userId, messages, isMessageSuccess, isShowingUserInput, isSessio
     });
     const { messagesRef, scrollRef, visibilityRef } = useScrollAnchor();
     const { onKeyDown, formRef, handleSubmit, input, setInput } = useChatEnterSubmit(startStream);
-const [isEnded, setIsEnded] = useState(false);
+
     return <ChatContainer>
       <MessagesContainer messagesRef={messagesRef} scrollRef={scrollRef} visibilityRef={visibilityRef}>
         {children}
         {mapNonStreamedDBMessagesToChatComponents(messageChunksByTimestamp, messages)}
         {mapChunksToChatComponents(messageChunksByTimestamp)}
         {(mutation.isPending && !isStreaming) ? <ThinkingIndicator /> : null}
-        {!isEnded ? null : <EndConvoOverlay />}
       </MessagesContainer>
       {!isShowingUserInput ? null :
-        <UserInputForm onEndConversationPressed={() => setIsEnded(true)} stepsRemaining={sessionStepCount - currentStepInfo.currentStep} formRef={formRef} input={input} setInput={setInput} onKeyDown={onKeyDown}
+        <UserInputForm onEndConversationPressed={onEndConversation}
+                       stepsRemaining={sessionStepCount - currentStepInfo.currentStep} formRef={formRef} input={input}
+                       setInput={setInput} onKeyDown={onKeyDown}
                        handleSubmit={handleSubmit} />}
     </ChatContainer>;
   }

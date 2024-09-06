@@ -7,12 +7,14 @@ export const useOnboardingProgressStore = create(
   persist<{
     lastStep: OnboardingStep
     actions: {
+      reset: () => void;
       setLastStep: (newStep: OnboardingStep) => void;
     };
   }>(
     (set, get) => ({
       lastStep: 'start',
       actions: {
+        reset: () => set({lastStep: 'start'}),
         setLastStep: newScreen => set({ lastStep: newScreen })
       }
     }),

@@ -15,8 +15,8 @@ export const button = tv({
       primary: 'bg-primary/90 hover:bg-primary/95 pressed:bg-primary text-primary-foreground',
       secondary: 'bg-zinc-100 hover:bg-zinc-200 pressed:bg-zinc-300 text-zinc-800 dark:bg-zinc-600 dark:hover:bg-zinc-500 dark:pressed:bg-zinc-400 dark:text-zinc-100',
       destructive: 'bg-red-700 hover:bg-red-800 pressed:bg-red-900 text-white',
-      ghost: 'border-0 text-zinc-600 hover:bg-black/[5%] pressed:bg-black/10 dark:hover:bg-white/10 dark:pressed:bg-white/20 disabled:bg-transparent',
-      icon: 'border-0 flex items-center justify-center p-1 text-zinc-600 hover:bg-black/[5%] pressed:bg-black/10 dark:hover:bg-white/10 dark:pressed:bg-white/20 disabled:bg-transparent'
+      ghost: 'border-0 text-zinc-500 hover:bg-black/[5%] pressed:bg-black/10 dark:hover:bg-white/10 dark:pressed:bg-white/20 disabled:bg-transparent',
+      icon: 'border-0 flex items-center justify-center p-1 text-zinc-500 hover:bg-black/[5%] pressed:bg-black/10 dark:hover:bg-white/10 dark:pressed:bg-white/20 disabled:bg-transparent'
     },
     isDisabled: {
       true: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-300 dark:text-zinc-600 forced-colors:text-[GrayText] border-black/5 dark:border-white/5'

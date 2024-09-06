@@ -80,7 +80,7 @@ export const storeLlmInteraction = async <TOOLS extends Record<string, CoreTool>
   for (const toolCall of (toolCalls ?? [])) {
     const index = (toolCalls ?? []).indexOf(toolCall);
     await db.insert(llmInteractionToolCalls).values({
-      id: toolCall.toolCallId,
+      toolCallId: toolCall.toolCallId,
       llmInteractionId,
       index,
       name: toolCall.toolName,
@@ -91,7 +91,7 @@ export const storeLlmInteraction = async <TOOLS extends Record<string, CoreTool>
   for (const result of (toolResults ?? [])) {
     const index = (toolResults ?? []).indexOf(result);
     await db.insert(llmInteractionToolCallResults).values({
-      id: result.toolCallId,
+      toolCallId: result.toolCallId,
       llmInteractionId,
       index,
       name: result.toolName,

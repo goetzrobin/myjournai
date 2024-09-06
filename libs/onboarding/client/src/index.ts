@@ -1,6 +1,6 @@
 export * from './lib/onboarding-survey';
 export * from './lib/onboarding-user.store';
-export * from './lib/onboarding-user-data.mutation';
+export * from './lib/onboarding-user.mutation';
 export * from './lib/onboarding-progress.store';
 
 export * from './lib/cidi/queries/onboarding-cidi.mutation'

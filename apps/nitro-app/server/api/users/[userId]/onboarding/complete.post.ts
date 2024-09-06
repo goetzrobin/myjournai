@@ -27,6 +27,11 @@ export default defineEventHandler(async (event) => {
       message: 'Please reach out to our support team.'
     });
   }
+
+  // mark onboarding as complete
+  await db.update(users).set({ onboardingCompletedAt: new Date(), updatedAt: new Date() }).where(eq(users.id, userId));
+
+
   // create session log for that session with id
   const [existingSessionLog] = await db.select().from(sessionLogs).where(
     and(
@@ -43,9 +48,6 @@ export default defineEventHandler(async (event) => {
       version: existingSessionLog?.version !== undefined ? existingSessionLog.version + 1 : 0
     });
   }
-
-  // mark onboarding as complete
-  await db.update(users).set({ onboardingCompletedAt: new Date(), updatedAt: new Date() }).where(eq(users.id, userId));
 
   // create user profile
   const existingProfile = await queryLatestUserProfileBy({ userId });

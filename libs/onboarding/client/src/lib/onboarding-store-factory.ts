@@ -8,6 +8,7 @@ export const onboardingSurveyStoreFactory = (survey: OnboardingSurvey, storageKe
       survey: OnboardingSurvey;
       currentIndex: number;
       actions: {
+        reset: () => void;
         moveToPreviousQuestion: () => void;
         moveToNextQuestion: () => void;
         answerCurrentQuestion: (selectedAnswer: OnboardingPossibleAnswer, customValue?: string | number) => void;
@@ -17,6 +18,7 @@ export const onboardingSurveyStoreFactory = (survey: OnboardingSurvey, storageKe
         survey,
         currentIndex: 0,
         actions: {
+          reset: () => set({survey, currentIndex: 0}),
           moveToPreviousQuestion: () => {
             const { currentIndex } = get();
             set({ currentIndex: Math.max(currentIndex - 1, 0) });

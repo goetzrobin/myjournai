@@ -42,13 +42,13 @@ export const ONBOARDING_CIDI_CAREER_IDENTITY_CONFUSION_SURVEY: OnboardingSurvey 
     {
       index: 0,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'Feel confused as to who I really am when it comes to my career',
+      question: 'I feel confused as to who I really am when it comes to my career',
       type: 'multiple-choice'
     },
     {
       index: 1,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'Am uncertain about the kind of work I could perform well',
+      question: 'I am uncertain about the kind of work I could perform well',
       type: 'multiple-choice'
     },
     {
@@ -60,7 +60,7 @@ export const ONBOARDING_CIDI_CAREER_IDENTITY_CONFUSION_SURVEY: OnboardingSurvey 
     {
       index: 3,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'Often feel lost when I think about choosing a career because I don’t have enough information and/or experience to make a career decision at this point',
+      question: 'I often feel lost when I think about choosing a career because I don’t have enough information and/or experience to make a career decision at this point',
       type: 'multiple-choice'
     },
     {
@@ -78,13 +78,13 @@ export const ONBOARDING_CIDI_CAREER_IDENTITY_CONFUSION_SURVEY: OnboardingSurvey 
     {
       index: 6,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'Have doubts that I will be able to find a career that I’m satisfied with',
+      question: 'I have doubts that I will be able to find a career that I’m satisfied with',
       type: 'multiple-choice'
     },
     {
       index: 7,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'Have no clear sense of a career direction that would be meaningful to me',
+      question: 'I have no clear sense of a career direction that would be meaningful to me',
       type: 'multiple-choice'
     }
   ],
@@ -96,25 +96,25 @@ export const ONBOARDING_CIDI_CAREER_EXPLORATION_BREADTH_SELF_SURVEY: OnboardingS
     {
       index: 0,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'Learn about myself for the purpose of finding a career that meets my needs',
+      question: 'I learn about myself for the purpose of finding a career that meets my needs',
       type: 'multiple-choice'
     },
     {
       index: 1,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'Reflect on how my past could integrate with various career alternatives',
+      question: 'I reflect on how my past could integrate with various career alternatives',
       type: 'multiple-choice'
     },
     {
       index: 2,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'Think about which career options would be a good fit with my personality and values',
+      question: 'I think about which career options would be a good fit with my personality and values',
       type: 'multiple-choice'
     },
     {
       index: 3,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'Reflect on how my strengths and abilities could be best used in a variety of careers',
+      question: 'I reflect on how my strengths and abilities could be best used in a variety of careers',
       type: 'multiple-choice'
     },
   ],
@@ -126,25 +126,25 @@ export const ONBOARDING_CIDI_CAREER_EXPLORATION_DEPTH_SELF_SURVEY: OnboardingSur
     {
       index: 0,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'Reflect on how my chosen career aligns with my past experiences',
+      question: 'I reflect on how my chosen career aligns with my past experiences',
       type: 'multiple-choice'
     },
     {
       index: 1,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'Contemplate what I value most in my desired career',
+      question: 'I contemplate what I value most in my desired career',
       type: 'multiple-choice'
     },
     {
       index: 2,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'Contemplate how the work I want to do is congruent with my interests and personality',
+      question: 'I contemplate how the work I want to do is congruent with my interests and personality',
       type: 'multiple-choice'
     },
     {
       index: 3,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'Reflect on how my strengths and abilities could be best used in my desired career',
+      question: 'I reflect on how my strengths and abilities could be best used in my desired career',
       type: 'multiple-choice'
     },
   ],
@@ -156,13 +156,13 @@ export const ONBOARDING_CIDI_PAST_CAREER_EXPLORATION_BREADTH_SELF_SURVEY: Onboar
     {
       index: 0,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'Thought about which career options would be a good fit with my personality and values',
+      question: 'I thought about which career options would be a good fit with my personality and values',
       type: 'multiple-choice'
     },
     {
       index: 1,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'Reflected on how my strengths and abilities could be best used in a variety of careers',
+      question: 'I reflected on how my strengths and abilities could be best used in a variety of careers',
       type: 'multiple-choice'
     },
 
@@ -181,7 +181,7 @@ export const ONBOARDING_CIDI_CAREER_COMMITMENT_QUALITY_SURVEY: OnboardingSurvey 
     {
       index: 1,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'Can say that I have found my purpose in life through my career of interest',
+      question: 'I can say that I have found my purpose in life through my career of interest',
       type: 'multiple-choice'
     },
     {
