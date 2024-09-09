@@ -37,7 +37,7 @@ export const queryMostRecentSessionLogBy = async ({ sessionSlug, sessionId, user
     ).orderBy(desc(sessionLogs.version))
     .limit(1);
   console.log('found', potentialSessionLog);
-  return {...potentialSessionLog?.session_logs, session: potentialSessionLog?.sessions};
+  return !potentialSessionLog ? undefined : {...potentialSessionLog.session_logs, session: potentialSessionLog?.sessions};
 };
 
 export const querySessionLogMessagesBy = async ({ sessionLogId }: { sessionLogId: string }): Promise<(BaseMessage & {

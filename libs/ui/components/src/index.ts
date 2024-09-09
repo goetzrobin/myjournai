@@ -9,6 +9,7 @@ export * from './lib/DateRangePicker';
 export * from './lib/Dialog';
 export * from './lib/Drawer';
 export * from './lib/Field';
+export * from './lib/SmoothButton';
 export * from './lib/Form';
 export * from './lib/GridList';
 export * from './lib/JournaiJ';

@@ -16,19 +16,24 @@ import { kv } from '@vercel/kv';
 import { storeMessageRunUsecase } from './use-cases/store-message-run.usecase';
 import { createError, createEventStream, H3Event, readBody } from 'h3';
 
-export async function executeStepThroughMessageRun<Tools>({
-                                                     event,
-                                                     sessionSlug,
-                                                     maxSteps,
-                                                     stepAnalyzerPrompt,
-                                                     executeStepPromptsAndTools,
-                                                     additionalAdjustFinalMessagePrompt
-                                                   }: {
+export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>({
+                                                                                  event,
+                                                                                  sessionSlug,
+                                                                                  maxSteps,
+                                                                                  stepAnalyzerPrompt,
+                                                                                  executeStepPromptsAndTools,
+                                                                                  additionalAdjustFinalMessagePrompt,
+                                                                                  fetchAdditionalPromptProps
+                                                                                }: {
   event: H3Event;
   sessionSlug: string;
   maxSteps: number;
   stepAnalyzerPrompt: (messages: string, currentStep: CurrentStepInfo) => string;
-  executeStepPromptsAndTools: Record<number, { tools: (props: ToolProps) => Tools; prompt: (props: PromptProps) => string }>
+  fetchAdditionalPromptProps?: ({userId}: {userId: string}) => AdditionalProps;
+  executeStepPromptsAndTools: Record<number, {
+    tools: (props: ToolProps) => Tools;
+    prompt: (props: PromptProps<AdditionalProps>) => string
+  }>
   additionalAdjustFinalMessagePrompt?: string;
 }) {
   const abortController = new AbortController();
@@ -70,6 +75,8 @@ export async function executeStepThroughMessageRun<Tools>({
   const llmInteractionsToStore: StoreLLMInteractionArgs<any>[] = [];
   const additionalChunks: BaseMessageChunk[] = [];
 
+  const additionalProps = fetchAdditionalPromptProps?.({userId});
+
   const stepAnalyzerNode = stepAnalyzerNodeFactory({
     userId,
     runId,
@@ -93,9 +100,10 @@ export async function executeStepThroughMessageRun<Tools>({
     llmInteractionsToStore,
     userProfile,
     userInfo,
-    additionalChunks
+    additionalChunks,
+    additionalProps
   });
-  console.log(additionalChunks)
+  console.log(additionalChunks);
   const streamFinalMessageNode = streamFinalMessageNodeFactory({
     userId,
     runId,
@@ -150,7 +158,7 @@ export async function executeStepThroughMessageRun<Tools>({
       runId,
       initialMessage
     });
-    console.log(`finished storing message run in db ${runId}`)
+    console.log(`finished storing message run in db ${runId}`);
   });
 
   console.log('sending stream');

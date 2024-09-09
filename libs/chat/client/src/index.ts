@@ -13,3 +13,6 @@ export * from './lib/use-stream-response';
 export * from './lib/use-end-conversation-on-toolcall-chunk';
 export * from './lib/use-chat-enter-submit';
 export * from './lib/use-auto-start-message';
+export * from './lib/questions-drawer/questions-drawer'
+export * from './lib/questions-drawer/pre-questions-drawer'
+export * from './lib/questions-drawer/post-questions-drawer'

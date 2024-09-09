@@ -1,8 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useSignInMutation } from '@myjournai/auth-client';
-import { Form, Link, TextField } from '~myjournai/components';
+import { Form, Link, SmoothButton, TextField } from '~myjournai/components';
 import { parseFormData } from '~myjournai/form-utils';
-import SmoothButton from './-components/smooth-button';
 import { LucideLoader } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -35,7 +34,7 @@ function SignIn() {
           type="password"
           isRequired
         />
-        <SmoothButton className="mt-8" buttonState={mut.status}>
+        <SmoothButton type="submit" className="mt-8" buttonState={mut.status}>
           {mut.status !== 'idle' ? null : 'Sign in'}
           {mut.status !== 'pending' ? null : <LucideLoader className="size-5 animate-spin" />}
           {mut.status !== 'success' ? null : 'You\'re signed in!'}

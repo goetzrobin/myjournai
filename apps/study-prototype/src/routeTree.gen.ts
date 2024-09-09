@@ -28,6 +28,7 @@ import { Route as AppOnboardingPronounsImport } from './routes/_app/onboarding/p
 import { Route as AppOnboardingNameImport } from './routes/_app/onboarding/name'
 import { Route as AppOnboardingMeetSamImport } from './routes/_app/onboarding/meet-sam'
 import { Route as AppOnboardingBdayImport } from './routes/_app/onboarding/bday'
+import { Route as AppSessionsGettingStartedV0IndexImport } from './routes/_app/sessions/getting-started-v0/index'
 import { Route as AppSessionsAlignmentV0IndexImport } from './routes/_app/sessions/alignment-v0/index'
 import { Route as AppOnboardingOneMoreThingIndexImport } from './routes/_app/onboarding/one-more-thing/index'
 import { Route as AppOnboardingFinalConvoIndexImport } from './routes/_app/onboarding/final-convo/index'
@@ -132,6 +133,12 @@ const AppOnboardingBdayRoute = AppOnboardingBdayImport.update({
   path: '/onboarding/bday',
   getParentRoute: () => AppRoute,
 } as any)
+
+const AppSessionsGettingStartedV0IndexRoute =
+  AppSessionsGettingStartedV0IndexImport.update({
+    path: '/sessions/getting-started-v0/',
+    getParentRoute: () => AppRoute,
+  } as any)
 
 const AppSessionsAlignmentV0IndexRoute =
   AppSessionsAlignmentV0IndexImport.update({
@@ -351,6 +358,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSessionsAlignmentV0IndexImport
       parentRoute: typeof AppImport
     }
+    '/_app/sessions/getting-started-v0/': {
+      id: '/_app/sessions/getting-started-v0/'
+      path: '/sessions/getting-started-v0'
+      fullPath: '/sessions/getting-started-v0'
+      preLoaderRoute: typeof AppSessionsGettingStartedV0IndexImport
+      parentRoute: typeof AppImport
+    }
     '/_app/onboarding/study/career-commitment-quality/survey': {
       id: '/_app/onboarding/study/career-commitment-quality/survey'
       path: '/onboarding/study/career-commitment-quality/survey'
@@ -408,6 +422,7 @@ export const routeTree = rootRoute.addChildren({
     AppOnboardingFinalConvoIndexRoute,
     AppOnboardingOneMoreThingIndexRoute,
     AppSessionsAlignmentV0IndexRoute,
+    AppSessionsGettingStartedV0IndexRoute,
     AppOnboardingStudyCareerCommitmentQualitySurveyRoute,
     AppOnboardingStudyCareerExplorationBreadthSelfSurveyRoute,
     AppOnboardingStudyCareerExplorationDepthSelfSurveyRoute,
@@ -455,6 +470,7 @@ export const routeTree = rootRoute.addChildren({
         "/_app/onboarding/final-convo/",
         "/_app/onboarding/one-more-thing/",
         "/_app/sessions/alignment-v0/",
+        "/_app/sessions/getting-started-v0/",
         "/_app/onboarding/study/career-commitment-quality/survey",
         "/_app/onboarding/study/career-exploration-breadth-self/survey",
         "/_app/onboarding/study/career-exploration-depth-self/survey",
@@ -546,6 +562,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/sessions/alignment-v0/": {
       "filePath": "_app/sessions/alignment-v0/index.tsx",
+      "parent": "/_app"
+    },
+    "/_app/sessions/getting-started-v0/": {
+      "filePath": "_app/sessions/getting-started-v0/index.tsx",
       "parent": "/_app"
     },
     "/_app/onboarding/study/career-commitment-quality/survey": {

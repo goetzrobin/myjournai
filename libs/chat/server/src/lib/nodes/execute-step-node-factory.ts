@@ -6,7 +6,9 @@ import { OpenAIProvider } from '@ai-sdk/openai';
 import { StoreLLMInteractionArgs } from '../store-llm-interaction';
 import { CurrentStepInfo } from './step-analyzer-node-factory';
 
-export type PromptProps = { messages: string, userInfo: string, userProfile: string; stepRepetitions: number };
+export type PromptProps<AdditionalProps = {}> =
+  { messages: string, userInfo: string, userProfile: string; stepRepetitions: number }
+  & AdditionalProps;
 export type ToolProps = {
   additionalChunks: BaseMessageChunk[];
   llmInteractionId: string,
@@ -16,21 +18,22 @@ export type ToolProps = {
   createdAt: Date
 };
 
-export const executeStepNodeFactory = <Tools>({
-                                                           userId,
-                                                           runId,
-                                                           currentStepBySessionLogIdKey,
-                                                           messagesBySessionLogIdKey,
-                                                           executeStepPromptsAndTools,
-                                                           groq,
-                                                           model,
-                                                           abortController,
-                                                           maxSteps,
-                                                           llmInteractionsToStore,
-                                                           userInfo,
-                                                           userProfile,
-                                                           additionalChunks
-                                                         }: {
+export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
+                                                                      userId,
+                                                                      runId,
+                                                                      currentStepBySessionLogIdKey,
+                                                                      messagesBySessionLogIdKey,
+                                                                      executeStepPromptsAndTools,
+                                                                      groq,
+                                                                      model,
+                                                                      abortController,
+                                                                      maxSteps,
+                                                                      llmInteractionsToStore,
+                                                                      userInfo,
+                                                                      userProfile,
+                                                                      additionalChunks,
+                                                                      additionalProps
+                                                                    }: {
   runId: string;
   userId: string;
   model?: string;
@@ -38,7 +41,7 @@ export const executeStepNodeFactory = <Tools>({
   messagesBySessionLogIdKey: string;
   executeStepPromptsAndTools: Record<number, {
     tools: (props: ToolProps) => Tools;
-    prompt: (props: PromptProps) => string
+    prompt: (props: PromptProps<AdditionalProps>) => string
   }>
   groq: OpenAIProvider;
   abortController: AbortController;
@@ -47,6 +50,7 @@ export const executeStepNodeFactory = <Tools>({
   userInfo: string;
   userProfile: string;
   additionalChunks: BaseMessageChunk[];
+  additionalProps?: AdditionalProps
 }) => async (messages: BaseMessage[]): Promise<BaseMessage[]> => {
   const llmInteractionId = crypto.randomUUID();
   const type = 'execute-step';
