@@ -1,0 +1,1 @@
+ALTER TABLE "llm_interaction_tool_calls" ADD COLUMN "tool_call_id" text;

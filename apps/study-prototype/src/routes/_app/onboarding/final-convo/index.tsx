@@ -55,6 +55,8 @@ function FinalConvo() {
   };
 
   useEffect(() => {
+    console.log(!isConversationMutatedToFinish, completeOnboardingMutation.isIdle, !conversationInitialized.current, isSuccessSessionLog, !sessionInProgress)
+    console.log(!isConversationMutatedToFinish && completeOnboardingMutation.isIdle && !conversationInitialized.current && isSuccessSessionLog && !sessionInProgress)
     if (!isConversationMutatedToFinish && completeOnboardingMutation.isIdle && !conversationInitialized.current && isSuccessSessionLog && !sessionInProgress) {
       conversationInitialized.current = true;
       console.log('initializing onboarding')
@@ -71,7 +73,7 @@ function FinalConvo() {
         </div>
       </div>}
     {!isShowingChat ? null :
-      <Chat onEndConversation={onEndConversation} isSessionLogExists={sessionInProgress}
+      <Chat endMutationStatus={endMutation.status} onEndConversation={onEndConversation} isSessionLogExists={sessionInProgress}
             isShowingUserInput={isShowingUserInput} sessionStepCount={sessionLog?.session?.stepCount ?? 99}
             isMessageSuccess={isMessageSuccess} messages={messages} userId={userId}>
         {!existingLetter || !isMessageSuccess ? null : <div className="px-8 pb-12 flex items-center justify-end">

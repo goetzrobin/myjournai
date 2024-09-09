@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
 
   // mark onboarding as complete
   await db.update(users).set({ onboardingCompletedAt: new Date(), updatedAt: new Date() }).where(eq(users.id, userId));
-
+console.log('marked users onboarding as completed')
 
   // create session log for that session with id
   const [existingSessionLog] = await db.select().from(sessionLogs).where(

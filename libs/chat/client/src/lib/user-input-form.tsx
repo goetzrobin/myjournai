@@ -1,8 +1,8 @@
-import React, { Dispatch, FormEvent, KeyboardEventHandler, Ref, SetStateAction } from 'react';
+import React, { Dispatch, FormEvent, KeyboardEventHandler, ReactNode, Ref, SetStateAction } from 'react';
 import { Button, TextArea } from '~myjournai/components';
 import { LucideArrowUp } from 'lucide-react';
 
-export const UserInputForm = ({ formRef, handleSubmit, input, setInput, onKeyDown, stepsRemaining, onEndConversationPressed }: {
+export const UserInputForm = ({ formRef, handleSubmit, input, setInput, onKeyDown, stepsRemaining, onEndConversationPressed, customEndConvoButton }: {
   stepsRemaining: number;
   formRef: Ref<HTMLFormElement>,
   input: string,
@@ -10,6 +10,7 @@ export const UserInputForm = ({ formRef, handleSubmit, input, setInput, onKeyDow
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
   onKeyDown: KeyboardEventHandler<HTMLTextAreaElement>;
   onEndConversationPressed: () => void;
+  customEndConvoButton?: ReactNode
 }) => <div className="flex-none isolate relative pb-3">
   <div
     className="-z-10 bg-gradient-to-b from-transparent -m-[1px] to-55% to-background absolute h-8 left-0 right-0 -top-[1.3rem]" />
@@ -30,5 +31,6 @@ export const UserInputForm = ({ formRef, handleSubmit, input, setInput, onKeyDow
       <LucideArrowUp />
     </Button>}
   </form>
-  {stepsRemaining > 0 ? null : <Button onPress={onEndConversationPressed} variant="ghost" className="mt-2 w-full animate-in fade-in [animation-duration:300ms]">End Conversation</Button>}
+  {(stepsRemaining > 0 || customEndConvoButton) ? null : <Button onPress={onEndConversationPressed} variant="ghost" className="mt-2 w-full animate-in fade-in [animation-duration:300ms]">End Conversation</Button>}
+  {stepsRemaining > 0 || !customEndConvoButton ? null : customEndConvoButton}
 </div>;
