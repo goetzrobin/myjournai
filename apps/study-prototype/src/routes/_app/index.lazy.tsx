@@ -11,7 +11,10 @@ export const Route = createLazyFileRoute('/_app/')({
   component: Index
 });
 
-const MenuItem = ({ session, onPress }: PropsWithChildren<{ session: SessionWithLogs; onPress?: () => void }>) => <div className="bg-background shadow-xl overflow-hidden relative px-8 pb-8 pt-44 rounded-xl border">
+const MenuItem = ({ session, onPress }: PropsWithChildren<{ session: SessionWithLogs; onPress?: () => void }>) => {
+  const hasInProgressLog = session.logs.some(l => l.status === 'IN_PROGRESS')
+  const hasCompletedLog = session.logs.some(l => l.status === 'COMPLETED')
+  return <div className="bg-background shadow-xl overflow-hidden relative px-8 pb-8 pt-44 rounded-xl border">
     <img
       className="absolute left-0 top-0 h-40 object-cover"
       src={`/sessions/${session.imageUrl}`}
@@ -22,9 +25,10 @@ const MenuItem = ({ session, onPress }: PropsWithChildren<{ session: SessionWith
     <h4 className="text-2xl font-serif text-center mb-4">{session?.name}</h4>
     <p className="text-muted-foreground text-lg text-center">{session?.description}</p>
     <Button isDisabled={!onPress} onPress={onPress} className="w-full mt-8" variant="secondary">
-      {session.logs.some(l => l.status === 'IN_PROGRESS') ? 'Continue' : 'Start'}
+      {hasInProgressLog ? 'Continue' : hasCompletedLog ? 'Restart' : 'Start'}
     </Button>
   </div>;
+}
 
 function Index() {
   const userQ = useUserQuery(useAuthUserIdFromHeaders());
@@ -43,7 +47,7 @@ function Index() {
         {!sessionsQ.isPending ? null : <p>Loading sessions</p>}
         {sessions.map(s => <MenuItem
           session={s}
-          onPress={s.logs.length > 0 && s.logs.every(l => l.status !== 'IN_PROGRESS') ? undefined : createOnPress(s)}
+          onPress={createOnPress(s)}
           key={s.id}>{s.name}</MenuItem>)}
       </div>
     </div>

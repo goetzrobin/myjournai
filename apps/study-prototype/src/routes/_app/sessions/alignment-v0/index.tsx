@@ -76,7 +76,7 @@ function Alignment() {
     <PreQuestionsDrawer status={startMutation.status} open={isSessionNotStarted} onStartClicked={onStartClicked} />
     <PostQuestionsDrawer status={endMutation.status} open={isEnded} setOpen={setIsEnded} onEndClicked={onEndClicked} />
     {isSessionNotStarted ? null :
-      <ChatContainer>
+      <ChatContainer withMenu sessionLogId={sessionLog?.id} userId={userId}>
         <MessagesContainer messagesRef={messagesRef} scrollRef={scrollRef} visibilityRef={visibilityRef}>
           {mapNonStreamedDBMessagesToChatComponents(messageChunksByTimestamp, messages ?? [])}
           {mapChunksToChatComponents(messageChunksByTimestamp)}

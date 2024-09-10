@@ -1,7 +1,7 @@
 import { db } from '~db/client';
 import { SessionLog, sessionLogs, SessionLogWithSession } from '~db/schema/session-logs';
 import { sessions } from '~db/schema/sessions';
-import { and, desc, eq, sql } from 'drizzle-orm';
+import { and, desc, eq, or, sql } from 'drizzle-orm';
 import { BaseMessage } from '~myjournai/chat-shared';
 import { messageRuns } from '~db/schema/message-runs';
 import { llmInteractions } from '~db/schema/llm-interactions';
@@ -20,24 +20,34 @@ export const querySessionLogBy = async ({ id }: {
     .limit(1);
   return potentialSessionLog;
 };
-export const queryMostRecentSessionLogBy = async ({ sessionSlug, sessionId, userId }: {
+export const queryMostRecentSessionLogBy = async ({ sessionSlug, sessionId, userId, includeAborted }: {
   sessionSlug?: string;
   sessionId?: string;
-  userId: string
+  userId: string;
+  includeAborted?: boolean
 }): Promise<SessionLogWithSession | undefined> => {
-  const [potentialSessionLog] = await db.select()
+   const query = db.select()
     .from(sessionLogs)
     .innerJoin(sessions, eq(sessions.id, sessionLogs.sessionId))
     .where(
       and(
+        eq(sessionLogs.userId, userId),
         !sessionId ? undefined : eq(sessions.id, sessionId),
         !sessionSlug ? undefined : eq(sessions.slug, sessionSlug),
-        eq(sessionLogs.userId, userId)
+        or(
+          eq(sessionLogs.status, 'IN_PROGRESS'),
+          eq(sessionLogs.status, 'COMPLETED'),
+          !includeAborted ? undefined : eq(sessionLogs.status, 'ABORTED')
+        )
       )
     ).orderBy(desc(sessionLogs.version))
     .limit(1);
-  console.log('found', potentialSessionLog);
-  return !potentialSessionLog ? undefined : {...potentialSessionLog.session_logs, session: potentialSessionLog?.sessions};
+  const [potentialSessionLog] = await query;
+  console.log('found', potentialSessionLog, query.toSQL());
+  return !potentialSessionLog ? undefined : {
+    ...potentialSessionLog.session_logs,
+    session: potentialSessionLog?.sessions
+  };
 };
 
 export const querySessionLogMessagesBy = async ({ sessionLogId }: { sessionLogId: string }): Promise<(BaseMessage & {

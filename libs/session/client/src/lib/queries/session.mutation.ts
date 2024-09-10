@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAxios } from '~myjournai/http-client';
 import {
+  AbortSessionResponse,
   EndSessionRequest,
   EndSessionResponse,
   StartSessionRequest,
@@ -44,6 +45,29 @@ export const useSessionEndMutation = ({ userId, sessionLogId, onSuccess }: {
         throw Error('provide userId and sessionLogId');
       }
       return axios.post<EndSessionRequest, EndSessionResponse>(`/api/session-logs/${sessionLogId}/end`, data);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: sessionQKF.logDetails(userId) });
+      onSuccess?.();
+    }
+  });
+};
+
+
+export const useSessionAbortMutation = ({ userId, sessionLogId, onSuccess }: {
+  userId?: string;
+  sessionLogId?: string;
+  onSuccess?: () => void
+}) => {
+  const axios = useAxios();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => {
+      console.log('yoooo')
+      if (!userId || !sessionLogId) {
+        throw Error('provide userId and sessionLogId');
+      }
+      return axios.post<never, AbortSessionResponse>(`/api/session-logs/${sessionLogId}/abort`);
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: sessionQKF.logDetails(userId) });

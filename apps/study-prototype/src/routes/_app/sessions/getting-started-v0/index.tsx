@@ -53,7 +53,7 @@ function GettingStarted() {
   const [isEnded, setIsEnded] = useState(false);
   const isSessionNotStarted = isSuccessSessionLog && !sessionLog;
   const isReadyForUserInput = isSuccessSessionLog && sessionLog?.status === 'IN_PROGRESS';
-  const stepsRemaining = sessionLog?.session?.stepCount ?? 99 - currentStepInfo.currentStep
+  const stepsRemaining = sessionLog?.session?.stepCount ?? 99 - currentStepInfo.currentStep;
 
   const onStartClicked = (scores: QuestionDrawerScores) => startMutation.mutate({
     preAnxietyScore: scores.anxietyScore,
@@ -73,7 +73,7 @@ function GettingStarted() {
     <PreQuestionsDrawer status={startMutation.status} open={isSessionNotStarted} onStartClicked={onStartClicked} />
     <PostQuestionsDrawer status={endMutation.status} open={isEnded} setOpen={setIsEnded} onEndClicked={onEndClicked} />
     {isSessionNotStarted ? null :
-      <ChatContainer>
+      <ChatContainer withMenu sessionLogId={sessionLog?.id} userId={userId}>
         <MessagesContainer messagesRef={messagesRef} scrollRef={scrollRef} visibilityRef={visibilityRef}>
           {mapNonStreamedDBMessagesToChatComponents(messageChunksByTimestamp, messages ?? [])}
           {mapChunksToChatComponents(messageChunksByTimestamp)}
