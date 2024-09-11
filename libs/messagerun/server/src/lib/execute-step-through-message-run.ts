@@ -33,7 +33,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
   sessionSlug: string;
   maxSteps: number;
   stepAnalyzerPrompt: (messages: string, currentStep: CurrentStepInfo) => string;
-  fetchAdditionalPromptProps?: ({userId}: {userId: string}) => AdditionalProps;
+  fetchAdditionalPromptProps?: ({userId}: {userId: string}) => Promise<AdditionalProps>;
   executeStepPromptsAndTools: Record<number, {
     tools: (props: ToolProps) => Tools;
     prompt: (props: PromptProps<AdditionalProps>) => string
@@ -79,7 +79,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
   const llmInteractionsToStore: StoreLLMInteractionArgs<any>[] = [];
   const additionalChunks: BaseMessageChunk[] = [];
 
-  const additionalProps = fetchAdditionalPromptProps?.({userId});
+  const additionalProps = await fetchAdditionalPromptProps?.({userId});
 
   const stepAnalyzerNode = stepAnalyzerNodeFactory({
     userId,
