@@ -3,30 +3,30 @@ import { SessionLog } from '~myjournai/sessionlog-shared';
 // Utility function to map scores to descriptive responses
 const scoreToFeelingText = (score: number | null): string => {
   switch (score) {
-    case 1: return "Awful";
-    case 2: return "Meh";
-    case 3: return "Good";
-    case 4: return "Great";
+    case 0: return "Awful";
+    case 1: return "Meh";
+    case 2: return "Good";
+    case 3: return "Great";
     default: return "Unknown";
   }
 };
 
 const scoreToMotivationText = (score: number | null): string => {
   switch (score) {
-    case 1: return "Not at all motivated";
-    case 2: return "Slightly motivated";
-    case 3: return "Quite motivated";
-    case 4: return "Highly motivated";
+    case 0: return "Not at all motivated";
+    case 1: return "Slightly motivated";
+    case 2: return "Quite motivated";
+    case 3: return "Highly motivated";
     default: return "Unknown";
   }
 };
 
 const scoreToAnxietyText = (score: number | null): string => {
   switch (score) {
-    case 1: return "Not at all anxious";
-    case 2: return "Slightly anxious";
-    case 3: return "Quite anxious";
-    case 4: return "Extremely anxious";
+    case 0: return "Not at all anxious";
+    case 1: return "Slightly anxious";
+    case 2: return "Quite anxious";
+    case 3: return "Extremely anxious";
     default: return "Unknown";
   }
 };
