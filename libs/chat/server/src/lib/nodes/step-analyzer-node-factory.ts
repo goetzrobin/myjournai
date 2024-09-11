@@ -44,6 +44,8 @@ export const stepAnalyzerNodeFactory = ({
   const messageString = formatMessages(filterOutInternalMessages((messages)));
   const prompt = stepAnalyzerPrompt(messageString, currentStepInfo);
 
+  console.log(`prompt used for step analysis: ${prompt}`)
+
   const result = await generateText({
     model: openai(model),
     prompt,
@@ -56,15 +58,15 @@ export const stepAnalyzerNodeFactory = ({
       console.log('end conversation here');
       onConversationEnd?.();
     }
-    console.log('incrementing current step to', JSON.stringify(currentStepInfo));
+    console.log('decided to advance to next step. incrementing current step to', JSON.stringify(currentStepInfo));
   } else {
     currentStepInfo = {currentStep: currentStepInfo.currentStep, stepRepetitions: currentStepInfo.stepRepetitions + 1};
-    console.log(`remaining on step ${JSON.stringify(currentStepInfo)}`);
+    console.log(`decided to stay: remaining on step ${JSON.stringify(currentStepInfo)}`);
   }
 
   messages.push({ id: llmInteractionId, type, scope, content: result.text, formatVersion: 1, createdAt });
 
-  console.log(`determined current step ${currentStepInfo} for ${currentStepBySessionLogIdKey}`);
+  console.log(`continuing with the following step info: ${JSON.stringify(currentStepInfo)} for ${currentStepBySessionLogIdKey}`);
 
   await kv.set(messagesBySessionLogIdKey, messages);
   await kv.set(currentStepBySessionLogIdKey, currentStepInfo);

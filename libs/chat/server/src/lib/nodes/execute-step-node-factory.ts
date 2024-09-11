@@ -7,7 +7,13 @@ import { StoreLLMInteractionArgs } from '../store-llm-interaction';
 import { CurrentStepInfo } from './step-analyzer-node-factory';
 
 export type PromptProps<AdditionalProps = {}> =
-  { messages: string, userInfoBlock: string, userProfileBlock: string; embeddedQuestionsBlock: string; stepRepetitions: number }
+  {
+    messages: string,
+    userInfoBlock: string,
+    userProfileBlock: string;
+    embeddedQuestionsBlock: string;
+    stepRepetitions: number
+  }
   & AdditionalProps;
 export type ToolProps = {
   additionalChunks: BaseMessageChunk[];
@@ -75,6 +81,14 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
   const currentPromptAndTools = executeStepPromptsAndTools[currentStep.currentStep];
   const currentPromptFactory = currentPromptAndTools.prompt ?? (() => '');
   const currentToolFactory = currentPromptAndTools.tools ?? (() => '');
+
+  console.log(`metadata passed to prompt:
+${userInfoBlock}
+${userProfileBlock}
+${embeddedQuestionsBlock}
+additional props:
+${JSON.stringify(additionalProps)}`);
+
   const prompt = currentPromptFactory({
     messages: messageString,
     userInfoBlock,
@@ -91,6 +105,8 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
     type: 'tool-call',
     createdAt
   } as any);
+
+  console.log(`prompt used for execution: ${prompt}`)
 
   const result = await generateText({
     model: groq(model),

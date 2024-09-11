@@ -51,6 +51,8 @@ export const streamFinalMessageNodeFactory = ({
   const prompt = createFinalMessageAugmentationPrompt(messageString, lastMessage, userInfoBlock, userProfileBlock, additionalPrompt);
   const currentStepInfo = (await kv.get(currentStepBySessionLogIdKey) ?? {currentStep: 1, stepRepetitions: 0}) as CurrentStepInfo;
 
+  console.log(`prompt used for anthropic ${prompt} stream`)
+
   const finalStream = await streamText({
     model: anthropic(model),
     prompt,

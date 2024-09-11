@@ -69,7 +69,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
     });
   }
 
-  console.log('session log exists. continuing with run');
+  console.log(`session log exists. continuing with run and session log: ${JSON.stringify(sessionLog)}`);
   const sessionLogId = sessionLog.id as string;
   const runId = crypto.randomUUID();
   const runCreatedAt = new Date();
@@ -108,7 +108,6 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
     additionalChunks,
     additionalProps
   });
-  console.log(additionalChunks);
   const streamFinalMessageNode = streamFinalMessageNodeFactory({
     userId,
     runId,
