@@ -17,6 +17,7 @@ Step-Specific Criteria:
 ${specificCriteriaCreator({ currentStep, stepRepetitions, messages })}
 
 Implementation Tips:
+- If there are no messages. Always stay, because we want to start with step 1.
 - Use linguistic cues, sentiment analysis, and contextual understanding to assess user responses accurately.
 - Each step has a soft limit of roundtrips. As this limit is approached the more likely you are to advance to the next step.
 - Maintain flexibility in handling unexpected user inputs or shifts in conversation direction.
