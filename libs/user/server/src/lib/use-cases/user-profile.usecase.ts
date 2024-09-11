@@ -4,7 +4,7 @@ import { queryLatestUserProfileBy } from '../queries/user-profile.queries';
 import { queryUserInfoBlock } from '../queries/query-user-info-block';
 import { createOpenAI } from '@ai-sdk/openai';
 import { generateText } from 'ai';
-import { convertToCidiResults, queryUserCidiSurveyResponsesBy } from '../queries/user-cidi.queries';
+import { createCidiResultsBlock, queryUserCidiSurveyResponsesBy } from '../queries/user-cidi.queries';
 import { BaseMessage } from '~myjournai/chat-shared';
 import { formatMessages } from '~myjournai/chat-server';
 
@@ -258,7 +258,7 @@ export const createUserProfileUsecase = async (command: CreateUserProfileCommand
   const newUserProfile = await generateNewUserProfile({
     ...command,
     userInfo,
-    cidiResults: convertToCidiResults(cidiResponse)
+    cidiResults: createCidiResultsBlock(cidiResponse)
   });
   console.log(newUserProfile);
   return db.insert(userProfiles).values(newUserProfile).returning();
@@ -278,7 +278,7 @@ export const recreateUserProfileUsecase = async (command: UpdateUserProfileComma
     ...command,
     userInfo,
     previousProfile,
-    cidiResults: convertToCidiResults(cidiResponse),
+    cidiResults: createCidiResultsBlock(cidiResponse),
     mostRecentConvoMessages: command.mostRecentConvoMessages
   });
   console.log(newUserProfile);

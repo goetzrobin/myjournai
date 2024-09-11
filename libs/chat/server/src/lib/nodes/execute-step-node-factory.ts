@@ -7,7 +7,7 @@ import { StoreLLMInteractionArgs } from '../store-llm-interaction';
 import { CurrentStepInfo } from './step-analyzer-node-factory';
 
 export type PromptProps<AdditionalProps = {}> =
-  { messages: string, userInfo: string, userProfile: string; stepRepetitions: number }
+  { messages: string, userInfoBlock: string, userProfileBlock: string; embeddedQuestionsBlock: string; stepRepetitions: number }
   & AdditionalProps;
 export type ToolProps = {
   additionalChunks: BaseMessageChunk[];
@@ -29,8 +29,9 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
                                                                       abortController,
                                                                       maxSteps,
                                                                       llmInteractionsToStore,
-                                                                      userInfo,
-                                                                      userProfile,
+                                                                      userInfoBlock,
+                                                                      userProfileBlock,
+                                                                      embeddedQuestionsBlock,
                                                                       additionalChunks,
                                                                       additionalProps
                                                                     }: {
@@ -47,8 +48,9 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
   abortController: AbortController;
   maxSteps: number;
   llmInteractionsToStore: StoreLLMInteractionArgs<any>[];
-  userInfo: string;
-  userProfile: string;
+  userInfoBlock: string;
+  userProfileBlock: string;
+  embeddedQuestionsBlock: string;
   additionalChunks: BaseMessageChunk[];
   additionalProps?: AdditionalProps
 }) => async (messages: BaseMessage[]): Promise<BaseMessage[]> => {
@@ -63,7 +65,7 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
     stepRepetitions: 0
   }) as CurrentStepInfo;
 
-  console.log(`executing current step ${currentStep}`);
+  console.log(`executing current step ${JSON.stringify(currentStep)}`);
   if (currentStep.currentStep > maxSteps) {
     console.warn(`current step greater than available, resetting to max step ${maxSteps}`);
     currentStep = { currentStep: maxSteps, stepRepetitions: currentStep.stepRepetitions + 1 };
@@ -75,9 +77,11 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
   const currentToolFactory = currentPromptAndTools.tools ?? (() => '');
   const prompt = currentPromptFactory({
     messages: messageString,
-    userInfo,
-    userProfile,
-    stepRepetitions: currentStep.stepRepetitions
+    userInfoBlock,
+    userProfileBlock,
+    embeddedQuestionsBlock,
+    stepRepetitions: currentStep.stepRepetitions,
+    ...additionalProps
   } as any);
   const tools = currentToolFactory({
     additionalChunks,

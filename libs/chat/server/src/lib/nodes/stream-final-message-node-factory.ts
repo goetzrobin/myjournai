@@ -19,8 +19,8 @@ export const streamFinalMessageNodeFactory = ({
                                                 model,
                                                 abortController,
                                                 llmInteractionsToStore,
-                                                userInfo,
-                                                userProfile,
+                                                userInfoBlock,
+                                                userProfileBlock,
                                                 additionalChunks,
                                                 eventStream,
                                                 additionalPrompt
@@ -34,8 +34,8 @@ export const streamFinalMessageNodeFactory = ({
   abortController: AbortController;
   maxSteps: number;
   llmInteractionsToStore: StoreLLMInteractionArgs<any>[];
-  userInfo: string;
-  userProfile: string;
+  userInfoBlock: string;
+  userProfileBlock: string;
   additionalChunks: BaseMessageChunk[];
   eventStream: EventStream;
   additionalPrompt?: string
@@ -48,8 +48,8 @@ export const streamFinalMessageNodeFactory = ({
 
   const messageString = formatMessages(filterOutInternalMessages(messages.slice(messages.length - 5, messages.length)));
   const lastMessage = messages[messages.length - 1].content as string;
-  const prompt = createFinalMessageAugmentationPrompt(messageString, lastMessage, userInfo, userProfile, additionalPrompt);
-  let currentStepInfo = (await kv.get(currentStepBySessionLogIdKey) ?? {currentStep: 1, stepRepetitions: 0}) as CurrentStepInfo;
+  const prompt = createFinalMessageAugmentationPrompt(messageString, lastMessage, userInfoBlock, userProfileBlock, additionalPrompt);
+  const currentStepInfo = (await kv.get(currentStepBySessionLogIdKey) ?? {currentStep: 1, stepRepetitions: 0}) as CurrentStepInfo;
 
   const finalStream = await streamText({
     model: anthropic(model),

@@ -16,7 +16,8 @@ export const queryUserCidiSurveyResponsesBy = async ({
   ).limit(1);
   return result;
 };
-export const convertToCidiResults = (cidiResponse?: CidiSurveyResponses): string => !cidiResponse ? `No career identity data available` : `
+
+export const createCidiConfusionBlock = (cidiResponse?: CidiSurveyResponses): string => !cidiResponse ? `` : `
 Feel confused as to who I really am when it comes to my career: ${likertScale[cidiResponse.question10 ?? 3]}
 Am uncertain about the kind of work I could perform well: ${likertScale[cidiResponse.question11 ?? 3]}
 Deciding on a career makes me feel anxious: ${likertScale[cidiResponse.question12 ?? 3]}
@@ -24,7 +25,9 @@ Often feel lost when I think about choosing a career because I don’t have enou
 Trying to find a satisfying career is stressful because there are so many things to consider: ${likertScale[cidiResponse.question14 ?? 3]}
 Being unsure about what kind of career I would enjoy worries me: ${likertScale[cidiResponse.question15 ?? 3]}
 Have doubts that I will be able to find a career that I’m satisfied with: ${likertScale[cidiResponse.question16 ?? 3]}
-Have no clear sense of a career direction that would be meaningful to me: ${likertScale[cidiResponse.question17 ?? 3]}
+Have no clear sense of a career direction that would be meaningful to me: ${likertScale[cidiResponse.question17 ?? 3]}`;
+export const createCidiResultsBlock = (cidiResponse?: CidiSurveyResponses): string => !cidiResponse ? `No career identity data available` : `
+${createCidiConfusionBlock(cidiResponse)}
 
 Learn about myself for the purpose of finding a career that meets my needs: ${likertScale[cidiResponse.question20 ?? 3]}
 Reflect on how my past could integrate with various career alternatives: ${likertScale[cidiResponse.question21 ?? 3]}

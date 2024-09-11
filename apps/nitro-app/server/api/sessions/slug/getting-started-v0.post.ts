@@ -7,7 +7,7 @@ import {
 import { executeStepThroughMessageRun } from '~myjournai/messagerun-server';
 import { CidiSurveyResponses } from '~db/schema/cidi-survey-responses';
 
-type PromptProps = BasePromptProps & {cidiResults: CidiSurveyResponses}
+type PromptProps = BasePromptProps<{cidiResults: CidiSurveyResponses}>
 const stepAnalyzerPrompt = createStepAnalyzerPromptFactory(({ currentStep }) => `
 ${!(currentStep === 0 || currentStep === 1) ? '' : `
 1. Acknowledging Graduation and the Pressure of Career Choices:

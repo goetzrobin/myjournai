@@ -10,7 +10,11 @@ import {
   ToolProps
 } from '~myjournai/chat-server';
 import { queryUserInfoBlock, queryUserProfileBlock } from '@myjournai/user-server';
-import { queryMostRecentSessionLogBy, querySessionLogMessagesBy } from '~myjournai/sessionlog-server';
+import {
+  createEmbeddedQuestionsBlock,
+  queryMostRecentSessionLogBy,
+  querySessionLogMessagesBy
+} from '~myjournai/sessionlog-server';
 import { BaseMessage, BaseMessageChunk } from '~myjournai/chat-shared';
 import { kv } from '@vercel/kv';
 import { storeMessageRunUsecase } from './use-cases/store-message-run.usecase';
@@ -51,7 +55,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
 
   const { openai, anthropic, groq } = createLLMProviders(event);
   console.log(`fetching user data and session log for userId ${userId} and session with slug ${sessionSlug}`);
-  const [userInfo, userProfile, sessionLog] = await Promise.all([
+  const [userInfoBlock, userProfileBlock, sessionLog] = await Promise.all([
     queryUserInfoBlock(userId),
     queryUserProfileBlock(userId),
     queryMostRecentSessionLogBy({ sessionSlug, userId })
@@ -98,8 +102,9 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
     abortController,
     maxSteps,
     llmInteractionsToStore,
-    userProfile,
-    userInfo,
+    userProfileBlock,
+    userInfoBlock,
+    embeddedQuestionsBlock: createEmbeddedQuestionsBlock(sessionLog),
     additionalChunks,
     additionalProps
   });
@@ -113,8 +118,8 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
     abortController,
     maxSteps,
     llmInteractionsToStore,
-    userProfile,
-    userInfo,
+    userProfileBlock,
+    userInfoBlock,
     additionalChunks,
     eventStream,
     additionalPrompt: additionalAdjustFinalMessagePrompt

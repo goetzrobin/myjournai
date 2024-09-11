@@ -1,7 +1,6 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import {
   ChatContainer,
-  ChatError,
   mapChunksToChatComponents,
   mapNonStreamedDBMessagesToChatComponents,
   MessagesContainer,
@@ -24,23 +23,15 @@ import {
   useSessionStartMutation
 } from '~myjournai/session-client';
 
-
-export const Route = createFileRoute('/_app/sessions/alignment-v0/')({
-  component: Alignment,
-  errorComponent: ChatError
-});
-
-
-function Alignment() {
+export const SessionRouteComponent = ({ slug }: { slug: string }) => {
   const nav = useNavigate();
   const userId = useAuthUserIdFromHeaders();
-  const slug = 'alignment-v0';
   const startMutation = useSessionStartMutation({ userId, slug });
   const { data: sessionLog, isSuccess: isSuccessSessionLog } = useLatestSessionLogBySlugQuery({ slug, userId });
   const { data: messages, isSuccess } = useSessionLogMessagesQuery(sessionLog?.id);
   const { mutation, startStream, isStreaming, messageChunksByTimestamp, currentStepInfo } = useStreamResponse({
     userId,
-    url: `/api/sessions/slug/alignment-v0`
+    url: `/api/sessions/slug/${slug}`
   });
   useAutoStartMessage({
     isSessionLogExists: !!(sessionLog && sessionLog.status === 'IN_PROGRESS'),
@@ -91,4 +82,4 @@ function Alignment() {
 
       </ChatContainer>}
   </>;
-}
+};
