@@ -99,7 +99,7 @@ ${messages}
 `
   },
   3: {
-    tools: () => ({}), prompt: ({ messages, userInfo, userProfile, stepRepetitions }: PromptProps) => `
+    tools: () => ({}), prompt: ({ messages, userInfoBlock, userProfileBlock, stepRepetitions }: PromptProps) => `
 We are role playing. You are my mentor.
 Think of the atmosphere and conversation's feel like that of you meeting a pen pal for the first time at a coffee shop.
 However, of course you're not actually in a coffee shop, but writing over a text based service like iMessage.
@@ -126,10 +126,10 @@ Messages so far:
 ${messages}
 
 What you know about the user:
-${userInfo}
+${userInfoBlock}
 
 What they shared about themselves:
-${userProfile}
+${userProfileBlock}
 `
   },
   4: {
