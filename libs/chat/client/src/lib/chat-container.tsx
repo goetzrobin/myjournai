@@ -1,8 +1,7 @@
 import React, { PropsWithChildren } from 'react';
-import { Button, Menu, MenuItem, Popover } from '~myjournai/components';
-import { LucideChevronLeft, LucideMoreVertical } from 'lucide-react';
+import { Button } from '~myjournai/components';
+import { LucideChevronLeft, LucideUndoDot } from 'lucide-react';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { MenuTrigger } from 'react-aria-components';
 import { useSessionAbortMutation } from '~myjournai/session-client';
 
 export const ChatContainer = ({ children, userId, sessionLogId, withMenu }: PropsWithChildren<{
@@ -23,16 +22,11 @@ export const ChatContainer = ({ children, userId, sessionLogId, withMenu }: Prop
       <div className="flex justify-between items-center">
         <Link to="/"><Button variant="icon"><span
           className="sr-only">Back to main</span><LucideChevronLeft /></Button></Link>
-        {!withMenu ? null : <MenuTrigger>
-          <Button variant="icon" aria-label="Menu"><LucideMoreVertical className="size-5" /></Button>
-          <Popover>
-            <Menu>
-              <MenuItem
-                onAction={onAbort}>
-                {abortMut.isPending ? 'Aborting' : 'Abort Session'}</MenuItem>
-            </Menu>
-          </Popover>
-        </MenuTrigger>}
+        {!withMenu ? null :
+          <Button onPress={onAbort} className="bg-destructive/30" variant="icon">
+            {abortMut.isPending ? 'Aborting' : <LucideUndoDot className="text-destructive-foreground size-5" />}
+            </Button>
+         }
       </div>
     </div>
     {children}</div>;

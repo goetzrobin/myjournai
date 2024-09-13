@@ -52,15 +52,17 @@ export const stepAnalyzerNodeFactory = ({
     abortSignal: abortController.signal
   });
 
-  if (result.text.trim() === 'advance') {
+  if (result.text.trim().includes('ADVANCE')) {
+    const initialRepetitions = currentStepInfo.stepRepetitions;
     currentStepInfo = {currentStep: currentStepInfo.currentStep + 1, stepRepetitions: 0};
-    if (currentStepInfo.currentStep === maxSteps) {
-      console.log('end conversation here');
+    if (currentStepInfo.currentStep > maxSteps) {
+      console.log('end conversation here, incrementing repetitions for final step');
+      currentStepInfo = {currentStep: currentStepInfo.currentStep, stepRepetitions: initialRepetitions + 1};
       onConversationEnd?.();
     }
     console.log('decided to advance to next step. incrementing current step to', JSON.stringify(currentStepInfo));
   } else {
-    currentStepInfo = {currentStep: currentStepInfo.currentStep, stepRepetitions: currentStepInfo.stepRepetitions + 1};
+    currentStepInfo = {currentStep: currentStepInfo.currentStep, stepRepetitions: (currentStepInfo.stepRepetitions ?? 0) + 1};
     console.log(`decided to stay: remaining on step ${JSON.stringify(currentStepInfo)}`);
   }
 

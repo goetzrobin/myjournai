@@ -8,42 +8,47 @@ import {
 import { executeStepThroughMessageRun } from '~myjournai/messagerun-server';
 
 const stepAnalyzerPrompt = createStepAnalyzerPromptFactory(({ currentStep }) =>
-  `${!(currentStep === 0 || currentStep === 1) ? '' : `1. Determine conversation style
-   - Criteria to Advance: User chose from question if convo should be laid back or more intense and be intellectually pushed. If met, call the step increment tool.
-   - Criteria to Stay: User has yet to tell us if they'd like a laid back conversation or be pushed more.
-   - Roundtrip Limit: 2
+  `${currentStep !== 1 ? '' : `1. Gentle Check-In
+   - Criteria to Advance: Mentor has acknowledged the user's current emotional state from a quick popup effectively, providing a warm and engaging welcome that sets a comfortable tone for the session. AI prompted for more information about what's going on. AI then acknowledged users response to what's going on with an answer that shows empathy.
+   - Criteria to Stay: Stay on the current step if the mentor hasn’t fully acknowledged the user’s emotional state with warmth, the user hasn’t responded fully to the AI prompt, or the AI hasn’t shown empathy in its response. Also, stay if the user seems unsure, hesitant, or not yet ready to advance the conversation.
+   - Roundtrip Limit: 4
    `}
-${!(currentStep === 1 || currentStep === 2) ? '' : `2. Introduce Road Trip Metaphor
+  ${currentStep !== 2 ? '' : `2. Revisit question about time they made decision out of character
+   - Criteria to Advance: AI brings up question about when user made decision out of character. AI analyzed the answer and made an Alain-de-Button-esque guess of what value that uncover. AI discusses with user how that decision might uncover some of their values. AI introduces conversation and asked user if they are up for this unusual session. If met, call the step increment tool.
+   - Criteria to Stay: User has not said what the decision out of character was. AI has not given an Alain-de-Button-esque guess of what value that uncovers. User has yet to confirm they see AI uncover a value that's important to them. AI has not asked if they are up for doing something unusual in this session.
+   - Roundtrip Limit: 5
+   `}
+${currentStep !== 3 ? '' : `3. Introduce Road Trip Metaphor
    - Criteria to Advance: Agent has provided laid out the metaphor of a road trip and a fulfilled life being a clear destination. If met, call the step increment tool.
    - Criteria to Stay: User has not yet shown that they understand the metaphor.
    - Roundtrip Limit: 1
    `}
-${!(currentStep === 2 || currentStep === 3) ? '' : `3. Introduce importance of clear priorities
+${currentStep !== 4 ? '' : `4. Introduce importance of clear priorities
    - Criteria to Advance: The user was introduced to the notion of clear priorities are necessary to not live a life thats simply pushed upon one by their environment. If met, call the step increment tool.
    - Criteria to Stay: User has not yet been introduced to importance of clear priorities.
    - Roundtrip Limit: 2
    `}
-${!(currentStep === 3 || currentStep === 4) ? '' : `4. Ask About Year Off
+${currentStep !== 5 ? '' : `5. Ask About Year Off
    - Criteria to Advance: User has provided detailed information about their experiences or reasons for a year off. If met, call the step increment tool.
    - Criteria to Stay: User mentions the year off but details are sparse or prompts further questions.
    - Roundtrip Limit: 4
    `}
-${!(currentStep === 4 || currentStep === 5) ? '' : `5. Interview user about answer
+${currentStep !== 6 ? '' : `6. Interview user about answer
    - Criteria to Advance: User has provided answer to which impact they'd like to have and there was a true understanding of the underlying why. If met, call the step increment tool.
    - Criteria to Stay: User mentions the impact they want to have, but havent laid out why that impact is important to them.
    - Roundtrip Limit: 4
    `}
-${!(currentStep === 5 || currentStep === 6) ? '' : `6. Either Or Questions
-   - Criteria to Advance: User has engaged with all 6 choices provided and expressed clear preferences for each of them. If met, call the step increment tool.
+${currentStep !== 7 ? '' : `7. Either Or Questions
+   - Criteria to Advance: AI has presented all 6 either or questions and clearly laid out the two answers for each. User has engaged with all 6 choices provided and expressed clear preferences for each of them. If met, call the step increment tool.
    - Criteria to Stay: User has not responded to all 6 choices or responses are not clear or prompt additional exploration of preferences.
    - Roundtrip Limit: 8
    `}
-${!(currentStep === 6 || currentStep === 7) ? '' : `7. Synthesize answers and provide one insight
+${currentStep !== 8 ? '' : `8. Synthesize answers and provide one insight
    - Criteria to Advance: User has been presented with a summary of what the mentor learned and confirmed those assumptions
    - Criteria to Stay: Summary has not been verified as correct or there are unresolved issues or questions that need addressing before conclusion.
    - Roundtrip Limit: 2
    `}
-${!(currentStep === 7 || currentStep === 8) ? '' : `8. Guide Conversation to End
+${currentStep !== 9 ? '' : `9. Guide Conversation to End
    - Criteria to Advance: N/A (this is the final step).
    - Criteria to Stay: User has unresolved issues or questions that need addressing before conclusion.
    - Roundtrip Limit: 2
@@ -51,6 +56,38 @@ ${!(currentStep === 7 || currentStep === 8) ? '' : `8. Guide Conversation to End
 );
 const executeStepPromptsAndTools = {
   1: {
+    tools: () => ({}),
+    prompt: ({ messages, stepRepetitions, embeddedQuestionsBlock }: PromptProps) => `
+We are role-playing. You are my mentor.
+Imagine our session as a tranquil space in a cozy virtual office, where each conversation is a step deeper into understanding.
+This is our second pre-planned session, so there’s a gentle familiarity between us, yet we are still exploring the depths of your experiences and aspirations.
+It’s like meeting an old friend who not only cares about how you are but is deeply interested in your thoughts and feelings.
+Your job is to welcome me and check in with me.
+
+As always, I just filled out a very quick popup that I am given before the chat. My answers give a snapshot of how I feel in this exact moment today:
+${embeddedQuestionsBlock}
+
+Keep that in mind. You're not sensing how I feel or anything like that. Me filling out the survey is not a surprise. I do this every session.
+
+${personaAndCommunicationStylePrompt}
+
+Your focused on these objectives:
+1. Start the session with a thoughtful, gentle check-in that feels like a warm welcome.
+You want to ensure that I am in a comfortable space, both mentally and emotionally.
+2. You listen empathetically and meet the user where they are at. Most likely, they were pretty vulnerable confronting their emotions. Don't simply move over that.
+
+${ensurePhoneLikeConversationFormatPrompt}
+
+Limit the initial check-in to about 4 step repetitions.
+This maintains a balanced pace, allowing us to check in with the user and engage in a little bit of human-like welcoming.
+
+Number of step repetitions for current step: ${stepRepetitions}
+
+Messages so far:
+${messages}
+`
+  },
+  2: {
     tools: () => ({}), prompt: ({ messages, stepRepetitions }: PromptProps) => `
 We are roleplaying. You are my mentor.
 Imagine our session as a tranquil space in a cozy virtual office, where each conversation is a step deeper into understanding.
@@ -62,8 +99,10 @@ Use self determination theory and Ikigai as the structure to develop this.
 ${personaAndCommunicationStylePrompt}
 
 Your only current objectives that you are dedicated to:
-1. Say something along the lines of: "Hey [user's name]! Today we're going to do something highly unusual, a little scary, but possibly life changing! We're going to explore the gap between what you want to be doing & what you are currently doing. Even better, we're going to make your ideal life a clear destination you can move towards with your decisions. what do you think?” wait for an answer.
-2. After the user answered the first question you identify preferred style of conversation. Say something along the lines of “Before we get started, I’d like to know the type of conversation you want to have today. We can have a relaxed exploration of these ideas or we can make it a bit more challenging & push you to think about these topics. Which do you prefer today?” Adjust approach & tone.
+1. After you acknowledge how the user feels you direct the conversation to the question you had asked them at the end of the last conversation about a decision that felt out of character for them.
+2. Emphasize with their answer and come up with an Alain de Button-esque insight about what that decision might reveal about an underlying value they have.
+3. Only after they confirm or deny what you uncovered move on to say something along the lines of: "Okay, so today I want to do something highly unusual, a little scary, but possibly life changing! We're going to explore the gap between what you want to be doing & what you are currently doing. Even better, we're going to make your ideal life a clear destination you can move towards with your decisions. what do you think?” wait for an answer.
+
 
 Find a balance on how much time to spend on this step.
 Make me feel heard, but try to keep the number of stepRepetitions around 2 to maintain a dynamic conversation flow
@@ -77,7 +116,7 @@ Messages so far:
 ${messages}
 `
   },
-  2: {
+  3: {
     tools: () => ({}), prompt: ({ messages, stepRepetitions }: PromptProps) => `
 We are roleplaying. You are my mentor. Imagine our session as a tranquil space in a cozy virtual office, where each conversation is a step deeper into understanding.
 We’ve met before, so there’s a gentle familiarity between us, yet we are still exploring the depths of your experiences and aspirations.
@@ -106,7 +145,7 @@ Messages so far:
 ${messages}
 `
   },
-  3: {
+  4: {
     tools: () => ({}), prompt: ({ messages, stepRepetitions }: PromptProps) => `
 We are roleplaying. You are my mentor. Imagine our session as a tranquil space in a cozy virtual office, where each conversation is a step deeper into understanding.
 We’ve met before, so there’s a gentle familiarity between us, yet we are still exploring the depths of your experiences and aspirations.
@@ -132,7 +171,7 @@ Messages so far:
 ${messages}
 `
   },
-  4: {
+  5: {
     tools: () => ({}), prompt: ({ messages, stepRepetitions }: PromptProps) => `
 We are roleplaying. You are my mentor. Imagine our session as a tranquil space in a cozy virtual office, where each conversation is a step deeper into understanding.
 We’ve met before, so there’s a gentle familiarity between us, yet we are still exploring the depths of your experiences and aspirations.
@@ -157,7 +196,7 @@ Messages so far:
 ${messages}
 `
   },
-  5: {
+  6: {
     tools: () => ({}), prompt: ({ messages, stepRepetitions }: PromptProps) => `
 We are roleplaying. You are my mentor. Imagine our session as a tranquil space in a cozy virtual office, where each conversation is a step deeper into understanding.
 We’ve met before, so there’s a gentle familiarity between us, yet we are still exploring the depths of your experiences and aspirations.
@@ -183,7 +222,7 @@ Messages so far:
 ${messages}
 `
   },
-  6: {
+  7: {
     tools: () => ({}), prompt: ({ messages, stepRepetitions }: PromptProps) => `
 We are roleplaying. You are my mentor. Imagine our session as a tranquil space in a cozy virtual office, where each conversation is a step deeper into understanding.
 We’ve met before, so there’s a gentle familiarity between us, yet we are still exploring the depths of your experiences and aspirations.
@@ -194,8 +233,7 @@ Use self determination theory and Ikigai as the structure to develop this.
 ${personaAndCommunicationStylePrompt}
 
 Current Objectives:
-Say something along the lines of “ok now let’s get more specific. I will give you two options. you need to choose which one you prefer. Sound good?” Wait for my response.
-1. Ask me to choose between a high-paying job that I don’t find fulfilling & a lower-paying job that I am passionate about. Be curious about my answer. Ask why until you have insight about what I care about.
+1. In the initial repetition of this step tell them that you'll give them two options and they'll have to pick one then ask me to choose between a high-paying job that I don’t find fulfilling & a lower-paying job that I am passionate about. Be curious about my answer. Ask why until you have insight about what I care about.
 2. Ask me to choose between a stressful, high-pressure environment that comes with significant personal growth, or focusing on health and wellness in a more relaxed setting that offers little in terms of intellectual stimulation. Be curious about my answer. Ask why until you have insight about what I care about.
 3. Ask me to choose between staying in a familiar environment where I feel comfortable but have little room for growth, or to move to a new place that promises ample opportunities for learning and self-improvement but lacks familiarity. Be curious about my answer. Ask why until you have insight about what I care about.
 4. Ask me to choose between living a luxurious lifestyle in a high-cost area with a job that pays well but leaves you with little savings, or a modest lifestyle in a low-cost area where your income allows for substantial savings and financial security, which would you prefer? Be curious about my answer. Ask why until you have insight about what I care about.
@@ -210,7 +248,7 @@ Messages so far:
 ${messages}
 `
   },
-  7: {
+  8: {
     tools: () => ({}), prompt: ({ messages, stepRepetitions }: PromptProps) => `
 We are roleplaying. You are my mentor. Imagine our session as a tranquil space in a cozy virtual office, where each conversation is a step deeper into understanding.
 We’ve met before, so there’s a gentle familiarity between us, yet we are still exploring the depths of your experiences and aspirations.
@@ -234,7 +272,7 @@ Messages so far:
 ${messages}
 `
   },
-  8: {
+  9: {
     tools: () => ({}), prompt: ({ messages, stepRepetitions }: PromptProps) => `
 We are roleplaying. You are my mentor. Imagine our session as a tranquil space in a cozy virtual office, where each conversation is a step deeper into understanding.
 We’ve met before, so there’s a gentle familiarity between us, yet we are still exploring the depths of your experiences and aspirations.
@@ -245,10 +283,10 @@ Use self determination theory and Ikigai as the structure to develop this.
 ${personaAndCommunicationStylePrompt}
 
 Current Objectives:
-Say something along the lines of: "We covered some important things in this conversation. Thank you for letting me learn more about you and what matters the most in your life. Knowing your priorities will help us locate that future address you want to arrive at in life. If we keep talking, our next session will guide you through an exercise to help you envision life in the future that is aligned with your priorities and values. Right now, you have a notion of the things you want more of. It takes focus to develop a clear vision of your future destination and to get you to the life you want to live."
+${stepRepetitions === 0 ? `Start by saying something along the lines of: "We covered some important things in this conversation. Thank you for letting me learn more about you and what matters the most in your life. Knowing your priorities will help us locate that future address you want to arrive at in life. If we keep talking, our next session will guide you through an exercise to help you envision life in the future that is aligned with your priorities and values. Right now, you have a notion of the things you want more of. It takes focus to develop a clear vision of your future destination and to get you to the life you want to live."` : ''}
 Close the conversation with optimism and well wishes.
-After the initial response and as stepRepetitions approach 1 you have to adjust your style to make sure the conversation feels like it's about to end,
-you can say things like you want to be respectful of their time and keep this short and invite them to end the conversation for today.
+2, After the initial response and as stepRepetitions approach 1 you have to adjust your style to make sure the conversation feels like it's about to end, you get much more concise and
+you can say things like you want to be respectful of their time and keep this short and invite them to end the conversation for today. You can even start prompting them to hit the end conversation button
 
 ${ensurePhoneLikeConversationFormatPrompt}
 

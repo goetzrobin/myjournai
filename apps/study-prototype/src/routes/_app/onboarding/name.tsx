@@ -1,10 +1,10 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import OnboardingWrapper from './-components/-onboarding-wrapper';
-import { Button, TextField } from '~myjournai/components';
-import { FormEvent, useState } from 'react';
-import { LucideChevronLeft } from 'lucide-react';
+import { SmoothButton, TextField } from '~myjournai/components';
+import React, { FormEvent, useState } from 'react';
+import { LucideLoader } from 'lucide-react';
 import { ensureUserQuery, useUserSuspenseQuery, useUserUpdateMutation } from '@myjournai/user-client';
-import { useAuthUserIdFromHeaders, useSignInMutation } from '@myjournai/auth-client';
+import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
 
 export const Route = createFileRoute('/_app/onboarding/name')({
   loader: async ({ context: { queryClient } }) => {
@@ -19,7 +19,7 @@ export const Route = createFileRoute('/_app/onboarding/name')({
     const [name, setName] = useState(user?.name ?? '');
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      mutation.mutate({ name }, { onSuccess: () => setTimeout(() => navigate({ to: '/onboarding/pronouns' }), 500) });
+      mutation.mutate({ name }, { onSuccess: () => setTimeout(() => navigate({ to: '/onboarding/pronouns' }), 800) });
     };
     return <OnboardingWrapper currentStep="name" className="block">
       <form onSubmit={handleSubmit} className="flex flex-col items-center mt-16 justify-between">
@@ -29,8 +29,13 @@ export const Route = createFileRoute('/_app/onboarding/name')({
           <TextField inputClassName="text-xl text-center" placeholder="e.g. Caitie" value={name} onChange={setName}
                      className="mt-8" aria-label="Name" />
         </div>
-        <Button type="submit" isDisabled={name.length === 0}
-                className="absolute left-0 right-0 bottom-4">Continue</Button>
+        <SmoothButton type="submit" className="absolute left-0 right-0 bottom-4" isDisabled={name.length === 0}
+                      buttonState={mutation.status}>
+          {mutation.status !== 'idle' ? null : 'Continue'}
+          {mutation.status !== 'pending' ? null : <LucideLoader className="size-5 animate-spin" />}
+          {mutation.status !== 'success' ? null : `Got it, ${name}!`}
+          {mutation.status !== 'error' ? null : 'Something went wrong... Try again!'}
+        </SmoothButton>
       </form>
     </OnboardingWrapper>;
   }

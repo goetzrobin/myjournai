@@ -1,10 +1,10 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
-import { Button, DateField } from '~myjournai/components';
+import { DateField, SmoothButton } from '~myjournai/components';
 import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
 import { ensureUserQuery, useUserSuspenseQuery, useUserUpdateMutation } from '@myjournai/user-client';
-import { FormEvent } from 'react';
+import React, { FormEvent } from 'react';
 import OnboardingWrapper from './-components/-onboarding-wrapper';
-import { LucideChevronLeft } from 'lucide-react';
+import { LucideChevronLeft, LucideLoader } from 'lucide-react';
 import { parseDate } from '@internationalized/date';
 import { parseFormData } from '~myjournai/form-utils';
 
@@ -48,7 +48,12 @@ function Bday() {
         <DateField defaultValue={existingBday} name="date" className="border p-2 rounded-lg mt-8 text-xl"
                    aria-label="Birthday" />
       </div>
-      <Button type="submit" className="absolute left-0 right-0 bottom-4">Continue</Button>
-    </form>
+      <SmoothButton type="submit" className="absolute left-0 right-0 bottom-4"
+                    buttonState={mutation.status}>
+        {mutation.status !== 'idle' ? null : 'Continue'}
+        {mutation.status !== 'pending' ? null : <LucideLoader className="size-5 animate-spin" />}
+        {mutation.status !== 'success' ? null : `I'll make sure to remember!`}
+        {mutation.status !== 'error' ? null : 'Something went wrong... Try again!'}
+      </SmoothButton>    </form>
   </OnboardingWrapper>;
 }

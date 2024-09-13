@@ -50,13 +50,11 @@ function FinalConvo() {
       postFeelingScore: null,
       postMotivationScore: null
     }, {
-      onSuccess: () => nav({ to: '/' })
+      onSuccess: () => setTimeout(() => nav({ to: '/' }), 500)
     });
   };
 
   useEffect(() => {
-    console.log(!isConversationMutatedToFinish, completeOnboardingMutation.isIdle, !conversationInitialized.current, isSuccessSessionLog, !sessionInProgress)
-    console.log(!isConversationMutatedToFinish && completeOnboardingMutation.isIdle && !conversationInitialized.current && isSuccessSessionLog && !sessionInProgress)
     if (!isConversationMutatedToFinish && completeOnboardingMutation.isIdle && !conversationInitialized.current && isSuccessSessionLog && !sessionInProgress) {
       conversationInitialized.current = true;
       console.log('initializing onboarding')

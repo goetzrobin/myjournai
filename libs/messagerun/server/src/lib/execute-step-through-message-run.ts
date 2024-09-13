@@ -142,12 +142,20 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
   await kv.set(messagesBySessionLogIdKey, messagesFromPreviousRuns);
 
   (async () => {
-    console.log('starting graph execution');
-    const messagesAfterAnalyzer = await stepAnalyzerNode(messagesFromPreviousRuns);
-    const messagesAfterStepExecution = await executeStepNode(messagesAfterAnalyzer);
-    const messagesAfterRun = await streamFinalMessageNode(messagesAfterStepExecution);
-    console.log('completed graph execution');
-    await kv.set(messagesBySessionLogIdKey, messagesAfterRun);
+    try {
+      console.log('starting graph execution');
+      const messagesAfterAnalyzer = await stepAnalyzerNode(messagesFromPreviousRuns);
+      const messagesAfterStepExecution = await executeStepNode(messagesAfterAnalyzer);
+      const messagesAfterRun = await streamFinalMessageNode(messagesAfterStepExecution);
+      console.log('completed graph execution');
+      await kv.set(messagesBySessionLogIdKey, messagesAfterRun);
+    } catch (e: unknown) {
+      throw createError({
+        status: 500,
+        statusMessage: 'Something went wrong',
+        message: JSON.stringify(e)
+      });
+    }
   })().then(async () => console.log('stream done'));
 
   eventStream.onClosed(async () => {

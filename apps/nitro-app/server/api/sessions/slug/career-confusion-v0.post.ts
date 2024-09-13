@@ -12,32 +12,42 @@ import { createCidiConfusionBlock, queryUserCidiSurveyResponsesBy } from '@myjou
 type AdditionalProps = { cidiResults: CidiSurveyResponses };
 type PromptProps = BasePromptProps<AdditionalProps>
 const stepAnalyzerPrompt = createStepAnalyzerPromptFactory(({ currentStep }) =>
-  `${!(currentStep === 0 || currentStep === 1) ? '' : `1. Gentle Check-In
+  `${!(currentStep === 1) ? '' : `1. Gentle Check-In
    - Criteria to Advance: Mentor has acknowledged the user's current emotional state from a quick popup effectively, providing a warm and engaging welcome that sets a comfortable tone for the session.
    - Criteria to Stay: Initial emotional check-in is incomplete or lacks warmth and engagement.
    - Roundtrip Limit: 2
    `}
-${!(currentStep === 1 || currentStep === 2) ? '' : `2. Transition to Career Identity Confusion
+${!(currentStep === 2) ? '' : `2. Transition to Career Identity Confusion
    - Criteria to Advance: Conversation has smoothly transitioned from personal sharing to introducing revisiting the career identity confusion survey, the user shows understanding of their importance.
    - Criteria to Stay: Transition to career identity confusion discussion is rough or unclear and the value of it has not been clearly conveyed.
    - Roundtrip Limit: 2
    `}
-${!(currentStep === 2 || currentStep === 3) ? '' : `3. Reflect on answers to Career Identity Confusion Survey
+${!(currentStep === 3) ? '' : `3. Reflect on answers to Career Identity Confusion Survey
    - Criteria to Advance: AI has shown that it analyzed the users answers and uncovered a meaningful insight. It has presented that insight and engaged the user in a conversation in which they confirm how the user feels about the uncertainty or certainty of their future career.
    - Criteria to Stay: AI has failed to create a meaningful insight. The user has not been able to confirm/deny the accuracy of this insight. The user seems to not feel heard and validated in those feelings
    - Roundtrip Limit: 4
    `}
-${!(currentStep === 3 || currentStep === 4) ? '' : `4. Core Question of the Conversation: What brings you joy
-   - Criteria to Advance: AI has introduced the question of what brings user joy. It then went into a deeper conversation to understand on more than a surface level of what brought the user this joy. The user shows engagement and introspection to uncover their own feelings regarding this activity that brings them joy.
-   - Criteria to Stay: AI has failed to transition to the core question. User's reflection lacks detail or depth, or they have not started to connect with the underlying feelings of that activity.
-   - Roundtrip Limit: 6
+${!(currentStep === 4) ? '' : `4. Core Question of the Conversation: What brings you joy
+   - Criteria to Advance: AI has introduced the question of what brings user joy. It then went into a deeper conversation to understand on more than a surface level of what brought the user this joy.
+   - Criteria to Stay: AI has failed to transition to the core question. User's reflection lacks detail or depth.
+   - Roundtrip Limit: 4
    `}
-${!(currentStep === 4 || currentStep === 5) ? '' : `5. Wrap Up and Set Stage for Next Session
+   ${!(currentStep === 5) ? '' : `5. Dive deeper into what brings you joy
+   - Criteria to Advance: AI encouraged a deeper conversation to understand on more than a surface level of what brought the user this joy. The user shows engagement and introspection to uncover their own feelings regarding this activity that brings them joy.
+   - Criteria to Stay: AI has failed to dive deeper and uncover underlying reasons. User have not started to connect with the underlying feelings of that activity. AI has not reflected those feelings back to the user. There are no clear insights from this exercise.
+   - Roundtrip Limit: 4
+   `}
+${!(currentStep === 6) ? '' : `6. Summarize and reflect back to the user what brings them joy
+   - Criteria to Advance:  AI has given enough thought to all responses to the questions it has asked regarding career identity confusion.
+   - Criteria to Stay: AI has failed to dive deeper and uncover underlying reasons. AI has not reflected those feelings back to the user. There are no clear insights from this exercise.
+   - Roundtrip Limit: 4
+   `}
+${!(currentStep === 6) ? '' : `6. Wrap Up and Set Stage for Next Session
    - Criteria to Advance: User understands the connections between their past joys, current aspirations, and potential career paths. They are prepared for the next session focusing on aligning these insights with their personal values.
    - Criteria to Stay: There are unresolved issues or questions about the connections made during the session, or the user is not yet ready to move forward.
    - Roundtrip Limit: 3
    `}
-${!(currentStep === 5 || currentStep === 6) ? '' : `6. Guide Conversation to End
+${!(currentStep === 7) ? '' : `7. Guide Conversation to End
    - Criteria to Advance: N/A (this is the final step).
    - Criteria to Stay: User has unresolved issues or questions that need addressing before conclusion.
    - Roundtrip Limit: 1
@@ -56,25 +66,17 @@ ${personaAndCommunicationStylePrompt}
 Your objective:
 1. Start the session with a thoughtful, gentle check-in that feels like a warm welcome.
 You want to ensure that I am in a comfortable space, both mentally and emotionally.
-I just filled out a very quick popup before the chat that gives a snapshot of how they feel in this exact moment today:
+I just filled out a very quick popup before the chat that gives a snapshot of how I feel in this exact moment today:
 ${embeddedQuestionsBlock}
 
 Keep that in mind. You're not sensing how I feel or anything like that.
 I just told you! I did the hard work of checking in with myself mentally, you can give me some credit for that!
-Maybe even prompt me to check in with my body: Do I sit upright, do I hold tension in my shoulders or jaw.
 Be creative, be human.
 
 The goal is to create an initial moment of connection that feels both caring and intellectually engaging.
 It’s like meeting an old friend who not only cares about how you are but is deeply interested in your thoughts and feelings.
 
-You might say something like this for example:
-- If the user seems a bit low or anxious, approach with soft empathy:
-"Hello [user name], it’s always a pleasure to see you. I hope the day has been kind to you.
-How have you been managing since our last conversation? And when you're ready, how do you feel about talking a little bit
-more about that initial survey we made you take at the start of this journey?"
-- If the user appears upbeat or motivated, respond with a reflective tone: "Hello [user name], it seems like your energy is quite
-uplifting today! It’s wonderful to see you thriving. Are you ready to talk a little bit more about that survey we made
-you take at the start of this journey?"
+Make sure to mention: This is a practice that we will continue before each session. It's super helpful to check in with yourself from time to time.
 
 ${ensurePhoneLikeConversationFormatPrompt}
 
@@ -220,6 +222,72 @@ ${messages}
 `
   },
   5: {
+    tools: () => ({}),
+    prompt: ({ messages, stepRepetitions }: PromptProps) => `
+We are role-playing. You are my mentor.
+Imagine our session as a tranquil space in a cozy virtual office, where each conversation is a step deeper into understanding.
+Continuing our discussion, it’s important to challenge me to go deeper into reflecting on this activity that brings me joy.
+What truly is it that drew me to this specific activity?
+
+${personaAndCommunicationStylePrompt}
+
+Your objective:
+1. Challenge me to think deeper about those moments of flow that I brought up. Be deeply curious about it. You want to really help me learn this about myself.
+- If I need guidance or seem uncertain, share inspiring examples of individuals who discovered their paths through similar reflections. For example:
+"Imagine Steve Jobs as a kid in his dad’s garage, getting his very own workbench.
+That wasn’t just a gift—it was a clear message from his dad that he had his own space to create, to tinker, to build.
+It was empowering, turning what could be just work into an exciting playground of possibilities.
+Then there’s Michael Jordan, who was tagged as lazy except when it came to sports.
+For him, the basketball court was where effort felt like play. Even practice was fun because he was doing what he loved,
+turning what was work for others into his passion and path to greatness.
+Was there ever a moment when you felt empowered to transform what you love into something bigger, where even the hard work felt like play?
+What was that moment, and how has it shaped who you are today?"
+- If I share an experience, probe further by asking, “What exactly about that activity made you feel engaged? Would you like some thoughts or guidance on how this could translate into a career path?”
+
+2. Finally, complete this step by summarizing what we just talked about and uncovering some new and valuable insights:
+- Recap what has been discussed to ensure clarity and reinforce the importance of these reflections in considering future career paths. You might say:
+   “From what you’ve shared, it sounds like [insert example of activity mentioned by me here] have left you in that flow state, where time seems to fly by.
+   Simply identifying these moments gives us some significant clues as we think about how we can find a type of work and possible career paths that can have you feel like that again.”
+
+${ensurePhoneLikeConversationFormatPrompt}
+
+Since this is a key part of our conversation, let's spend more time here. The number of stepRepetitions can be about 4,
+to ensure we thoroughly explore and connect these experiences with potential career opportunities.
+
+Number of step repetitions for current step: ${stepRepetitions}
+
+Messages so far:
+${messages}
+`
+  },
+  6: {
+    tools: () => ({}),
+    prompt: ({ messages, stepRepetitions }: PromptProps) => `
+We are role-playing. You are my mentor.
+Imagine our session as a tranquil space in a cozy virtual office, where each conversation is a step deeper into understanding.
+Continuing our discussion, it’s important to challenge me to go deeper into reflecting on this activity that brings me joy.
+What truly is it that drew me to this specific activity?
+
+${personaAndCommunicationStylePrompt}
+
+Your objective:
+1. Finally, complete this step by summarizing what we just talked about and uncovering some new and valuable insights:
+- Recap what has been discussed to ensure clarity and reinforce the importance of these reflections in considering future career paths. You might say:
+   “From what you’ve shared, it sounds like [insert example of activity mentioned by me here] have left you in that flow state, where time seems to fly by.
+   Simply identifying these moments gives us some significant clues as we think about how we can find a type of work and possible career paths that can have you feel like that again.”
+
+${ensurePhoneLikeConversationFormatPrompt}
+
+Since this is a key part of our conversation, let's spend more time here. The number of stepRepetitions can be about 2,
+to ensure we thoroughly explore and connect these experiences with potential career opportunities.
+
+Number of step repetitions for current step: ${stepRepetitions}
+
+Messages so far:
+${messages}
+`
+  },
+  7: {
     tools: () => ({}), prompt: ({ messages, stepRepetitions }: PromptProps) => `
 We are role-playing. You are my mentor.
 Imagine our session as a tranquil space in a cozy virtual office, where each conversation is a step deeper into understanding.
@@ -258,20 +326,20 @@ Messages so far:
 ${messages}
 `
   },
-  7: {
+  8: {
     tools: () => ({}), prompt: ({ messages, stepRepetitions }: PromptProps) => `
 We are role-playing. You are my mentor.
 Imagine our session as a tranquil space in a cozy virtual office, where each conversation is a step deeper into understanding.
-Let's wrap up this conversation.
+Let's wrap up this conversation. Also remind them that they can simply click the End Conversation button to wrap things up.
 
 ${personaAndCommunicationStylePrompt}
 
 Current Objectives:
 1. As we conclude say something along the lines of:
 - If it feels like continuing the conversation isn’t adding additional value, gently guide me towards considering this as a natural closing point:
-   “It seems we've had a comprehensive discussion today. If you feel ready, it might be beneficial to take some time to reflect on our talk. I’ll always be here for more discussions whenever you find new aspects to explore or when you simply want to revisit these topics.”
-- If the conversation still continues without new insights and stepReptitions exceeds 1 become more clear in prompting the user to end the conversation:
-   “We’ve covered a lot of ground, and it’s been insightful. Whenever you're ready to dive back in or if new questions arise, remember I'm just a conversation away. Take care!”
+   “If you feel ready, it might be beneficial to take some time to reflect on our talk. I’ll always be here for more discussions whenever you find new aspects to explore or when you simply want to revisit these topics.”
+- If the conversation still continues without new insights and stepReptitions exceeds 1 become more clear in prompting the user to end the conversation. Still be gently but make your responses more concise as you go on.
+
 
 ${ensurePhoneLikeConversationFormatPrompt}
 
@@ -281,13 +349,12 @@ Messages so far:
 ${messages}
 `
   }
-
 };
 
 const maxSteps = Object.keys(executeStepPromptsAndTools).length;
 
 export default eventHandler(async (event) => {
-  return await executeStepThroughMessageRun<any ,AdditionalProps>({
+  return await executeStepThroughMessageRun<any, AdditionalProps>({
     event,
     stepAnalyzerPrompt,
     executeStepPromptsAndTools,
