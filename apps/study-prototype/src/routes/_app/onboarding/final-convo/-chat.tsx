@@ -48,7 +48,7 @@ const Chat = ({
       endMutationStatus: 'idle' | 'pending' | 'success' | 'error';
     }
   >) => {
-    const { mutation, startStream, isStreaming, messageChunksByTimestamp, currentStepInfo } = useStreamResponse({
+    const { mutation, startStream, isStreaming, messageChunksByTimestamp, currentStepInfo, removeChunksForTimestamp } = useStreamResponse({
       userId,
       url: `/api/sessions/slug/onboarding-v0`
     });
@@ -66,7 +66,7 @@ const Chat = ({
       <MessagesContainer messagesRef={messagesRef} scrollRef={scrollRef} visibilityRef={visibilityRef}>
         {children}
         {mapNonStreamedDBMessagesToChatComponents(messageChunksByTimestamp, messages)}
-        {mapChunksToChatComponents(messageChunksByTimestamp)}
+        {mapChunksToChatComponents(messageChunksByTimestamp, startStream, removeChunksForTimestamp)}
         {(mutation.isPending && !isStreaming) ? <ThinkingIndicator /> : null}
       </MessagesContainer>
       {!isShowingUserInput ? null :
@@ -74,7 +74,8 @@ const Chat = ({
                        stepsRemaining={sessionStepCount - currentStepInfo.currentStep} formRef={formRef} input={input}
                        setInput={setInput} onKeyDown={onKeyDown}
                        handleSubmit={handleSubmit}
-                       customEndConvoButton={<SmoothButton variant="ghost" onPress={onEndConversation} className="mt-4 w-full"
+                       customEndConvoButton={<SmoothButton variant="ghost" onPress={onEndConversation}
+                                                           className="mt-4 w-full"
                                                            buttonState={endMutationStatus}>
                          {endMutationStatus !== 'idle' ? null : 'End Session'}
                          {endMutationStatus !== 'pending' ? null : <LucideLoader className="size-5 animate-spin" />}

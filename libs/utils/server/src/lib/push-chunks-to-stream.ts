@@ -12,7 +12,7 @@ export const pushChunksToStream = async ({
                                            type,
                                            createdAt,
                                            abortController,
-                                           currentStepInfo,
+                                           currentStepInfo
                                          }: {
   id: string,
   runId: string,
@@ -38,11 +38,27 @@ export const pushChunksToStream = async ({
       if (chunk.textDelta && chunk.textDelta.length > 0) {
         content += chunk.textDelta;
       }
-      await eventStream.push(JSON.stringify({ ...chunk, chunkType: chunk.type, id, runId, scope, type, createdAt, ...currentStepInfo }));
+      await eventStream.push(JSON.stringify({
+        ...chunk,
+        chunkType: chunk.type,
+        id,
+        runId,
+        scope,
+        type,
+        createdAt, ...currentStepInfo
+      }));
     }
-  } catch (err) {
+  } catch (err: any) {
     console.error(err);
-    // Ignore error
+    await eventStream.push(JSON.stringify({
+      message: err.message,
+      chunkType: 'error',
+      id,
+      runId,
+      scope,
+      type,
+      createdAt, ...currentStepInfo
+    }));
   } finally {
     for (const chunk of additionalChunks ?? []) {
       await eventStream.push(JSON.stringify(chunk));

@@ -24,4 +24,7 @@ This is their first session together and the AI mentor is like a wise coach or t
 Make sure the messages mimic natural speech patterns, can technically include some informal language and typical conversational fillers like 'um' and 'you know', but
 again are always appropriate for a mentor mentee relationship that is just starting out.
 ${additionalPrompt}
+
+
+Response format: Only return the refined message from a perspective of Sam, the mentor.
 `;

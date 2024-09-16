@@ -1,7 +1,7 @@
 import { BaseMessage } from '~myjournai/chat-shared';
 import { storeLlmInteraction, StoreLLMInteractionArgs } from '~myjournai/chat-server';
 import { db } from '~db/client';
-import { messageRuns } from '~db/schema/message-runs';
+import { MessageRunEndReason, messageRuns } from '~db/schema/message-runs';
 
 export type StoreMessageRunCommand = {
   initialMessage: BaseMessage;
@@ -9,16 +9,18 @@ export type StoreMessageRunCommand = {
   runId: string;
   userId: string,
   sessionLogId: string;
-  llmInteractionsToStore: StoreLLMInteractionArgs<any>[]
+  llmInteractionsToStore: StoreLLMInteractionArgs<any>[];
+  endReason: MessageRunEndReason;
 }
 export const storeMessageRunUsecase = async ({
-                                        runId,
-                                        userId,
-                                        sessionLogId,
-                                        llmInteractionsToStore,
-                                        runCreatedAt,
-                                        initialMessage
-                                      }: StoreMessageRunCommand) => {
+                                               runId,
+                                               userId,
+                                               sessionLogId,
+                                               llmInteractionsToStore,
+                                               runCreatedAt,
+                                               initialMessage,
+                                               endReason
+                                             }: StoreMessageRunCommand) => {
   await db.insert(messageRuns).values({
     id: runId,
     userId,
@@ -26,6 +28,7 @@ export const storeMessageRunUsecase = async ({
     userMessage: initialMessage.content,
     userMessageType: initialMessage.type,
     userMessageScope: initialMessage.scope,
+    endReason,
     createdAt: runCreatedAt,
     finishedAt: new Date()
   });

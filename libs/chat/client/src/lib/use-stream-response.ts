@@ -34,6 +34,7 @@ export function useStreamResponse({
       type = type ?? 'user-message';
       scope = scope ?? 'external';
       const body = { message, type, scope, userId };
+      // TODO: the dates are off here because we use the createdAt and a new date, we need the date from the BE and update the chunk
       setChunks(p => [...p, {
         id: newId,
         runId: newId,
@@ -124,6 +125,9 @@ export function useStreamResponse({
     return {currentStep: potentialChunks[0]?.currentStep ?? 1, stepRepetitions: potentialChunks[0]?.stepRepetitions ?? 1}
     }, [messageChunksByTimestamp])
 
+  const removeChunksForTimestamp = (isoTimeStamp: string) => setChunks(chunks.filter(c => c.createdAt.toISOString() !== isoTimeStamp));
+
+
   return {
     chunks,
     mutation,
@@ -132,6 +136,7 @@ export function useStreamResponse({
     abort: () => abortController.abort(),
     temporaryId,
     messageChunksByTimestamp,
-    currentStepInfo
+    currentStepInfo,
+    removeChunksForTimestamp
   };
 }

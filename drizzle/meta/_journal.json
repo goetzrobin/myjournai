@@ -218,6 +218,13 @@
       "when": 1725997377122,
       "tag": "0031_salty_silverclaw",
       "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1726506523774,
+      "tag": "0032_early_zarda",
+      "breakpoints": true
     }
   ]
 }

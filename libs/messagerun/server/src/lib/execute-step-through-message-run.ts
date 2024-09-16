@@ -19,6 +19,7 @@ import { BaseMessage, BaseMessageChunk } from '~myjournai/chat-shared';
 import { kv } from '@vercel/kv';
 import { storeMessageRunUsecase } from './use-cases/store-message-run.usecase';
 import { createError, createEventStream, H3Event, readBody } from 'h3';
+import { MessageRunEndReason } from '~db/schema/message-runs';
 
 export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>({
                                                                                   event,
@@ -33,7 +34,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
   sessionSlug: string;
   maxSteps: number;
   stepAnalyzerPrompt: (messages: string, currentStep: CurrentStepInfo) => string;
-  fetchAdditionalPromptProps?: ({userId}: {userId: string}) => Promise<AdditionalProps>;
+  fetchAdditionalPromptProps?: ({ userId }: { userId: string }) => Promise<AdditionalProps>;
   executeStepPromptsAndTools: Record<number, {
     tools: (props: ToolProps) => Tools;
     prompt: (props: PromptProps<AdditionalProps>) => string
@@ -70,6 +71,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
   }
 
   console.log(`session log exists. continuing with run and session log: ${JSON.stringify(sessionLog)}`);
+  let endReason: MessageRunEndReason = 'SUCCESS';
   const sessionLogId = sessionLog.id as string;
   const runId = crypto.randomUUID();
   const runCreatedAt = new Date();
@@ -79,7 +81,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
   const llmInteractionsToStore: StoreLLMInteractionArgs<any>[] = [];
   const additionalChunks: BaseMessageChunk[] = [];
 
-  const additionalProps = await fetchAdditionalPromptProps?.({userId});
+  const additionalProps = await fetchAdditionalPromptProps?.({ userId });
 
   const stepAnalyzerNode = stepAnalyzerNodeFactory({
     userId,
@@ -149,11 +151,25 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
       const messagesAfterRun = await streamFinalMessageNode(messagesAfterStepExecution);
       console.log('completed graph execution');
       await kv.set(messagesBySessionLogIdKey, messagesAfterRun);
-    } catch (e: unknown) {
+    } catch (e: any) {
+      endReason = 'ERROR'
+      console.error(e);
+      
+      const errorChunk: BaseMessageChunk = {
+        scope: 'internal',
+        chunkType: 'error',
+        createdAt: new Date(),
+        id: runId,
+        runId,
+        textDelta: e.message ?? 'Something went wrong'
+      };
+      await eventStream.push(JSON.stringify(errorChunk));
+
+      await kv.set(messagesBySessionLogIdKey, messagesFromPreviousRuns);
+      await eventStream.close();
       throw createError({
         status: 500,
-        statusMessage: 'Something went wrong',
-        message: JSON.stringify(e)
+        statusMessage: 'Something went wrong'
       });
     }
   })().then(async () => console.log('stream done'));
@@ -168,7 +184,8 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
       sessionLogId,
       userId,
       runId,
-      initialMessage
+      initialMessage,
+      endReason
     });
     console.log(`finished storing message run in db ${runId}`);
   });

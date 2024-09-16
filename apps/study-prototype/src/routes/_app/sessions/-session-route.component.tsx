@@ -29,7 +29,7 @@ export const SessionRouteComponent = ({ slug }: { slug: string }) => {
   const startMutation = useSessionStartMutation({ userId, slug });
   const { data: sessionLog, isSuccess: isSuccessSessionLog } = useLatestSessionLogBySlugQuery({ slug, userId });
   const { data: messages, isSuccess } = useSessionLogMessagesQuery(sessionLog?.id);
-  const { mutation, startStream, isStreaming, messageChunksByTimestamp, currentStepInfo } = useStreamResponse({
+  const { mutation, startStream, isStreaming, messageChunksByTimestamp, currentStepInfo, removeChunksForTimestamp } = useStreamResponse({
     userId,
     url: `/api/sessions/slug/${slug}`
   });
@@ -70,7 +70,7 @@ export const SessionRouteComponent = ({ slug }: { slug: string }) => {
       <ChatContainer withMenu sessionLogId={sessionLog?.id} userId={userId}>
         <MessagesContainer messagesRef={messagesRef} scrollRef={scrollRef} visibilityRef={visibilityRef}>
           {mapNonStreamedDBMessagesToChatComponents(messageChunksByTimestamp, messages ?? [])}
-          {mapChunksToChatComponents(messageChunksByTimestamp)}
+          {mapChunksToChatComponents(messageChunksByTimestamp, startStream, removeChunksForTimestamp)}
           {(mutation.isPending && !isStreaming) ? <ThinkingIndicator /> : null}
         </MessagesContainer>
         {!isReadyForUserInput ? null :

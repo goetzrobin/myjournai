@@ -26,7 +26,7 @@ export const queryMostRecentSessionLogBy = async ({ sessionSlug, sessionId, user
   userId: string;
   includeAborted?: boolean
 }): Promise<SessionLogWithSession | undefined> => {
-   const query = db.select()
+  const query = db.select()
     .from(sessionLogs)
     .innerJoin(sessions, eq(sessions.id, sessionLogs.sessionId))
     .where(
@@ -61,7 +61,12 @@ export const querySessionLogMessagesBy = async ({ sessionLogId }: { sessionLogId
     content: messageRuns.userMessage,
     createdAt: messageRuns.createdAt,
     formatVersion: sql<number>`1`.as('formatVersion')
-  }).from(messageRuns).where(eq(messageRuns.sessionLogId, sessionLogId));
+  }).from(messageRuns).where(
+    and(
+      eq(messageRuns.sessionLogId, sessionLogId),
+      eq(messageRuns.endReason, 'SUCCESS')
+    )
+  );
 
   const llmInteractionsQuery = db.select({
     id: llmInteractions.id,
@@ -72,7 +77,11 @@ export const querySessionLogMessagesBy = async ({ sessionLogId }: { sessionLogId
     createdAt: llmInteractions.createdAt,
     formatVersion: sql<number>`1`.as('formatVersion')
   }).from(llmInteractions)
-    .innerJoin(messageRuns, and(eq(messageRuns.id, llmInteractions.messageRunId), eq(messageRuns.sessionLogId, sessionLogId)));
+    .innerJoin(messageRuns, and(
+      eq(messageRuns.id, llmInteractions.messageRunId),
+      eq(messageRuns.sessionLogId, sessionLogId),
+      eq(messageRuns.endReason, 'SUCCESS')
+    ));
 
   const unionQuery = unionAll(messageRunsQuery, llmInteractionsQuery).as('results');
 

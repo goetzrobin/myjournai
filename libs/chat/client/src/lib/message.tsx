@@ -3,7 +3,7 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import { CodeBlock } from './code-block';
 
-export type MessageProps = { content: string }
+export type MessageProps = { maKey?: string;content: string }
 
 export const Message = (props: MessageProps) => {
   return (
