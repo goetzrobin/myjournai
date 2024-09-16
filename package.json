@@ -8,7 +8,6 @@
     "build": "nx run study-prototype:build && nx run nitro-app:build --skip-nx-cache",
     "preview": "node .vercel/output/server/index.mjs",
     "generate-pwa-assets": "pwa-assets-generator -r apps/study-prototype --preset minimal-2023 public/journai.svg"
-
   },
   "private": true,
   "engines": {
@@ -76,6 +75,7 @@
     "@swc/cli": "~0.3.12",
     "@swc/core": "~1.5.7",
     "@swc/helpers": "~0.5.11",
+    "@tailwindcss/typography": "^0.5.15",
     "@tanstack/eslint-plugin-query": "^5.50.1",
     "@tanstack/router-devtools": "^1.43.12",
     "@tanstack/router-plugin": "^1.43.12",

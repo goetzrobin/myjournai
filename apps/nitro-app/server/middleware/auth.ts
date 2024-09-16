@@ -5,6 +5,14 @@ export default defineEventHandler(async (event) => {
   // Will execute everything but /auth routes
   const pathName = getRequestURL(event).pathname;
   if (pathName.startsWith('/api') && !pathName.startsWith('/api/auth')) {
-    event.context.user = await authenticateUser(event);
+    try {
+      event.context.user = await authenticateUser(event);
+    } catch (e) {
+      console.log(`Authentication error: ${JSON.stringify(e)}`);
+      throw createError({
+        status: 401,
+        statusMessage: 'Authentication failed.'
+      })
+    }
   }
 });

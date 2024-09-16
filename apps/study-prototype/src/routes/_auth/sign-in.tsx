@@ -1,27 +1,23 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { useSignInMutation } from '@myjournai/auth-client';
 import { Form, Link, SmoothButton, TextField } from '~myjournai/components';
 import { parseFormData } from '~myjournai/form-utils';
 import { LucideLoader } from 'lucide-react';
-import { useEffect, useState } from 'react';
 
 export const Route = createFileRoute('/_auth/sign-in')({
+  beforeLoad: () => {
+    const isStartScreenShown = JSON.parse(localStorage.getItem('isStartScreenShown') ?? 'false');
+    if (!isStartScreenShown) {
+      localStorage.setItem('isStartScreenShown', 'true');
+      throw redirect({ to: '/start' });
+    }
+  },
   component: SignIn
 });
 
 function SignIn() {
-  const [isStartScreenShown, setStartScreenShown] = useState(JSON.parse(localStorage.getItem('isStartScreenShown') ?? 'false'));
-
   const navigate = useNavigate();
   const mut = useSignInMutation(() => setTimeout(() => navigate({ to: '/' }), 500));
-
-  useEffect(() => {
-    if (!isStartScreenShown) {
-      localStorage.setItem('isStartScreenShown', 'true');
-      setStartScreenShown(true);
-      void navigate({ to: '/start' });
-    }
-  }, [isStartScreenShown]);
 
   return (
     <>

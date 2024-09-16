@@ -82,5 +82,6 @@ module.exports = {
   },
   plugins: [
     require('tailwindcss-animate'),
-    require('tailwindcss-react-aria-components')
+    require('tailwindcss-react-aria-components'),
+    require('@tailwindcss/typography'),
   ]};
