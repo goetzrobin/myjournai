@@ -8,6 +8,9 @@ export const useOnboardingCidiDataMutation = (userId: string | null | undefined,
   const axios = useAxios();
   const qC = useQueryClient();
   return useMutation({
+    scope: {
+      id: 'cidi-pre-data',
+    },
     mutationFn: (data: CreateUserCidiResponseRequest) => axios.post(`/api/cidi/pre/${userId}`, data),
     onSuccess: async () => {
       await qC.invalidateQueries({
