@@ -30,6 +30,8 @@ export const Route = createLazyFileRoute('/_app/profile/')({
     const onboardingStepsActions = useOnboardingProgressActions();
     const mutation = useOnboardingUserResetMutation({ userId });
 
+    const isJeffOrRobin = userQ.data?.username === 'jeff@neurotrainer.com' || userQ.data?.username === 'tug29225@temple.edu';
+
     const resetOnboarding = () => {
       pastBreadthActions.reset();
       confusionActions.reset();
@@ -52,8 +54,8 @@ export const Route = createLazyFileRoute('/_app/profile/')({
           <Button className="w-full"
                   onPress={() => signOutMut.mutate(undefined, { onSuccess: () => nav({ to: '/sign-in' }) })}>Sign
             out</Button>
-          <Button variant="ghost" className="w-full"
-                  onPress={resetOnboarding}>Reset Onboarding</Button>
+          {!isJeffOrRobin ? null : <Button variant="ghost" className="w-full"
+                                           onPress={resetOnboarding}>Reset Onboarding</Button>}
         </div>
         <p className="text-center mt-4 text-muted-foreground text-xs">
           Version - {import.meta.env.VITE_APP_VERSION}
