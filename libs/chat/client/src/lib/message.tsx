@@ -2,13 +2,14 @@ import { MemoizedReactMarkdown } from './markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import { CodeBlock } from './code-block';
+import { twMerge } from 'tailwind-merge';
 
-export type MessageProps = { maKey?: string;content: string }
+export type MessageProps = { className?: string; maKey?: string; content: string }
 
 export const Message = (props: MessageProps) => {
   return (
     <MemoizedReactMarkdown
-      className="prose-sm break-words prose-p:leading-relaxed prose-pre:p-0"
+      className={twMerge('prose-base break-words prose-p:leading-relaxed prose-pre:p-0', props.content)}
       remarkPlugins={[remarkGfm, remarkMath]}
       components={{
         p({ children }) {

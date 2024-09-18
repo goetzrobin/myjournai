@@ -1,6 +1,4 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { useOnboardingCidiPreQuery } from '~myjournai/onboarding-client';
-import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
 import { Button } from '~myjournai/components';
 import OnboardingWrapper from '../-components/-onboarding-wrapper';
 
@@ -9,8 +7,6 @@ export const Route = createFileRoute('/_app/onboarding/study/complete')({
 });
 
 function Complete() {
-  const userId = useAuthUserIdFromHeaders();
-  const cidiQ = useOnboardingCidiPreQuery(userId);
   return <OnboardingWrapper currentStep="one-more-thing">
     <div className="place-self-center w-full">
       <h1 className="text-2xl text-center">Survey Complete!</h1>

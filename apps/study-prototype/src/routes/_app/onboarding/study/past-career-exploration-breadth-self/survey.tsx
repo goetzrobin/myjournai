@@ -61,7 +61,8 @@ function PastCareerCommitmentQuality() {
       to="/onboarding/study/career-commitment-quality/survey"
       label="Continue"
       isIdle={cidiMutation.isIdle}
-    />    <p className="flex-none text-xl">{currentQuestion.question}</p>
+    />
+    <p className="flex-none text-xl">{currentQuestion.question}</p>
     <div className="flex-1" />
     <div className="flex-none px-4">
       <LikertScaleSlider value={currentAnswer?.value as number ?? 3}

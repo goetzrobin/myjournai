@@ -50,8 +50,9 @@ function OneMoreThing() {
         <Button onPress={() => setWritingLetter(false)} variant="secondary"
                 className="animate-in fade-in absolute top-4 right-4">Done</Button>}
       <h1 className="text-2xl text-center">One more thing</h1>
-      <p className="mt-4 mb-20 text-muted-foreground text-center">We want to learn about you! Help Sam get to know you
-        by writing a short letter.</p>
+      <p className="mt-4 mb-20 text-muted-foreground text-center">We prepared some questions for you!
+        Write a quick letter to help Sam get to know you by answering each with a short sentence.
+        Think of this like a quick interview to get to know you!</p>
 
       <div
         className={(writingLetter ? '!scale-100 max-w-none !rotate-0 !translate-y-10' : '') + ' top-10 translate-y-40 absolute flex items-center justify-center left-0 right-0 h-full origin-center transition-transform scale-50 rotate-[-10deg]'}>
@@ -68,7 +69,7 @@ function OneMoreThing() {
     </div>
     {writingLetter || hasExistingLetterContent ? null :
       <Button onPress={onStartJournaiPress} isDisabled={writingLetter || letterLength === 0}
-              className="animate-in fade-in absolute bottom-4 left-0 right-0">Start your journai</Button>}
+              className="animate-in fade-in absolute bottom-4 left-0 right-0">Share letter & start your journey!</Button>}
     {!hasExistingLetterContent ? null :
       <Button onPress={onContinuePress}
               className="animate-in fade-in absolute bottom-4 left-0 right-0">Continue</Button>}

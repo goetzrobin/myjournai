@@ -22,7 +22,7 @@ function ResourceDetail() {
     </div>
     <h1 className="-mt-4 mb-4 text-3xl px-2">{data.title}</h1>
     <div className="pb-24 text-pretty px-2">
-      <Message content={data.content} />
+      <Message className="prose-sm" content={data.content} />
     </div>
   </div>
     ;

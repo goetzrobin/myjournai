@@ -8,36 +8,22 @@ export const Letter = ({ letterContent, setLetterContent, name }: {
 }) => {
   const sentenceCount = ((letterContent ?? '').match(/\(?[^.?!\n]+[.!?\n]\)?/g) ?? []).length;
   const questions = [
-    'What sport do you play?',
+    'I\'ll move to the next question whenever you finish a sentence. Write Hey Sam! to get started.',
+    'What sport did or do you play for your university?',
     'What achievement are you most proud of?',
-    'What do you like doing in your downtime?',
     'What’s your favorite book, movie or TV show?',
     'What’s a goal you are working towards?',
     'What does a typical Sunday look like for you?',
     'Who’s someone you are close to?',
-    'What is your dream job?',
+    'Do you have any siblings?',
+    'What subject did you enjoy most in school?',
     'What’s something you’ve always wanted to try?',
     'What’s one thing your friends love about you?',
-    'If your life were to have a motto what would it be?',
-    'If you could travel to any place in the world, where would it be?',
-    'Who’s your best friend and why?',
-    'What subject did you enjoy most in school?',
-    'Do you have any siblings?',
-    'In what ways are you similar to your parents?',
-    'In what ways are you different from your parents?',
-    'What’s your favorite cuisine?',
     'What’s an important belief that guides your choices?',
     'What, in life, do you want to be known for?',
-    'What’s a value you hold that few others do?',
     'Thank you so much! You’ve answered all my questions, for now!'
   ];
   const currentQuestion = questions[Math.min((sentenceCount), questions.length - 1) % questions.length];
-
-  const preventWindowScroll = () => {
-    console.log('trying to prevent on window scroll')
-    window.scrollTo(0, 0);
-    document.body.scrollTop = 0;
-  };
 
   return (
     <div className="h-full -mt-5 flex flex-col w-full bg-background/80">
@@ -51,7 +37,7 @@ export const Letter = ({ letterContent, setLetterContent, name }: {
         className="overflow-hidden bg-background p-4 w-full text-xl h-[50%] pressed:bg-muted text-muted-foreground border rounded-xl"
       >
         <div className="inset-0 bg-muted/20 h-full w-full absolute -z-10" />
-        <TextArea onFocus={preventWindowScroll} value={letterContent} onChange={e => setLetterContent(e.target.value)}
+        <TextArea value={letterContent} onChange={e => setLetterContent(e.target.value)}
                   className="min-h-full bg-transparent w-full outline-none"
                   placeholder={`${name ? name + ',' : 'Please'} introduce yourself...`} />
 

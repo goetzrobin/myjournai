@@ -31,8 +31,8 @@ export function FieldError(props: FieldErrorProps) {
 export const fieldBorderStyles = tv({
   variants: {
     isFocusWithin: {
-      false: 'border-border/40',
-      true: 'border-border/80',
+      false: 'border-border/90',
+      true: 'border-border',
     },
     isInvalid: {
       true: 'border-destructive'
@@ -54,5 +54,5 @@ export function FieldGroup(props: GroupProps) {
 }
 
 export function Input(props: InputProps) {
-  return <RACInput {...props} className={composeTailwindRenderProps(props.className, 'px-2 py-1.5 flex-1 min-w-0 outline outline-0 text-sm border border-input bg-background placeholder:text-muted-foreground disabled:opacity-50')} />
+  return <RACInput {...props} className={composeTailwindRenderProps(props.className, 'px-2 py-1.5 flex-1 min-w-0 outline outline-0 text-sm border bg-input/40 placeholder:text-muted-foreground disabled:opacity-50')} />
 }

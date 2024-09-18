@@ -18,4 +18,4 @@ export const useUserSuspenseQuery = (userId?: string | null) =>
 export const ensureUserQuery = async (
   queryClient: QueryClient,
   userId?: string
-) => await queryClient.ensureQueryData(userQueryOptions(userId));
+) => await queryClient?.ensureQueryData(userQueryOptions(userId));

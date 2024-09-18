@@ -28,7 +28,7 @@ export function GradYearField(
           <StepperButton slot="decrement">
             <LucideMinus aria-hidden className="size-8 place-self-center" />
           </StepperButton>
-          <Input className="tabular-nums py-8 text-7xl border-0 text-center" />
+          <Input className="bg-background tabular-nums py-8 text-7xl border-0 text-center" />
           <StepperButton slot="increment">
             <LucidePlus aria-hidden className="size-8 place-self-center" />
           </StepperButton>
