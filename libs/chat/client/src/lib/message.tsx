@@ -8,7 +8,7 @@ export type MessageProps = { maKey?: string;content: string }
 export const Message = (props: MessageProps) => {
   return (
     <MemoizedReactMarkdown
-      className="prose-base break-words prose-p:leading-relaxed prose-pre:p-0"
+      className="prose-sm break-words prose-p:leading-relaxed prose-pre:p-0"
       remarkPlugins={[remarkGfm, remarkMath]}
       components={{
         p({ children }) {

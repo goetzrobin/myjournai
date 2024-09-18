@@ -32,8 +32,8 @@ export const Route = createFileRoute('/_app/onboarding/pronouns')({
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col items-center mt-16 justify-between">
         <div className="w-full">
-          <h1 className="text-2xl text-center">What's are your pronouns?</h1>
-          <p className="mt-4 text-muted-foreground text-center">Specifying your pronouns helps Sam tu actually
+          <h1 className="text-2xl text-center">What are your pronouns?</h1>
+          <p className="mt-4 text-muted-foreground text-center">Specifying your pronouns helps Sam to better
             understand your identity.</p>
           <TextField placeholder="e.g. She/Her" inputClassName="text-xl text-center" value={pronouns}
                      onChange={setPronouns} className="mt-8" aria-label="Pronouns" />

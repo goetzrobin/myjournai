@@ -1,41 +1,38 @@
 import { eventHandler } from 'h3';
-import { tool } from 'ai';
 import {
   createStepAnalyzerPromptFactory,
   ensurePhoneLikeConversationFormatPrompt,
   personaAndCommunicationStylePrompt,
-  PromptProps,
-  ToolProps
+  PromptProps
 } from '~myjournai/chat-server';
-import { z } from 'zod';
 import { executeStepThroughMessageRun } from '~myjournai/messagerun-server';
 
 const stepAnalyzerPrompt = createStepAnalyzerPromptFactory(({ currentStep }) => `
-${!(currentStep === 0 || currentStep === 1) ? '' : `
+${currentStep !== 1 ? '' : `
 1. Introduction and Acknowledgment:
   - Criteria to Advance: AI acknowledges the user's effort, introduces itself by name, and asks how the user felt writing the letter; if met, increment step.
   - Criteria to Stay: AI fails to introduce itself or acknowledge the user's effort, stay on current step.
   - Roundtrip Limit: 2
 `}
-${!(currentStep === 1 || currentStep === 2) ? '' : `
+${currentStep !== 2 ? '' : `
 2. Being vulnerable and Establishing the AI as Part of a Supportive Team:
   - Criteria to Advance: AI shares own vulnerabilities about what it means to be AI and emphasizes its role as part of a dedicated team helping the user and asks if this resonates with the user; if met, increment step.
   - Criteria to Stay: AI fails to be vulnerable or clarify its team-based support role or does not ask if the message resonates with the user; stay on current step.
   - Roundtrip Limit: 2
 `}
-${!(currentStep === 2 || currentStep === 3) ? '' : `
+${currentStep !== 3 ? '' : `
 3. Shifting Focus to the User's Letter and Offering a Playful Insight:
   - Criteria to Advance: AI shifts the focus back to the user's letter, makes an insightful guess about the user's personality and asks the user how accurate it is; if met, increment step.
   - Criteria to Stay: AI fails to refocus on the user's letter, does not make an insightful guess or does not ask the user for feedback on the accuracy; stay on current step.
   - Roundtrip Limit: 4
 `}
-${!(currentStep === 3 || currentStep === 4) ? '' : `
+${currentStep !== 4 ? '' : `
 4. Guiding the Conversation to a Reassuring Conclusion:
   - Criteria to Advance: AI gently transitions the conversation towards closure, outlines the next 4 weeks ahead with focus on exploring new career possibilities, reassures the user about the support during this transition; if met, increment step.
   - Criteria to Stay: AI fails to effectively transition towards the end, does not clearly outline the upcoming 4 weeks, lacks reassurance about the user's transition; stay on current step.
   - Roundtrip Limit: 3
   `}
-${!(currentStep === 4 || currentStep === 5) ? '' : `
+${currentStep !== 5 ? '' : `
 5. Ending conversation:
   - Criteria to Advance: DNA;
   - Criteria to Stay: AI has not mentioned that it will be right there at the start of the next session for the user
@@ -156,33 +153,7 @@ ${messages}
 `
   },
   5: {
-    tools: ({
-              additionalChunks,
-              llmInteractionId,
-              runId,
-              scope,
-              type,
-              createdAt
-            }: ToolProps) => ({
-      endConversation: tool({
-        description: 'Only call this tool after the user has said their goodbyes to you',
-        parameters: z.object({}),
-        execute: async () => {
-          console.log('pushing end conversation to our friends on the frontend');
-          additionalChunks.push({
-            toolName: 'endConversation',
-            toolCallId: crypto.randomUUID(),
-            textDelta: '',
-            chunkType: 'tool-call',
-            id: llmInteractionId,
-            runId,
-            scope,
-            type,
-            createdAt
-          });
-        }
-      })
-    }), prompt: ({ messages, stepRepetitions }: PromptProps) => `
+    tools: () => ({}), prompt: ({ messages, stepRepetitions }: PromptProps) => `
 We are role playing. You are my mentor. You just spent a good amount of time getting to know each other and they were very patient answering questions and surveys.
 You want to wind down the conversation and keep it light and short.
 

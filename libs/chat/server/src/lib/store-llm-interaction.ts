@@ -61,8 +61,8 @@ export const storeLlmInteraction = async <TOOLS extends Record<string, CoreTool>
     promptTokens: isNaN(usage?.promptTokens) ? undefined : usage?.promptTokens,
     completionTokens: isNaN(usage?.completionTokens) ? undefined : usage?.completionTokens,
     totalTokens: isNaN(usage?.totalTokens) ? undefined : usage?.totalTokens,
-    currentStep: !currentStep || isNaN(currentStep) ? undefined : currentStep,
-    stepRepetitions: !stepRepetitions || isNaN(stepRepetitions) ? undefined : stepRepetitions,
+    currentStep: currentStep === undefined || isNaN(currentStep) ? undefined : currentStep,
+    stepRepetitions: stepRepetitions === undefined || isNaN(stepRepetitions) ? undefined : stepRepetitions,
   };
   console.log('inserting this bad boy', usage);
   await db.insert(llmInteractions).values(values);

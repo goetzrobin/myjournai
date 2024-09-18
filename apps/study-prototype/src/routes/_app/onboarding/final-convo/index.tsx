@@ -50,7 +50,9 @@ function FinalConvo() {
       postFeelingScore: null,
       postMotivationScore: null
     }, {
-      onSuccess: () => setTimeout(() => nav({ to: '/' }), 500)
+      onSuccess: () => {
+        setTimeout(() => nav({ to: '/' }), 500)
+      }
     });
   };
 

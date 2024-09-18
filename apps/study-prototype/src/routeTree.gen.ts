@@ -20,11 +20,12 @@ import { Route as PublicPrivacyPolicyImport } from './routes/_public/privacy-pol
 import { Route as AuthStartImport } from './routes/_auth/start'
 import { Route as AuthSignUpImport } from './routes/_auth/sign-up'
 import { Route as AuthSignInImport } from './routes/_auth/sign-in'
-import { Route as AppResourcesImport } from './routes/_app/resources'
+import { Route as AppResourcesIndexImport } from './routes/_app/resources/index'
 import { Route as AppOnboardingIndexImport } from './routes/_app/onboarding/index'
 import { Route as AppSessionsGettingStartedV0Import } from './routes/_app/sessions/getting-started-v0'
 import { Route as AppSessionsCareerConfusionV0Import } from './routes/_app/sessions/career-confusion-v0'
 import { Route as AppSessionsAlignmentV0Import } from './routes/_app/sessions/alignment-v0'
+import { Route as AppResourcesSlugImport } from './routes/_app/resources/$slug'
 import { Route as AppOnboardingSurveyIntroImport } from './routes/_app/onboarding/survey-intro'
 import { Route as AppOnboardingStartImport } from './routes/_app/onboarding/start'
 import { Route as AppOnboardingPronounsImport } from './routes/_app/onboarding/pronouns'
@@ -88,17 +89,17 @@ const AuthSignInRoute = AuthSignInImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
-const AppResourcesRoute = AppResourcesImport.update({
-  path: '/resources',
-  getParentRoute: () => AppRoute,
-} as any)
-
 const AppProfileIndexLazyRoute = AppProfileIndexLazyImport.update({
   path: '/profile/',
   getParentRoute: () => AppRoute,
 } as any).lazy(() =>
   import('./routes/_app/profile/index.lazy').then((d) => d.Route),
 )
+
+const AppResourcesIndexRoute = AppResourcesIndexImport.update({
+  path: '/resources/',
+  getParentRoute: () => AppRoute,
+} as any)
 
 const AppOnboardingIndexRoute = AppOnboardingIndexImport.update({
   path: '/onboarding/',
@@ -119,6 +120,11 @@ const AppSessionsCareerConfusionV0Route =
 
 const AppSessionsAlignmentV0Route = AppSessionsAlignmentV0Import.update({
   path: '/sessions/alignment-v0',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppResourcesSlugRoute = AppResourcesSlugImport.update({
+  path: '/resources/$slug',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -224,13 +230,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
-    '/_app/resources': {
-      id: '/_app/resources'
-      path: '/resources'
-      fullPath: '/resources'
-      preLoaderRoute: typeof AppResourcesImport
-      parentRoute: typeof AppImport
-    }
     '/_auth/sign-in': {
       id: '/_auth/sign-in'
       path: '/sign-in'
@@ -315,6 +314,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppOnboardingSurveyIntroImport
       parentRoute: typeof AppImport
     }
+    '/_app/resources/$slug': {
+      id: '/_app/resources/$slug'
+      path: '/resources/$slug'
+      fullPath: '/resources/$slug'
+      preLoaderRoute: typeof AppResourcesSlugImport
+      parentRoute: typeof AppImport
+    }
     '/_app/sessions/alignment-v0': {
       id: '/_app/sessions/alignment-v0'
       path: '/sessions/alignment-v0'
@@ -341,6 +347,13 @@ declare module '@tanstack/react-router' {
       path: '/onboarding'
       fullPath: '/onboarding'
       preLoaderRoute: typeof AppOnboardingIndexImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/resources/': {
+      id: '/_app/resources/'
+      path: '/resources'
+      fullPath: '/resources'
+      preLoaderRoute: typeof AppResourcesIndexImport
       parentRoute: typeof AppImport
     }
     '/_app/profile/': {
@@ -420,7 +433,6 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   AppRoute: AppRoute.addChildren({
-    AppResourcesRoute,
     AppIndexLazyRoute,
     AppOnboardingBdayRoute,
     AppOnboardingMeetSamRoute,
@@ -428,10 +440,12 @@ export const routeTree = rootRoute.addChildren({
     AppOnboardingPronounsRoute,
     AppOnboardingStartRoute,
     AppOnboardingSurveyIntroRoute,
+    AppResourcesSlugRoute,
     AppSessionsAlignmentV0Route,
     AppSessionsCareerConfusionV0Route,
     AppSessionsGettingStartedV0Route,
     AppOnboardingIndexRoute,
+    AppResourcesIndexRoute,
     AppProfileIndexLazyRoute,
     AppOnboardingStudyCompleteRoute,
     AppOnboardingStudyUserRoute,
@@ -469,7 +483,6 @@ export const routeTree = rootRoute.addChildren({
     "/_app": {
       "filePath": "_app.tsx",
       "children": [
-        "/_app/resources",
         "/_app/",
         "/_app/onboarding/bday",
         "/_app/onboarding/meet-sam",
@@ -477,10 +490,12 @@ export const routeTree = rootRoute.addChildren({
         "/_app/onboarding/pronouns",
         "/_app/onboarding/start",
         "/_app/onboarding/survey-intro",
+        "/_app/resources/$slug",
         "/_app/sessions/alignment-v0",
         "/_app/sessions/career-confusion-v0",
         "/_app/sessions/getting-started-v0",
         "/_app/onboarding/",
+        "/_app/resources/",
         "/_app/profile/",
         "/_app/onboarding/study/complete",
         "/_app/onboarding/study/user",
@@ -500,10 +515,6 @@ export const routeTree = rootRoute.addChildren({
         "/_auth/sign-up",
         "/_auth/start"
       ]
-    },
-    "/_app/resources": {
-      "filePath": "_app/resources.tsx",
-      "parent": "/_app"
     },
     "/_auth/sign-in": {
       "filePath": "_auth/sign-in.tsx",
@@ -551,6 +562,10 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_app/onboarding/survey-intro.tsx",
       "parent": "/_app"
     },
+    "/_app/resources/$slug": {
+      "filePath": "_app/resources/$slug.tsx",
+      "parent": "/_app"
+    },
     "/_app/sessions/alignment-v0": {
       "filePath": "_app/sessions/alignment-v0.tsx",
       "parent": "/_app"
@@ -565,6 +580,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/onboarding/": {
       "filePath": "_app/onboarding/index.tsx",
+      "parent": "/_app"
+    },
+    "/_app/resources/": {
+      "filePath": "_app/resources/index.tsx",
       "parent": "/_app"
     },
     "/_app/profile/": {

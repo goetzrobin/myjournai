@@ -12,42 +12,42 @@ import { createCidiConfusionBlock, queryUserCidiSurveyResponsesBy } from '@myjou
 type AdditionalProps = { cidiResults: CidiSurveyResponses };
 type PromptProps = BasePromptProps<AdditionalProps>
 const stepAnalyzerPrompt = createStepAnalyzerPromptFactory(({ currentStep }) =>
-  `${!(currentStep === 1) ? '' : `1. Gentle Check-In
+  `${currentStep !== 1 ? '' : `1. Gentle Check-In
    - Criteria to Advance: Mentor has acknowledged the user's current emotional state from a quick popup effectively, providing a warm and engaging welcome that sets a comfortable tone for the session.
    - Criteria to Stay: Initial emotional check-in is incomplete or lacks warmth and engagement.
    - Roundtrip Limit: 2
    `}
-${!(currentStep === 2) ? '' : `2. Transition to Career Identity Confusion
+${currentStep !== 2 ? '' : `2. Transition to Career Identity Confusion
    - Criteria to Advance: Conversation has smoothly transitioned from personal sharing to introducing revisiting the career identity confusion survey, the user shows understanding of their importance.
    - Criteria to Stay: Transition to career identity confusion discussion is rough or unclear and the value of it has not been clearly conveyed.
    - Roundtrip Limit: 2
    `}
-${!(currentStep === 3) ? '' : `3. Reflect on answers to Career Identity Confusion Survey
+${currentStep !== 3 ? '' : `3. Reflect on answers to Career Identity Confusion Survey
    - Criteria to Advance: AI has shown that it analyzed the users answers and uncovered a meaningful insight. It has presented that insight and engaged the user in a conversation in which they confirm how the user feels about the uncertainty or certainty of their future career.
    - Criteria to Stay: AI has failed to create a meaningful insight. The user has not been able to confirm/deny the accuracy of this insight. The user seems to not feel heard and validated in those feelings
    - Roundtrip Limit: 4
    `}
-${!(currentStep === 4) ? '' : `4. Core Question of the Conversation: What brings you joy
+${currentStep !== 4 ? '' : `4. Core Question of the Conversation: What brings you joy
    - Criteria to Advance: AI has introduced the question of what brings user joy. It then went into a deeper conversation to understand on more than a surface level of what brought the user this joy.
    - Criteria to Stay: AI has failed to transition to the core question. User's reflection lacks detail or depth.
    - Roundtrip Limit: 4
    `}
-   ${!(currentStep === 5) ? '' : `5. Dive deeper into what brings you joy
+${currentStep !== 5 ? '' : `5. Dive deeper into what brings you joy
    - Criteria to Advance: AI encouraged a deeper conversation to understand on more than a surface level of what brought the user this joy. The user shows engagement and introspection to uncover their own feelings regarding this activity that brings them joy.
    - Criteria to Stay: AI has failed to dive deeper and uncover underlying reasons. User have not started to connect with the underlying feelings of that activity. AI has not reflected those feelings back to the user. There are no clear insights from this exercise.
    - Roundtrip Limit: 4
    `}
-${!(currentStep === 6) ? '' : `6. Summarize and reflect back to the user what brings them joy
+${currentStep !== 6 ? '' : `6. Summarize and reflect back to the user what brings them joy
    - Criteria to Advance:  AI has given enough thought to all responses to the questions it has asked regarding career identity confusion.
    - Criteria to Stay: AI has failed to dive deeper and uncover underlying reasons. AI has not reflected those feelings back to the user. There are no clear insights from this exercise.
    - Roundtrip Limit: 4
    `}
-${!(currentStep === 6) ? '' : `6. Wrap Up and Set Stage for Next Session
+${currentStep !== 7 ? '' : `7. Wrap Up and Set Stage for Next Session
    - Criteria to Advance: User understands the connections between their past joys, current aspirations, and potential career paths. They are prepared for the next session focusing on aligning these insights with their personal values.
    - Criteria to Stay: There are unresolved issues or questions about the connections made during the session, or the user is not yet ready to move forward.
    - Roundtrip Limit: 3
    `}
-${!(currentStep === 7) ? '' : `7. Guide Conversation to End
+${currentStep !== 8 ? '' : `8. Guide Conversation to End
    - Criteria to Advance: N/A (this is the final step).
    - Criteria to Stay: User has unresolved issues or questions that need addressing before conclusion.
    - Roundtrip Limit: 1

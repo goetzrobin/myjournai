@@ -6,7 +6,7 @@ import { button } from './Button';
 
 interface LinkProps extends TanLinkProps {
   className?: string;
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'icon';
 }
 
 const styles = tv({
