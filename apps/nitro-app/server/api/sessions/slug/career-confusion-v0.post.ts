@@ -70,8 +70,7 @@ I just filled out a very quick popup before the chat that gives a snapshot of ho
 ${embeddedQuestionsBlock}
 
 Keep that in mind. You're not sensing how I feel or anything like that.
-I just told you! I did the hard work of checking in with myself mentally, you can give me some credit for that!
-Be creative, be human.
+I just told you! I did the hard work of checking in with myself mentally. Be creative, be human.
 
 The goal is to create an initial moment of connection that feels both caring and intellectually engaging.
 It’s like meeting an old friend who not only cares about how you are but is deeply interested in your thoughts and feelings.
