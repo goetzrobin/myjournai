@@ -23,7 +23,7 @@ const Section = ({ articles, title, icon, className }: PropsWithChildren<{
     <span className="ml-2">{title}</span>
   </div>
   <div className="flex px-4 pb-6 items-center space-x-8 overflow-x-auto">
-    {articles?.map((article: ResourceArticle) => <Card {...article} />)}
+    {articles?.map((article: ResourceArticle, i) => <Card key={article.link + '-' + i} {...article} />)}
   </div>
   <hr className="mx-auto w-full" />
 </div>;
@@ -51,7 +51,7 @@ function About() {
     <div className="overflow-auto h-full">
       <h1 className="ml-2 text-3xl">Resources</h1>
       <div className="pb-12 pt-8">
-        {RESOURCE_SECTIONS.map(s => <Section {...s} />)}
+        {RESOURCE_SECTIONS.map((s,i) => <Section key={i} {...s} />)}
       </div>
     </div>
   </WithMobileNav>;
