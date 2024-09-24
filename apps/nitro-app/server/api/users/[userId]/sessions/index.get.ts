@@ -9,5 +9,8 @@ export default eventHandler(async (event) => {
       message: 'Can only get sessions for own user'
     });
   }
-  return await getSessionsWithLogsBy({ userId });
+  return await getSessionsWithLogsBy({
+    userId,
+    isAdmin: (event.context.user?.email && ['tug29225@temple.edu'].includes(event.context.user?.email))
+  });
 });

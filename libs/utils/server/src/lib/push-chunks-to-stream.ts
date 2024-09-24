@@ -1,6 +1,5 @@
 import { EventStream } from 'h3';
-import { BaseMessageChunk, BaseMessageScope, BaseMessageType } from '~myjournai/chat-shared';
-import { CurrentStepInfo } from '~myjournai/chat-server';
+import { BaseMessageChunk, BaseMessageScope, BaseMessageType, CurrentStepInfo } from '~myjournai/chat-shared';
 
 export const pushChunksToStream = async ({
                                            eventStream,

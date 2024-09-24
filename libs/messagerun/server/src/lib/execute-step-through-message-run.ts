@@ -1,7 +1,6 @@
 import {
   createInitialMessage,
   createLLMProviders,
-  CurrentStepInfo,
   executeStepNodeFactory,
   PromptProps,
   stepAnalyzerNodeFactory,
@@ -15,7 +14,7 @@ import {
   queryMostRecentSessionLogBy,
   querySessionLogMessagesBy
 } from '~myjournai/sessionlog-server';
-import { BaseMessage, BaseMessageChunk } from '~myjournai/chat-shared';
+import { BaseMessage, BaseMessageChunk, CurrentStepInfo } from '~myjournai/chat-shared';
 import { kv } from '@vercel/kv';
 import { storeMessageRunUsecase } from './use-cases/store-message-run.usecase';
 import { createError, createEventStream, H3Event, readBody } from 'h3';
@@ -154,7 +153,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
     } catch (e: any) {
       endReason = 'ERROR'
       console.error(e);
-      
+
       const errorChunk: BaseMessageChunk = {
         scope: 'internal',
         chunkType: 'error',
@@ -175,6 +174,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
   })().then(async () => console.log('stream done'));
 
   eventStream.onClosed(async () => {
+    console.log(await kv.get(currentStepBySessionLogIdKey))
     console.log('stream closed aborting all llm calls');
     abortController.abort();
     console.log(`storing message run in db ${runId}`);

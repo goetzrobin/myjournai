@@ -9,7 +9,7 @@ export type MessageProps = { className?: string; maKey?: string; content: string
 export const Message = (props: MessageProps) => {
   return (
     <MemoizedReactMarkdown
-      className={twMerge('prose-base break-words prose-p:leading-relaxed prose-pre:p-0', props.content)}
+      className={twMerge('prose-base break-words prose-p:leading-relaxed prose-pre:p-0', props.className)}
       remarkPlugins={[remarkGfm, remarkMath]}
       components={{
         p({ children }) {

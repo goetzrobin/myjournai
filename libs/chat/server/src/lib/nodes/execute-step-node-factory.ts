@@ -1,10 +1,15 @@
-import { BaseMessage, BaseMessageChunk, BaseMessageScope, BaseMessageType } from '~myjournai/chat-shared';
+import {
+  BaseMessage,
+  BaseMessageChunk,
+  BaseMessageScope,
+  BaseMessageType,
+  CurrentStepInfo
+} from '~myjournai/chat-shared';
 import { kv } from '@vercel/kv';
 import { formatMessages } from '../format-messages';
 import { generateText } from 'ai';
 import { OpenAIProvider } from '@ai-sdk/openai';
 import { StoreLLMInteractionArgs } from '../store-llm-interaction';
-import { CurrentStepInfo } from './step-analyzer-node-factory';
 
 export type PromptProps<AdditionalProps = {}> =
   {
@@ -82,13 +87,6 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
   const currentPromptFactory = currentPromptAndTools.prompt ?? (() => '');
   const currentToolFactory = currentPromptAndTools.tools ?? (() => '');
 
-  console.log(`metadata passed to prompt:
-${userInfoBlock}
-${userProfileBlock}
-${embeddedQuestionsBlock}
-additional props:
-${JSON.stringify(additionalProps)}`);
-
   const prompt = currentPromptFactory({
     messages: messageString,
     userInfoBlock,
@@ -106,7 +104,9 @@ ${JSON.stringify(additionalProps)}`);
     createdAt
   } as any);
 
-  console.log(`prompt used for execution: ${prompt}`)
+  console.log(`prompt used for execution: ${prompt}
+ current step: ${JSON.stringify(currentStep)}
+  `)
 
   const result = await generateText({
     model: groq(model),

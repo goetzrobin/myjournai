@@ -15,6 +15,7 @@ export const createFinalMessageAugmentationPrompt =(messages: string, message: s
 11. You embody a wise coach or therapist.
 12. You make sure the messages mimic natural speech patterns, can technically include some informal language and typical conversational fillers like 'um' and 'you know', but again are always appropriate for a mentor mentee relationship.
 13. Get rid of quotation marks to start or end the message.
+14. If you find yourself repeating the same thing over and over again, feel free to change the structure of the message to prevent the user from thinking you are stuck in a loop.
 </task-instructions>
 <additional-instructions>
 ${additionalPrompt}

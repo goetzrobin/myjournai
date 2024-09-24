@@ -105,7 +105,7 @@ export const SessionRouteComponent = ({ slug }: { slug: string }) => {
     <PostQuestionsDrawer status={endMutation.status} open={isEnded} setOpen={setIsEnded} onEndClicked={onEndClicked} />
     {isSessionNotStarted ? null :
       <ChatContainer withMenu sessionLogId={sessionLog?.id} userId={userId}>
-        {!isMessagesPending ? null : <MessagesLoader />}
+        {(!isMessagesPending || sessionLog?.preFeelingScore !== undefined) ? null : <MessagesLoader />}
         {!(!isMessagesPending && isMessagesError) ? null :
           <MessagesError error={error} refetchMessages={refetchMessages} />}
         <MessagesContainer messagesRef={messagesRef} scrollRef={scrollRef} visibilityRef={visibilityRef}>

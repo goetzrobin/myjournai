@@ -1,4 +1,4 @@
-import { BaseMessage } from '~myjournai/chat-shared';
+import { BaseMessage, CurrentStepInfo } from '~myjournai/chat-shared';
 import { kv } from '@vercel/kv';
 import { generateText } from 'ai';
 import { formatMessages } from '../format-messages';
@@ -6,7 +6,6 @@ import { filterOutInternalMessages } from '../filter-out-internal-messages';
 import { OpenAIProvider } from '@ai-sdk/openai';
 import { StoreLLMInteractionArgs } from '../store-llm-interaction';
 
-export type CurrentStepInfo = {currentStep: number; stepRepetitions: number}
 
 export const stepAnalyzerNodeFactory = ({
                                           userId,

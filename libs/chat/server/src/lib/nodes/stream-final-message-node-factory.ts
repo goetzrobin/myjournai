@@ -1,14 +1,13 @@
-import { BaseMessage, BaseMessageChunk } from '~myjournai/chat-shared';
+import { BaseMessage, BaseMessageChunk, CurrentStepInfo } from '~myjournai/chat-shared';
 import { formatMessages } from '../format-messages';
 import { filterOutInternalMessages } from '../filter-out-internal-messages';
 import { createFinalMessageAugmentationPrompt } from '../prompts/create-final-message-augmentation-prompt';
 import { streamText } from 'ai';
-import { pushChunksToStream } from '~myjournai/utils-server';
 import { kv } from '@vercel/kv';
 import { StoreLLMInteractionArgs } from '../store-llm-interaction';
 import { AnthropicProvider } from '@ai-sdk/anthropic';
 import { EventStream } from 'h3';
-import { CurrentStepInfo } from './step-analyzer-node-factory';
+import { pushChunksToStream } from '~myjournai/utils-server';
 
 export const streamFinalMessageNodeFactory = ({
                                                 userId,
@@ -50,7 +49,7 @@ export const streamFinalMessageNodeFactory = ({
   const lastMessage = messages[messages.length - 1].content as string;
   const prompt = createFinalMessageAugmentationPrompt(messageString, lastMessage, userInfoBlock, userProfileBlock, additionalPrompt);
   const currentStepInfo = (await kv.get(currentStepBySessionLogIdKey) ?? {currentStep: 1, stepRepetitions: 0}) as CurrentStepInfo;
-  
+
   const finalStream = await streamText({
     model: anthropic(model),
     prompt,

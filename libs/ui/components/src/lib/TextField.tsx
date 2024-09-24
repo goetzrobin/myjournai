@@ -52,9 +52,7 @@ export const TextArea = ({ className, name, placeholder, onKeyDown, onChange, va
     placeholder={placeholder}
     className={className}
     autoFocus
-    spellCheck={false}
     autoComplete="off"
-    autoCorrect="off"
     name={name}
     rows={1}
     value={value}
