@@ -45,7 +45,7 @@ function Index() {
   return <WithMobileNav>
     <div className="flex flex-col h-full w-full">
       <div className="overflow-auto pb-20 pt-8 space-y-8">
-        {!sessionsQ.isPending ? null : <p>Loading sessions</p>}
+        {!sessionsQ.isPending ? null : <p className="py-20 text-center">Loading sessions</p>}
         {sessions.map(s => <MenuItem
           session={s}
           key={s.id}>{s.name}</MenuItem>)}
