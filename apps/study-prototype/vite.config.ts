@@ -53,7 +53,6 @@ const pwaOptions: Partial<VitePWAOptions> = {
     // Prevent index.html from being cached
     globPatterns: ["**/*.{js,css}"],
     navigateFallback: null,
-    cleanupOutdatedCaches: true,
   },
 }
 
