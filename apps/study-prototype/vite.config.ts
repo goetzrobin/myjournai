@@ -14,8 +14,15 @@ const pwaOptions: Partial<VitePWAOptions> = {
   base: '/',
   includeAssets: ['favicon.svg'],
   manifest: {
+    id: 'journai',
     name: 'journai',
+    lang: 'en-US',
+    dir: 'ltr',
+    description: 'AI mentorship for athletes',
     short_name: 'journai',
+    start_url: '/',
+    display: 'standalone',
+    orientation: 'portrait',
     theme_color: '#141414',
     icons: [
       {
