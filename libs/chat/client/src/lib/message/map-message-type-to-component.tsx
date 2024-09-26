@@ -2,7 +2,7 @@ import { BaseMessage, BaseMessageChunk, BaseMessageType } from '~myjournai/chat-
 import { AIMessage } from './ai-message';
 import { UserMessage } from './user-message';
 import { MessageError } from './message-error';
-import { StreamRequest } from './use-stream-response';
+import { StreamRequest } from '../use-stream-response';
 
 export const mapMessageTypeToComponent = (type: BaseMessageType | undefined, key: string, content: string) => {
   if (type === 'ai-message') return <AIMessage maKey={key} key={key} content={content} />;

@@ -1,4 +1,4 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useUserQuery } from '@myjournai/user-client';
 import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
 import { WithMobileNav } from '../-nav/with-mobile-nav';
@@ -7,7 +7,7 @@ import { Button } from '~myjournai/components';
 import { useSessionsWithLogsQuery } from '~myjournai/session-client';
 import { SessionWithLogs } from '~myjournai/session-shared';
 
-export const Route = createLazyFileRoute('/_app/')({
+export const Route = createFileRoute('/_app/')({
   component: Index
 });
 

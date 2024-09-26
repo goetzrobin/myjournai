@@ -1,11 +1,13 @@
 import { useNavigate } from '@tanstack/react-router';
 import {
   ChatContainer,
+  LoadPreviousMessagesError,
   mapChunksToChatComponents,
   mapNonStreamedDBMessagesToChatComponents,
   MessagesContainer,
   PostQuestionsDrawer,
   PreQuestionsDrawer,
+  PreviousMessagesLoader,
   QuestionDrawerScores,
   ThinkingIndicator,
   useAutoStartMessage,
@@ -14,7 +16,7 @@ import {
   useStreamResponse
 } from '~myjournai/chat-client';
 import React, { useState } from 'react';
-import { Button, useScrollAnchor } from '~myjournai/components';
+import { useScrollAnchor } from '~myjournai/components';
 import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
 import {
   useLatestSessionLogBySlugQuery,
@@ -22,28 +24,6 @@ import {
   useSessionLogMessagesQuery,
   useSessionStartMutation
 } from '~myjournai/session-client';
-import { AlertCircle, Loader2, RefreshCw } from 'lucide-react';
-
-const MessagesLoader = () => <div className="h-full w-full flex items-center justify-center space-x-2 text-primary">
-  <Loader2 className="h-5 w-5 animate-spin" />
-  <span className="text-sm font-medium">Loading previous messages...</span>
-</div>;
-const MessagesError = ({ error, refetchMessages }: {
-  error: { message: string } | null;
-  refetchMessages: () => void
-}) => {
-  return <div className="h-full w-full flex flex-col items-center justify-center">
-    <AlertCircle className="mb-2 w-8 h-8 text-destructive mx-auto" />
-    <h1 className="mb-4 font-bold">Oops! Something went wrong</h1>
-    <p className="mb-6 px-4 max-w-sm text-xs text-muted-foreground">
-      {error?.message ?? 'We\'re sorry, but it seems there was an error loading your messages. Please try again or reach out to us if the issue persists.'}
-    </p>
-    <Button onPress={() => refetchMessages()} className="w-full flex items-center max-w-xs mx-auto">
-      <RefreshCw className="mr-2 h-4 w-4" />
-      Reload Page
-    </Button>
-  </div>;
-};
 
 export const SessionRouteComponent = ({ slug }: { slug: string }) => {
   const nav = useNavigate();
@@ -105,9 +85,8 @@ export const SessionRouteComponent = ({ slug }: { slug: string }) => {
     <PostQuestionsDrawer status={endMutation.status} open={isEnded} setOpen={setIsEnded} onEndClicked={onEndClicked} />
     {isSessionNotStarted ? null :
       <ChatContainer withMenu sessionLogId={sessionLog?.id} userId={userId}>
-        {(!isMessagesPending || sessionLog?.preFeelingScore !== undefined) ? null : <MessagesLoader />}
-        {!(!isMessagesPending && isMessagesError) ? null :
-          <MessagesError error={error} refetchMessages={refetchMessages} />}
+        {(!isMessagesPending || sessionLog?.preFeelingScore !== undefined) ? null : <PreviousMessagesLoader />}
+        {!(!isMessagesPending && isMessagesError) ? null : <LoadPreviousMessagesError error={error} refetchMessages={refetchMessages} />}
         <MessagesContainer messagesRef={messagesRef} scrollRef={scrollRef} visibilityRef={visibilityRef}>
           {mapNonStreamedDBMessagesToChatComponents(messageChunksByTimestamp, messages ?? [])}
           {mapChunksToChatComponents(messageChunksByTimestamp, startStream, removeChunksForTimestamp)}

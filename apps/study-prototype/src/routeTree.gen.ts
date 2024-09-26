@@ -15,6 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AppImport } from './routes/_app'
+import { Route as AppIndexImport } from './routes/_app/index'
 import { Route as PublicTermsImport } from './routes/_public/terms'
 import { Route as PublicPrivacyPolicyImport } from './routes/_public/privacy-policy'
 import { Route as AuthStartImport } from './routes/_auth/start'
@@ -44,7 +45,6 @@ import { Route as AppOnboardingStudyCareerCommitmentQualitySurveyImport } from '
 
 // Create Virtual Routes
 
-const AppIndexLazyImport = createFileRoute('/_app/')()
 const AppProfileIndexLazyImport = createFileRoute('/_app/profile/')()
 
 // Create/Update Routes
@@ -59,10 +59,10 @@ const AppRoute = AppImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AppIndexLazyRoute = AppIndexLazyImport.update({
+const AppIndexRoute = AppIndexImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
-} as any).lazy(() => import('./routes/_app/index.lazy').then((d) => d.Route))
+} as any)
 
 const PublicTermsRoute = PublicTermsImport.update({
   path: '/terms',
@@ -269,7 +269,7 @@ declare module '@tanstack/react-router' {
       id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof AppIndexLazyImport
+      preLoaderRoute: typeof AppIndexImport
       parentRoute: typeof AppImport
     }
     '/_app/onboarding/bday': {
@@ -433,7 +433,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   AppRoute: AppRoute.addChildren({
-    AppIndexLazyRoute,
+    AppIndexRoute,
     AppOnboardingBdayRoute,
     AppOnboardingMeetSamRoute,
     AppOnboardingNameRoute,
@@ -535,7 +535,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_public/terms.tsx"
     },
     "/_app/": {
-      "filePath": "_app/index.lazy.tsx",
+      "filePath": "_app/index.tsx",
       "parent": "/_app"
     },
     "/_app/onboarding/bday": {

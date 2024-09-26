@@ -1,7 +1,7 @@
-import { MemoizedReactMarkdown } from './markdown';
+import { MemoizedReactMarkdown } from '../markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
-import { CodeBlock } from './code-block';
+import { CodeBlock } from '../code-block';
 import { twMerge } from 'tailwind-merge';
 
 export type MessageProps = { className?: string; maKey?: string; content: string }
