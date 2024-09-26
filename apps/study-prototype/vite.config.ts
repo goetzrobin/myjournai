@@ -49,6 +49,11 @@ const pwaOptions: Partial<VitePWAOptions> = {
     type: 'module',
     navigateFallback: 'index.html',
   },
+  workbox: {
+    // Prevent index.html from being cached
+    globPatterns: ["**/*.{js,css}"],
+    navigateFallback: null,
+  },
 }
 
 export default defineConfig({
