@@ -23,16 +23,16 @@ const MenuItem = ({ session }: PropsWithChildren<{ session: Pick<SessionWithLogs
     (session.slug === 'offboarding-v0') ? () => nav({ to: `/offboarding` }):
     () => nav({ to: `/sessions/${session.slug}` });
 
-  return <div className="drop-shadow-xl overflow-hidden relative pt-64 rounded-xl border">
+  return <div className="drop-shadow-xl overflow-hidden relative rounded-xl border">
     <img
-      className={twMerge('-z-10 absolute filter left-0 top-0 h-58 object-cover', !hasCompletedLog ? 'grayscale' : '')}
+      className={twMerge('filter h-58 object-cover', !hasCompletedLog ? 'grayscale' : '')}
       src={`/sessions/${session.imageUrl}`}
       width={800}
       height={500}
       alt="Mountain range with unique motive fitting the session"
     />
     <div className="bg-gradient-to-b px-8 py-8 -mt-8 to-40% from-transparent to-background/80">
-      <h4 className="text-3xl font-serif text-center mb-4">{session?.name}</h4>
+      <h4 className="text-3xl font-serif text-center mt-4 mb-4">{session?.name}</h4>
       <p className="text-muted-foreground text-lg text-center">{session?.description}</p>
       <Button isDisabled={!onPress} onPress={onPress} className="w-full mt-8" variant="secondary">
         {hasInProgressLog ? 'Continue' : hasCompletedLog ? 'View' : 'Start'}
@@ -59,9 +59,7 @@ function Index() {
     <div className="flex flex-col h-full w-full">
       <div className="overflow-auto pb-20 pt-8 px-8 -mx-8 space-y-10">
         {!sessionsQ.isPending ? null : <p className="py-20 text-center">Loading sessions</p>}
-        {sessions.map(s => <MenuItem
-          session={s}
-          key={s.id}>{s.name}</MenuItem>)}
+        {sessions.map(s => <MenuItem session={s} key={s.id}>{s.name}</MenuItem>)}
         <MenuItem key={endSession.id} session={endSession} />
       </div>
     </div>
