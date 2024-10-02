@@ -4,15 +4,17 @@ import { useAuthUserIdFromHeaders, useSignOutMutation } from '~myjournai/auth-cl
 import { useUserQuery } from '~myjournai/user-client';
 import { WithMobileNav } from '../../-nav/with-mobile-nav';
 import {
-  useOnbCidiCareerCommitmentQualitySurveyActions,
-  useOnbCidiCareerExplorationBreadthSelfSurveyActions,
-  useOnbCidiCareerExplorationDepthSelfSurveyActions,
-  useOnbCidiCareerIdentityConfusionSurveyActions,
-  useOnbCidiPastCareerExplorationBreadthSelfSurveyActions,
   useOnboardingProgressActions,
   useOnboardingSurveyActions,
   useOnboardingUserResetMutation
 } from '~myjournai/onboarding-client';
+import {
+  useCidiPreCareerCommitmentQualitySurveyActions,
+  useCidiPreCareerExplorationBreadthSelfSurveyActions,
+  useCidiPreCareerExplorationDepthSelfSurveyActions,
+  useCidiPreCareerIdentityConfusionSurveyActions,
+  useCidiPrePastCareerExplorationBreadthSelfSurveyActions
+} from '~myjournai/cidi-client';
 
 export const Route = createLazyFileRoute('/_app/profile/')({
   component: () => {
@@ -21,11 +23,11 @@ export const Route = createLazyFileRoute('/_app/profile/')({
     const signOutMut = useSignOutMutation();
     const nav = useNavigate();
 
-    const pastBreadthActions = useOnbCidiPastCareerExplorationBreadthSelfSurveyActions();
-    const confusionActions = useOnbCidiCareerIdentityConfusionSurveyActions();
-    const depthActions = useOnbCidiCareerExplorationDepthSelfSurveyActions();
-    const breadthActions = useOnbCidiCareerExplorationBreadthSelfSurveyActions();
-    const qualityActions = useOnbCidiCareerCommitmentQualitySurveyActions();
+    const pastBreadthActions = useCidiPrePastCareerExplorationBreadthSelfSurveyActions();
+    const confusionActions = useCidiPreCareerIdentityConfusionSurveyActions();
+    const depthActions = useCidiPreCareerExplorationDepthSelfSurveyActions();
+    const breadthActions = useCidiPreCareerExplorationBreadthSelfSurveyActions();
+    const qualityActions = useCidiPreCareerCommitmentQualitySurveyActions();
     const userActions = useOnboardingSurveyActions();
     const onboardingStepsActions = useOnboardingProgressActions();
     const mutation = useOnboardingUserResetMutation({ userId });
