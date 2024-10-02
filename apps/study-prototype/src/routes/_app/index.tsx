@@ -22,7 +22,7 @@ const MenuItem = ({ session }: PropsWithChildren<{ session: Pick<SessionWithLogs
     (session.slug === 'offboarding-v0') ? () => nav({ to: `/offboarding` }):
     () => nav({ to: `/sessions/${session.slug}` });
 
-  return <div className="drop-shadow-xl overflow-hidden relative rounded-xl border">
+  return <div className="drop-shadow-xl relative rounded-xl border">
     <div className="bg-gradient-to-b px-8 py-8 -mt-8 to-40% from-transparent to-background/80">
       <h4 className="text-3xl font-serif text-center mt-4 mb-4">{session?.name}</h4>
       <p className="text-muted-foreground text-lg text-center">{session?.description}</p>
