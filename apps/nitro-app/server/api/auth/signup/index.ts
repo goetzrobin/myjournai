@@ -1,4 +1,4 @@
-import { signUpAction } from '@myjournai/auth-server';
+import { signUpAction } from '~myjournai/auth-server';
 import { AuthError } from '@supabase/auth-js';
 import { createError, eventHandler, readBody } from 'h3';
 import { SignUpRequestSchema } from '~myjournai/auth-shared';

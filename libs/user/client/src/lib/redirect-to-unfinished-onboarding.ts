@@ -1,4 +1,4 @@
-import { useAuthSessionFromHeaders } from '@myjournai/auth-client';
+import { useAuthSessionFromHeaders } from '~myjournai/auth-client';
 import { ensureUserQuery } from './queries/user.query';
 import { ParsedLocation, redirect } from '@tanstack/react-router';
 import { QueryClient } from '@tanstack/react-query';

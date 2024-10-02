@@ -3,7 +3,7 @@ import { Button } from '~myjournai/components';
 import { LucideChevronLeft, LucideUndoDot } from 'lucide-react';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useSessionAbortMutation } from '~myjournai/session-client';
-import { useUserQuery } from '@myjournai/user-client';
+import { useUserQuery } from '~myjournai/user-client';
 
 export const ChatContainer = ({ children, userId, sessionLogId, withMenu }: PropsWithChildren<{
   userId?: string;

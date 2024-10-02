@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import OnboardingWrapper from '../-components/-onboarding-wrapper';
-import { useUserQuery } from '@myjournai/user-client';
-import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
+import { useUserQuery } from '~myjournai/user-client';
+import { useAuthUserIdFromHeaders } from '~myjournai/auth-client';
 import { Button } from '~myjournai/components';
 import React, { useState } from 'react';
 import { Letter } from './-components/-letter';

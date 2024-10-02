@@ -1,21 +1,20 @@
 import { createFileRoute } from '@tanstack/react-router';
-import {
-  buildCreateUserCidiResponseRequest,
-  useOnbCidiPastCareerExplorationBreadthSelfAnswers,
-  useOnbCidiPastCareerExplorationBreadthSelfCanMoveToNextQuestion,
-  useOnbCidiPastCareerExplorationBreadthSelfCurrentAnswer,
-  useOnbCidiPastCareerExplorationBreadthSelfCurrentProgress,
-  useOnbCidiPastCareerExplorationBreadthSelfCurrentQuestion,
-  useOnbCidiPastCareerExplorationBreadthSelfIsFinalQuestion,
-  useOnbCidiPastCareerExplorationBreadthSelfQuestionCount,
-  useOnbCidiPastCareerExplorationBreadthSelfSurveyActions,
-  useOnboardingCidiDataMutation
-} from '~myjournai/onboarding-client';
-import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
+import { useAuthUserIdFromHeaders } from '~myjournai/auth-client';
 import OnboardingSurveyWrapper from '../../-components/-onboarding-survey-wrapper';
 import SavingCidiData from '../../-components/-saving-cidi-data';
 import { LikertScaleSlider } from '../../-components/-likert-scale-slider';
 import React from 'react';
+import {
+  buildCreateUserCidiResponseRequest, useCidiDataMutation,
+  useCidiPrePastCareerExplorationBreadthSelfAnswers,
+  useCidiPrePastCareerExplorationBreadthSelfCanMoveToNextQuestion,
+  useCidiPrePastCareerExplorationBreadthSelfCurrentAnswer,
+  useCidiPrePastCareerExplorationBreadthSelfCurrentProgress,
+  useCidiPrePastCareerExplorationBreadthSelfCurrentQuestion,
+  useCidiPrePastCareerExplorationBreadthSelfIsFinalQuestion,
+  useCidiPrePastCareerExplorationBreadthSelfQuestionCount,
+  useCidiPrePastCareerExplorationBreadthSelfSurveyActions
+} from '~myjournai/cidi-client';
 
 export const Route = createFileRoute('/_app/onboarding/study/past-career-exploration-breadth-self/survey')({
   component: PastCareerCommitmentQuality
@@ -26,19 +25,19 @@ function PastCareerCommitmentQuality() {
     moveToNextQuestion,
     moveToPreviousQuestion,
     answerCurrentQuestion
-  } = useOnbCidiPastCareerExplorationBreadthSelfSurveyActions();
-  const questionCount = useOnbCidiPastCareerExplorationBreadthSelfQuestionCount();
-  const isFinalQuestion = useOnbCidiPastCareerExplorationBreadthSelfIsFinalQuestion();
-  const stepProgress = useOnbCidiPastCareerExplorationBreadthSelfCurrentProgress();
-  const currentQuestion = useOnbCidiPastCareerExplorationBreadthSelfCurrentQuestion();
-  const currentAnswer = useOnbCidiPastCareerExplorationBreadthSelfCurrentAnswer();
+  } = useCidiPrePastCareerExplorationBreadthSelfSurveyActions();
+  const questionCount = useCidiPrePastCareerExplorationBreadthSelfQuestionCount();
+  const isFinalQuestion = useCidiPrePastCareerExplorationBreadthSelfIsFinalQuestion();
+  const stepProgress = useCidiPrePastCareerExplorationBreadthSelfCurrentProgress();
+  const currentQuestion = useCidiPrePastCareerExplorationBreadthSelfCurrentQuestion();
+  const currentAnswer = useCidiPrePastCareerExplorationBreadthSelfCurrentAnswer();
 
   const firstQuestion = currentQuestion.index === 0;
-  const canMoveToNextQuestion = useOnbCidiPastCareerExplorationBreadthSelfCanMoveToNextQuestion();
+  const canMoveToNextQuestion = useCidiPrePastCareerExplorationBreadthSelfCanMoveToNextQuestion();
 
   const userId = useAuthUserIdFromHeaders();
-  const answers = useOnbCidiPastCareerExplorationBreadthSelfAnswers();
-  const cidiMutation = useOnboardingCidiDataMutation(userId);
+  const answers = useCidiPrePastCareerExplorationBreadthSelfAnswers();
+  const cidiMutation = useCidiDataMutation({ userId });
   const updateCidiData = () => {
     if (!userId) return;
     cidiMutation.mutate(buildCreateUserCidiResponseRequest('question4', answers, userId));

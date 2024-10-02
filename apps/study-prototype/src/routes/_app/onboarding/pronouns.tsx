@@ -3,8 +3,8 @@ import OnboardingWrapper from './-components/-onboarding-wrapper';
 import { SmoothButton, TextField } from '~myjournai/components';
 import React, { FormEvent, useState } from 'react';
 import { LucideChevronLeft, LucideLoader } from 'lucide-react';
-import { ensureUserQuery, useUserSuspenseQuery, useUserUpdateMutation } from '@myjournai/user-client';
-import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
+import { ensureUserQuery, useUserSuspenseQuery, useUserUpdateMutation } from '~myjournai/user-client';
+import { useAuthUserIdFromHeaders } from '~myjournai/auth-client';
 
 export const Route = createFileRoute('/_app/onboarding/pronouns')({
   loader: async ({ context: { queryClient } }) => {

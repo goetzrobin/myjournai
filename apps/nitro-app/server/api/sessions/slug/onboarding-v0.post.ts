@@ -70,6 +70,8 @@ ${messages}
 </useful-information>
 `
 
+// first step starts with props.stepRepetitions = 1 because we always STAY on initial contact
+// following steps often have conditions start at props.stepRepetitions = 0 because we normally move to step as we ADVANCE and reset to 0
 const executeStepPromptsAndTools = {
   1: {
     tools: () => ({}), prompt: (props: PromptProps) => `

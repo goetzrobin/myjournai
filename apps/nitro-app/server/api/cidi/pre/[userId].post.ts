@@ -1,9 +1,9 @@
 import { createError } from 'h3';
-import { createOrUpdateUserCidiResponseUsecase, createUserCidiResponseCommandSchema } from '@myjournai/user-server';
+import { createOrUpdateUserCidiResponseUsecase, createUserCidiResponseCommandSchema } from '~myjournai/user-server';
 
 export default defineEventHandler(async (event) => {
   const userId = getRouterParam(event, 'userId');
-  const parsedRequest = createUserCidiResponseCommandSchema.safeParse(await readBody(event));
+  const parsedRequest = createUserCidiResponseCommandSchema.safeParse({...(await readBody(event) ?? {}), type: 'PRE'});
   if (parsedRequest.error) {
     throw createError({
       status: 400,

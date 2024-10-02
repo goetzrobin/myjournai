@@ -1,17 +1,18 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useUserQuery } from '@myjournai/user-client';
-import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
+import { useUserQuery } from '~myjournai/user-client';
+import { useAuthUserIdFromHeaders } from '~myjournai/auth-client';
 import { WithMobileNav } from '../-nav/with-mobile-nav';
 import { PropsWithChildren } from 'react';
 import { Button } from '~myjournai/components';
 import { useSessionsWithLogsQuery } from '~myjournai/session-client';
 import { SessionWithLogs } from '~myjournai/session-shared';
+import { twMerge } from 'tailwind-merge';
 
 export const Route = createFileRoute('/_app/')({
   component: Index
 });
 
-const MenuItem = ({ session }: PropsWithChildren<{ session: SessionWithLogs }>) => {
+const MenuItem = ({ session }: PropsWithChildren<{ session: Pick<SessionWithLogs, 'logs' | 'slug' | 'imageUrl' | 'name' | 'description'> }>) => {
   const hasInProgressLog = session.logs.some(l => l.status === 'IN_PROGRESS');
   const hasCompletedLog = session.logs.some(l => l.status === 'COMPLETED');
 
@@ -19,21 +20,24 @@ const MenuItem = ({ session }: PropsWithChildren<{ session: SessionWithLogs }>) 
 
   const onPress = (session.slug === 'onboarding-v0') ?
     () => nav({ to: '/onboarding/final-convo' }) :
+    (session.slug === 'offboarding-v0') ? () => nav({ to: `/offboarding` }):
     () => nav({ to: `/sessions/${session.slug}` });
 
-  return <div className="bg-background shadow-xl overflow-hidden relative px-8 pb-8 pt-44 rounded-xl border">
+  return <div className="drop-shadow-xl overflow-hidden relative pt-64 rounded-xl border">
     <img
-      className="absolute left-0 top-0 h-40 object-cover"
+      className={twMerge('-z-10 absolute filter left-0 top-0 h-58 object-cover', !hasCompletedLog ? 'grayscale' : '')}
       src={`/sessions/${session.imageUrl}`}
       width={800}
       height={500}
-      alt="Picture of the author"
+      alt="Mountain range with unique motive fitting the session"
     />
-    <h4 className="text-2xl font-serif text-center mb-4">{session?.name}</h4>
-    <p className="text-muted-foreground text-lg text-center">{session?.description}</p>
-    <Button isDisabled={!onPress} onPress={onPress} className="w-full mt-8" variant="secondary">
-      {hasInProgressLog ? 'Continue' : hasCompletedLog ? 'View' : 'Start'}
-    </Button>
+    <div className="bg-gradient-to-b px-8 py-8 -mt-8 to-40% from-transparent to-background/80">
+      <h4 className="text-3xl font-serif text-center mb-4">{session?.name}</h4>
+      <p className="text-muted-foreground text-lg text-center">{session?.description}</p>
+      <Button isDisabled={!onPress} onPress={onPress} className="w-full mt-8" variant="secondary">
+        {hasInProgressLog ? 'Continue' : hasCompletedLog ? 'View' : 'Start'}
+      </Button>
+    </div>
   </div>;
 };
 
@@ -42,13 +46,23 @@ function Index() {
   const sessionsQ = useSessionsWithLogsQuery({ userId: userQ.data?.id });
   const sessions = sessionsQ.data ?? [];
 
+  const endSession = {
+    id: 'end-session',
+    logs: [],
+    slug: 'offboarding-v0',
+    imageUrl: 'the-journey-continues.jpg',
+    name: 'The journey continues',
+    description: 'Your final session with Sam, for now!'
+  }
+
   return <WithMobileNav>
     <div className="flex flex-col h-full w-full">
-      <div className="overflow-auto pb-20 pt-8 space-y-8">
+      <div className="overflow-auto pb-20 pt-8 px-8 -mx-8 space-y-10">
         {!sessionsQ.isPending ? null : <p className="py-20 text-center">Loading sessions</p>}
         {sessions.map(s => <MenuItem
           session={s}
           key={s.id}>{s.name}</MenuItem>)}
+        <MenuItem key={endSession.id} session={endSession} />
       </div>
     </div>
   </WithMobileNav>

@@ -65,6 +65,8 @@ Use my answers to your questions in this conversation to refine the existing pro
 Use self determination theory and Ikigai as the structure to develop this.
 `
 
+// first step starts with props.stepRepetitions = 1 because we always STAY on initial contact
+// following steps often have conditions start at props.stepRepetitions = 0 because we normally move to step as we ADVANCE and reset to 0
 const executeStepPromptsAndTools = {
   1: {
     tools: () => ({}),

@@ -1,21 +1,21 @@
 import { createFileRoute } from '@tanstack/react-router';
-import {
-  buildCreateUserCidiResponseRequest,
-  useOnbCidiCareerCommitmentQualityAnswers,
-  useOnbCidiCareerCommitmentQualityCanMoveToNextQuestion,
-  useOnbCidiCareerCommitmentQualityCurrentAnswer,
-  useOnbCidiCareerCommitmentQualityCurrentProgress,
-  useOnbCidiCareerCommitmentQualityCurrentQuestion,
-  useOnbCidiCareerCommitmentQualityIsFinalQuestion,
-  useOnbCidiCareerCommitmentQualityQuestionCount,
-  useOnbCidiCareerCommitmentQualitySurveyActions,
-  useOnboardingCidiDataMutation
-} from '~myjournai/onboarding-client';
-import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
+import { useAuthUserIdFromHeaders } from '~myjournai/auth-client';
 import OnboardingSurveyWrapper from '../../-components/-onboarding-survey-wrapper';
 import SavingCidiData from '../../-components/-saving-cidi-data';
 import { LikertScaleSlider } from '../../-components/-likert-scale-slider';
 import React from 'react';
+import {
+  buildCreateUserCidiResponseRequest,
+  useCidiDataMutation,
+  useCidiPreCareerCommitmentQualityAnswers,
+  useCidiPreCareerCommitmentQualityCanMoveToNextQuestion,
+  useCidiPreCareerCommitmentQualityCurrentAnswer,
+  useCidiPreCareerCommitmentQualityCurrentProgress,
+  useCidiPreCareerCommitmentQualityCurrentQuestion,
+  useCidiPreCareerCommitmentQualityIsFinalQuestion,
+  useCidiPreCareerCommitmentQualityQuestionCount,
+  useCidiPreCareerCommitmentQualitySurveyActions
+} from '~myjournai/cidi-client';
 
 export const Route = createFileRoute('/_app/onboarding/study/career-commitment-quality/survey')({
   component: CareerComittmentQuality
@@ -26,19 +26,19 @@ function CareerComittmentQuality() {
     moveToNextQuestion,
     moveToPreviousQuestion,
     answerCurrentQuestion
-  } = useOnbCidiCareerCommitmentQualitySurveyActions();
-  const questionCount = useOnbCidiCareerCommitmentQualityQuestionCount();
-  const isFinalQuestion = useOnbCidiCareerCommitmentQualityIsFinalQuestion();
-  const stepProgress = useOnbCidiCareerCommitmentQualityCurrentProgress();
-  const currentQuestion = useOnbCidiCareerCommitmentQualityCurrentQuestion();
-  const currentAnswer = useOnbCidiCareerCommitmentQualityCurrentAnswer();
+  } = useCidiPreCareerCommitmentQualitySurveyActions();
+  const questionCount = useCidiPreCareerCommitmentQualityQuestionCount();
+  const isFinalQuestion = useCidiPreCareerCommitmentQualityIsFinalQuestion();
+  const stepProgress = useCidiPreCareerCommitmentQualityCurrentProgress();
+  const currentQuestion = useCidiPreCareerCommitmentQualityCurrentQuestion();
+  const currentAnswer = useCidiPreCareerCommitmentQualityCurrentAnswer();
 
   const firstQuestion = currentQuestion.index === 0;
-  const canMoveToNextQuestion = useOnbCidiCareerCommitmentQualityCanMoveToNextQuestion();
+  const canMoveToNextQuestion = useCidiPreCareerCommitmentQualityCanMoveToNextQuestion();
 
   const userId = useAuthUserIdFromHeaders();
-  const answers = useOnbCidiCareerCommitmentQualityAnswers();
-  const cidiMutation = useOnboardingCidiDataMutation(userId);
+  const answers = useCidiPreCareerCommitmentQualityAnswers();
+  const cidiMutation = useCidiDataMutation({ userId });
   const updateCidiData = () => {
     if (!userId) return;
     cidiMutation.mutate(buildCreateUserCidiResponseRequest('question5', answers, userId));

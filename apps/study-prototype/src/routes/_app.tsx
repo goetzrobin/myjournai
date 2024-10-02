@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router';
-import { authenticateRoute } from '@myjournai/auth-client';
-import { redirectToUnfinishedOnboarding } from '@myjournai/user-client';
+import { authenticateRoute } from '~myjournai/auth-client';
+import { redirectToUnfinishedOnboarding } from '~myjournai/user-client';
 import MobileNav from './-nav/mobile-nav';
 import ReloadPrompt from './-reload/reload-prompt';
 

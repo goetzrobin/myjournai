@@ -8,7 +8,7 @@ import {
 } from '~myjournai/chat-server';
 import { executeStepThroughMessageRun } from '~myjournai/messagerun-server';
 import { CidiSurveyResponses } from '~db/schema/cidi-survey-responses';
-import { createCidiConfusionBlock, queryUserCidiSurveyResponsesBy } from '@myjournai/user-server';
+import { createCidiConfusionBlock, queryUserCidiSurveyResponsesBy } from '~myjournai/user-server';
 
 type AdditionalProps = { cidiResults: CidiSurveyResponses };
 type PromptProps = BasePromptProps<AdditionalProps>
@@ -66,6 +66,8 @@ We’ve met before, so there’s a gentle familiarity between us, yet we are sti
 This is our second pre-planned session, so there’s some gentle familiarity between us, yet we are still developing our trust.
 </session-info>`;
 
+// first step starts with props.stepRepetitions = 1 because we always STAY on initial contact
+// following steps often have conditions start at props.stepRepetitions = 0 because we normally move to step as we ADVANCE and reset to 0
 const executeStepPromptsAndTools = {
   1: {
     tools: () => ({}),

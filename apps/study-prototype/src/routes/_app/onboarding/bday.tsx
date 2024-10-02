@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { DateField, SmoothButton } from '~myjournai/components';
-import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
-import { ensureUserQuery, useUserSuspenseQuery, useUserUpdateMutation } from '@myjournai/user-client';
+import { useAuthUserIdFromHeaders } from '~myjournai/auth-client';
+import { ensureUserQuery, useUserSuspenseQuery, useUserUpdateMutation } from '~myjournai/user-client';
 import React, { FormEvent } from 'react';
 import OnboardingWrapper from './-components/-onboarding-wrapper';
 import { LucideChevronLeft, LucideLoader } from 'lucide-react';

@@ -1,0 +1,9 @@
+{
+  "name": "cidi-client",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/cidi/client/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project cidi-client --web",
+  "targets": {}
+}

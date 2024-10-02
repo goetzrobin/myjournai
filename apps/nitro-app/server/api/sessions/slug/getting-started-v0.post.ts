@@ -74,6 +74,8 @@ Use self-determination theory and Ikigai as the structure to develop this.
 This is our third pre-planned session, so there’s a gentle familiarity between us, yet we are still exploring the depths of my experiences and aspirations.
 </session-info>`;
 
+// first step starts with props.stepRepetitions = 1 because we always STAY on initial contact
+// following steps often have conditions start at props.stepRepetitions = 0 because we normally move to step as we ADVANCE and reset to 0
 const executeStepPromptsAndTools = {
   1: {
     tools: () => ({}),

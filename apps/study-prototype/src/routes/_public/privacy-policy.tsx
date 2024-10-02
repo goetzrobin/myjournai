@@ -115,7 +115,7 @@ You have the right to access and update your personal information within the app
 
 **5.2 Data Deletion**
 
-You can request the deletion of your personal information by contacting our support team at [support@myjournai.app](mailto:support@myjournai.app).
+You can request the deletion of your personal information by contacting our support team at [support~myjournai.app](mailto:support~myjournai.app).
 
 **5.3 Opt-Out**
 
@@ -135,7 +135,7 @@ If you have any questions or concerns about this Privacy Policy or our data prac
 
 **Journai Support Team**
 
-Email: [support@myjournai.app](mailto:support@myjournai.app)
+Email: [support~myjournai.app](mailto:support~myjournai.app)
 
 ---
 `;

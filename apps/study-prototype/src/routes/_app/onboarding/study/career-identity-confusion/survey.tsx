@@ -1,20 +1,19 @@
 import { createFileRoute } from '@tanstack/react-router';
 import OnboardingSurveyWrapper from '../../-components/-onboarding-survey-wrapper';
 import { LikertScaleSlider } from '../../-components/-likert-scale-slider';
-import {
-  buildCreateUserCidiResponseRequest,
-  useOnbCidiCareerIdentityConfusionAnswers,
-  useOnbCidiCareerIdentityConfusionCanMoveToNextQuestion,
-  useOnbCidiCareerIdentityConfusionCurrentAnswer,
-  useOnbCidiCareerIdentityConfusionCurrentProgress,
-  useOnbCidiCareerIdentityConfusionCurrentQuestion,
-  useOnbCidiCareerIdentityConfusionIsFinalQuestion,
-  useOnbCidiCareerIdentityConfusionQuestionCount,
-  useOnbCidiCareerIdentityConfusionSurveyActions,
-  useOnboardingCidiDataMutation
-} from '~myjournai/onboarding-client';
 import SavingCidiData from '../../-components/-saving-cidi-data';
-import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
+import { useAuthUserIdFromHeaders } from '~myjournai/auth-client';
+import {
+  buildCreateUserCidiResponseRequest, useCidiDataMutation,
+  useCidiPreCareerIdentityConfusionAnswers,
+  useCidiPreCareerIdentityConfusionCanMoveToNextQuestion,
+  useCidiPreCareerIdentityConfusionCurrentAnswer,
+  useCidiPreCareerIdentityConfusionCurrentProgress,
+  useCidiPreCareerIdentityConfusionCurrentQuestion,
+  useCidiPreCareerIdentityConfusionIsFinalQuestion,
+  useCidiPreCareerIdentityConfusionQuestionCount,
+  useCidiPreCareerIdentityConfusionSurveyActions
+} from '~myjournai/cidi-client';
 
 export const Route = createFileRoute('/_app/onboarding/study/career-identity-confusion/survey')({
   component: CareerIdentityConfusion
@@ -25,19 +24,19 @@ function CareerIdentityConfusion() {
     moveToNextQuestion,
     moveToPreviousQuestion,
     answerCurrentQuestion
-  } = useOnbCidiCareerIdentityConfusionSurveyActions();
-  const questionCount = useOnbCidiCareerIdentityConfusionQuestionCount();
-  const isFinalQuestion = useOnbCidiCareerIdentityConfusionIsFinalQuestion();
-  const stepProgress = useOnbCidiCareerIdentityConfusionCurrentProgress();
-  const currentQuestion = useOnbCidiCareerIdentityConfusionCurrentQuestion();
-  const currentAnswer = useOnbCidiCareerIdentityConfusionCurrentAnswer();
+  } = useCidiPreCareerIdentityConfusionSurveyActions();
+  const questionCount = useCidiPreCareerIdentityConfusionQuestionCount();
+  const isFinalQuestion = useCidiPreCareerIdentityConfusionIsFinalQuestion();
+  const stepProgress = useCidiPreCareerIdentityConfusionCurrentProgress();
+  const currentQuestion = useCidiPreCareerIdentityConfusionCurrentQuestion();
+  const currentAnswer = useCidiPreCareerIdentityConfusionCurrentAnswer();
 
   const firstQuestion = currentQuestion.index === 0;
-  const canMoveToNextQuestion = useOnbCidiCareerIdentityConfusionCanMoveToNextQuestion();
+  const canMoveToNextQuestion = useCidiPreCareerIdentityConfusionCanMoveToNextQuestion();
 
   const userId = useAuthUserIdFromHeaders();
-  const answers = useOnbCidiCareerIdentityConfusionAnswers();
-  const cidiMutation = useOnboardingCidiDataMutation(userId);
+  const answers = useCidiPreCareerIdentityConfusionAnswers();
+  const cidiMutation = useCidiDataMutation({ userId });
   const updateCidiData = () => {
     if (!userId) return;
     cidiMutation.mutate(buildCreateUserCidiResponseRequest('question1', answers, userId));

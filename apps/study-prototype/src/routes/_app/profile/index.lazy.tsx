@@ -1,7 +1,7 @@
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { Button } from '~myjournai/components';
-import { useAuthUserIdFromHeaders, useSignOutMutation } from '@myjournai/auth-client';
-import { useUserQuery } from '@myjournai/user-client';
+import { useAuthUserIdFromHeaders, useSignOutMutation } from '~myjournai/auth-client';
+import { useUserQuery } from '~myjournai/user-client';
 import { WithMobileNav } from '../../-nav/with-mobile-nav';
 import {
   useOnbCidiCareerCommitmentQualitySurveyActions,

@@ -1,6 +1,6 @@
 import { QueryClient, queryOptions, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { userQKF } from './query-key.factory';
-import { UserQR } from '@myjournai/user-shared';
+import { UserQR } from '~myjournai/user-shared';
 import { useAxios } from '~myjournai/http-client';
 
 export const userQueryOptions = (userId?: string | null) => {

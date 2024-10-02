@@ -1,21 +1,20 @@
 import { createFileRoute } from '@tanstack/react-router';
-import {
-  buildCreateUserCidiResponseRequest,
-  useOnbCidiCareerExplorationDepthSelfAnswers,
-  useOnbCidiCareerExplorationDepthSelfCanMoveToNextQuestion,
-  useOnbCidiCareerExplorationDepthSelfCurrentAnswer,
-  useOnbCidiCareerExplorationDepthSelfCurrentProgress,
-  useOnbCidiCareerExplorationDepthSelfCurrentQuestion,
-  useOnbCidiCareerExplorationDepthSelfIsFinalQuestion,
-  useOnbCidiCareerExplorationDepthSelfQuestionCount,
-  useOnbCidiCareerExplorationDepthSelfSurveyActions,
-  useOnboardingCidiDataMutation
-} from '~myjournai/onboarding-client';
-import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
+import { useAuthUserIdFromHeaders } from '~myjournai/auth-client';
 import OnboardingSurveyWrapper from '../../-components/-onboarding-survey-wrapper';
 import SavingCidiData from '../../-components/-saving-cidi-data';
 import { LikertScaleSlider } from '../../-components/-likert-scale-slider';
 import React from 'react';
+import {
+  buildCreateUserCidiResponseRequest, useCidiDataMutation,
+  useCidiPreCareerExplorationDepthSelfAnswers,
+  useCidiPreCareerExplorationDepthSelfCanMoveToNextQuestion,
+  useCidiPreCareerExplorationDepthSelfCurrentAnswer,
+  useCidiPreCareerExplorationDepthSelfCurrentProgress,
+  useCidiPreCareerExplorationDepthSelfCurrentQuestion,
+  useCidiPreCareerExplorationDepthSelfIsFinalQuestion,
+  useCidiPreCareerExplorationDepthSelfQuestionCount,
+  useCidiPreCareerExplorationDepthSelfSurveyActions
+} from '~myjournai/cidi-client';
 
 export const Route = createFileRoute('/_app/onboarding/study/career-exploration-depth-self/survey')({
   component: CareerExplorationDepthSelf
@@ -26,19 +25,19 @@ function CareerExplorationDepthSelf() {
     moveToNextQuestion,
     moveToPreviousQuestion,
     answerCurrentQuestion
-  } = useOnbCidiCareerExplorationDepthSelfSurveyActions();
-  const questionCount = useOnbCidiCareerExplorationDepthSelfQuestionCount();
-  const isFinalQuestion = useOnbCidiCareerExplorationDepthSelfIsFinalQuestion();
-  const stepProgress = useOnbCidiCareerExplorationDepthSelfCurrentProgress();
-  const currentQuestion = useOnbCidiCareerExplorationDepthSelfCurrentQuestion();
-  const currentAnswer = useOnbCidiCareerExplorationDepthSelfCurrentAnswer();
+  } = useCidiPreCareerExplorationDepthSelfSurveyActions();
+  const questionCount = useCidiPreCareerExplorationDepthSelfQuestionCount();
+  const isFinalQuestion = useCidiPreCareerExplorationDepthSelfIsFinalQuestion();
+  const stepProgress = useCidiPreCareerExplorationDepthSelfCurrentProgress();
+  const currentQuestion = useCidiPreCareerExplorationDepthSelfCurrentQuestion();
+  const currentAnswer = useCidiPreCareerExplorationDepthSelfCurrentAnswer();
 
   const firstQuestion = currentQuestion.index === 0;
-  const canMoveToNextQuestion = useOnbCidiCareerExplorationDepthSelfCanMoveToNextQuestion();
+  const canMoveToNextQuestion = useCidiPreCareerExplorationDepthSelfCanMoveToNextQuestion();
 
   const userId = useAuthUserIdFromHeaders();
-  const answers = useOnbCidiCareerExplorationDepthSelfAnswers();
-  const cidiMutation = useOnboardingCidiDataMutation(userId);
+  const answers = useCidiPreCareerExplorationDepthSelfAnswers();
+  const cidiMutation = useCidiDataMutation({ userId });
   const updateCidiData = () => {
     if (!userId) return;
     cidiMutation.mutate(buildCreateUserCidiResponseRequest('question3', answers, userId));

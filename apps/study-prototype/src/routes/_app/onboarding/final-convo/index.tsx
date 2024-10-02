@@ -1,9 +1,9 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import classes from './index.module.css';
 import { useEffect, useRef } from 'react';
-import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
+import { useAuthUserIdFromHeaders } from '~myjournai/auth-client';
 import Chat from './-chat';
-import { useUserCompleteOnboardingMutation } from '@myjournai/user-client';
+import { useUserCompleteOnboardingMutation } from '~myjournai/user-client';
 import { useOnboardingLetterQuery } from '~myjournai/onboarding-client';
 import {
   useLatestSessionLogBySlugQuery,

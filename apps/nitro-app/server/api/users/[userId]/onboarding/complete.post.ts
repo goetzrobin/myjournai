@@ -1,5 +1,5 @@
 import { createError } from 'h3';
-import { createUserProfileUsecase, queryLatestUserProfileBy } from '@myjournai/user-server';
+import { createUserProfileUsecase, queryLatestUserProfileBy } from '~myjournai/user-server';
 import { useRuntimeConfig } from 'nitropack/runtime';
 import { db } from '~db/client';
 import { users } from '~db/schema/users';

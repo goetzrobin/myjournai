@@ -8,7 +8,7 @@ import { formatMessages } from '~myjournai/chat-server';
 import { BaseMessage } from '~myjournai/chat-shared';
 import { EndSessionCommand } from '~myjournai/session-shared';
 import { SessionLog } from '~myjournai/sessionlog-shared';
-import { recreateUserProfileUsecase } from '@myjournai/user-server';
+import { recreateUserProfileUsecase } from '~myjournai/user-server';
 import { querySessionLogBy, querySessionLogMessagesBy } from '~myjournai/sessionlog-server';
 
 

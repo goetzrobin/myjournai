@@ -1,17 +1,17 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { OnboardingActualAnswer, OnboardingPossibleAnswer, OnboardingSurvey } from './onboarding-survey';
+import { Survey, SurveyActualAnswer, SurveyPossibleAnswer } from './survey';
 
-export const onboardingSurveyStoreFactory = (survey: OnboardingSurvey, storageKey: string) => {
-  const useOnboardingSurveyStore = create(
+export const surveyStoreFactory = (survey: Survey, storageKey: string) => {
+  const useSurveyStore = create(
     persist<{
-      survey: OnboardingSurvey;
+      survey: Survey;
       currentIndex: number;
       actions: {
         reset: () => void;
         moveToPreviousQuestion: () => void;
         moveToNextQuestion: () => void;
-        answerCurrentQuestion: (selectedAnswer: OnboardingPossibleAnswer, customValue?: string | number) => void;
+        answerCurrentQuestion: (selectedAnswer: SurveyPossibleAnswer, customValue?: string | number) => void;
       };
     }>(
       (set, get) => ({
@@ -27,7 +27,7 @@ export const onboardingSurveyStoreFactory = (survey: OnboardingSurvey, storageKe
             const { currentIndex, survey } = get();
             set({ currentIndex: Math.min(currentIndex + 1, survey.questions.length - 1) });
           },
-          answerCurrentQuestion: (selectedAnswer: OnboardingPossibleAnswer, customValue?: string | number) => {
+          answerCurrentQuestion: (selectedAnswer: SurveyPossibleAnswer, customValue?: string | number) => {
             const { survey, currentIndex } = get();
             const newAnswers = [...survey.answers];
             newAnswers[currentIndex] = { type: selectedAnswer.type, value: selectedAnswer.value, customValue };
@@ -41,13 +41,13 @@ export const onboardingSurveyStoreFactory = (survey: OnboardingSurvey, storageKe
       }
     )
   );
-  const useOnboardingSurveyActions = () => useOnboardingSurveyStore((s) => s.actions);
-  const useOnboardingIsFinalQuestion = () => useOnboardingSurveyStore((s) => s.survey.questions.length - 1 === s.currentIndex);
-  const useOnboardingCurrentQuestion = () => useOnboardingSurveyStore((s) => s.survey.questions[s.currentIndex]);
-  const useOnboardingAnswers = () => useOnboardingSurveyStore((s) => s.survey.answers);
-  const useOnboardingCurrentAnswer = () => useOnboardingSurveyStore((s) => s.survey.answers[s.currentIndex] as OnboardingActualAnswer | undefined);
-  const useOnboardingCurrentProgress = () => useOnboardingSurveyStore((s) => Math.round(((s.currentIndex + 1) / s.survey.questions.length) * 100));
-  const useOnboardingCanMoveToNextQuestion = () => useOnboardingSurveyStore((s) => {
+  const useSurveyActions = () => useSurveyStore((s) => s.actions);
+  const useIsFinalQuestion = () => useSurveyStore((s) => s.survey.questions.length - 1 === s.currentIndex);
+  const useCurrentQuestion = () => useSurveyStore((s) => s.survey.questions[s.currentIndex]);
+  const useAnswers = () => useSurveyStore((s) => s.survey.answers);
+  const useCurrentAnswer = () => useSurveyStore((s) => s.survey.answers[s.currentIndex] as SurveyActualAnswer | undefined);
+  const useCurrentProgress = () => useSurveyStore((s) => Math.round(((s.currentIndex + 1) / s.survey.questions.length) * 100));
+  const useCanMoveToNextQuestion = () => useSurveyStore((s) => {
     const currentAnswer = s.survey.answers[s.currentIndex];
     if (!currentAnswer) return false;
     if (currentAnswer.type === 'fixed') {
@@ -62,13 +62,13 @@ export const onboardingSurveyStoreFactory = (survey: OnboardingSurvey, storageKe
   });
 
   return {
-    useOnboardingSurveyStore,
-    useOnboardingSurveyActions,
-    useOnboardingIsFinalQuestion,
-    useOnboardingCurrentQuestion,
-    useOnboardingAnswers,
-    useOnboardingCurrentAnswer,
-    useOnboardingCurrentProgress,
-    useOnboardingCanMoveToNextQuestion
+    useSurveyStore,
+    useSurveyActions,
+    useIsFinalQuestion,
+    useCurrentQuestion,
+    useAnswers,
+    useCurrentAnswer,
+    useCurrentProgress,
+    useCanMoveToNextQuestion
   };
 };

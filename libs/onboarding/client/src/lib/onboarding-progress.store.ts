@@ -28,7 +28,6 @@ export const useOnboardingProgressStore = create(
 export const useOnboardingProgressActions = () => useOnboardingProgressStore(s => s.actions)
 export const useOnboardingLastStep = () => useOnboardingProgressStore(s => s.lastStep)
 
-
 export const parseLastStepFromLocalStorage = (): OnboardingStep => {
   try {
     const storeState = JSON.parse(typeof localStorage === 'object' ? localStorage.getItem('journai-onboarding-progress') ?? '{}' : '{}');

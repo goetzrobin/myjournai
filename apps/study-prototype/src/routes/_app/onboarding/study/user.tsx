@@ -1,9 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 import MultipleChoiceAnswers from '../-components/-multiple-choice-answers';
 import { GradYearField } from '../-components/-grad-year-field';
-import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
+import { useAuthUserIdFromHeaders } from '~myjournai/auth-client';
 import {
-  OnboardingActualAnswer,
   useOnboardingAnswers,
   useOnboardingCanMoveToNextQuestion,
   useOnboardingCurrentAnswer,
@@ -15,13 +14,14 @@ import {
 } from '~myjournai/onboarding-client';
 import OnboardingSurveyWrapper from '../-components/-onboarding-survey-wrapper';
 import SavingUserData from '../-components/-saving-user-data';
+import { SurveyActualAnswer } from '~myjournai/survey';
 
 
 export const Route = createFileRoute('/_app/onboarding/study/user')({
   component: Onboarding
 });
 
-const buildUserOnboardingRequest = (answers: (OnboardingActualAnswer | undefined)[]) => {
+const buildUserOnboardingRequest = (answers: (SurveyActualAnswer | undefined)[]) => {
   const keys = ['cohort', 'genderIdentity', 'ethnicity', 'ncaaDivision', 'graduationYear'];
   let result = {};
   keys.forEach((key, index) => {

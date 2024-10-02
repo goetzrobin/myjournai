@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { useUserSuspenseQuery } from '@myjournai/user-client';
-import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
+import { useUserSuspenseQuery } from '~myjournai/user-client';
+import { useAuthUserIdFromHeaders } from '~myjournai/auth-client';
 import { useMobileNavShowing } from './mobile-nav.store';
 import { Link } from '~myjournai/components';
 import { LucideBookMarked, LucideMountainSnow, PersonStanding } from 'lucide-react';

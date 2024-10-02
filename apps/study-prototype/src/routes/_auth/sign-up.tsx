@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useSignUpMutation } from '@myjournai/auth-client';
+import { useSignUpMutation } from '~myjournai/auth-client';
 import { Form, Link, SmoothButton, TextField } from '~myjournai/components';
 import { parseFormData } from '~myjournai/form-utils';
 import { LucideLoader } from 'lucide-react';

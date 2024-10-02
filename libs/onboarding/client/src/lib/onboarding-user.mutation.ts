@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAxios } from '~myjournai/http-client';
-import { userQKF } from '@myjournai/user-client';
+import { userQKF } from '~myjournai/user-client';
 
 export const useOnboardingUserDataMutation = ({ userId }: { userId?: string }, onSuccess?: () => void) => {
   const axios = useAxios();

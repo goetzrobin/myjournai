@@ -1,8 +1,9 @@
 // Please select which group you belong:
 //   Current student-athlete, current Temple STHM undergraduate student, current Temple MSSB student (former student-athlete), former student-athlete (non-MSSB student)
-import { OnboardingQuestion, OnboardingSurvey } from './onboarding-survey';
 
-const GROUP_QUESTION: OnboardingQuestion = {
+import { Survey, SurveyQuestion } from '~myjournai/survey';
+
+const GROUP_QUESTION: SurveyQuestion = {
   index: 0,
   possibleAnswers: [
     {
@@ -36,7 +37,7 @@ const GROUP_QUESTION: OnboardingQuestion = {
 };
 // What is your gender identity?
 //   Man, woman, transgender man, transgender woman, non-binary, prefer to self describe (with text box), prefer not to say
-const GENDER_IDENTITY_QUESTION: OnboardingQuestion = {
+const GENDER_IDENTITY_QUESTION: SurveyQuestion = {
   index: 1,
   possibleAnswers: [
     {
@@ -80,7 +81,7 @@ const GENDER_IDENTITY_QUESTION: OnboardingQuestion = {
 };
 // What is your race/ethnicity?
 //   American Indian or Alaska Native, Asian, Black or African American, Hispanic/Latino/Latina, White/Caucasian, Native Hawaiian or other Pacific Islander, Biracial or Multiracial (with textbox), prefer to self describe (with text box), prefer not to say
-const ETHNICITY_QUESTION: OnboardingQuestion = {
+const ETHNICITY_QUESTION: SurveyQuestion = {
   index: 2,
   possibleAnswers: [
     {
@@ -134,7 +135,7 @@ const ETHNICITY_QUESTION: OnboardingQuestion = {
 };
 // If you are/were a student-athlete, what division did you participate in?
 //   NCAA Division I, NCAA Division II, NCAA Division III, other (with text box)
-const DIVISION_QUESTION: OnboardingQuestion = {
+const DIVISION_QUESTION: SurveyQuestion = {
   index: 3,
   possibleAnswers: [
     {
@@ -167,7 +168,7 @@ const DIVISION_QUESTION: OnboardingQuestion = {
   type: 'multiple-choice'
 };
 // What is your expected or actual graduation year?  (text box entry)
-const GRAD_YEAR_QUESTION: OnboardingQuestion = {
+const GRAD_YEAR_QUESTION: SurveyQuestion = {
   index: 4,
   possibleAnswers: [{
     type: 'custom',
@@ -178,7 +179,7 @@ const GRAD_YEAR_QUESTION: OnboardingQuestion = {
   type: 'number'
 };
 
-export const ONBOARDING_USER_SURVEY: OnboardingSurvey = {
+export const ONBOARDING_USER_SURVEY: Survey = {
   questions: [GROUP_QUESTION, GENDER_IDENTITY_QUESTION, ETHNICITY_QUESTION, DIVISION_QUESTION, GRAD_YEAR_QUESTION],
   answers: [undefined, undefined, undefined, undefined, { value: 2025, type: 'custom', customValue: 2025 }]
 };

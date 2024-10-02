@@ -8,12 +8,14 @@ export const queryUserCidiSurveyResponsesBy = async ({
                                                        userId,
                                                        type
                                                      }: CidiSurveyResponseQueryParams): Promise<CidiSurveyResponses | undefined> => {
-  const [result] = await db.select().from(cidiSurveyResponses).where(
+  const query = db.select().from(cidiSurveyResponses).where(
     and(
       eq(cidiSurveyResponses.type, type ?? 'PRE'),
       eq(cidiSurveyResponses.userId, userId)
     )
-  ).limit(1);
+  ).orderBy(cidiSurveyResponses.createdAt).limit(1);
+  console.log(query.toSQL().params);
+  const [result] = await query;
   return result;
 };
 

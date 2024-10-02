@@ -8,7 +8,7 @@ import {
   streamFinalMessageNodeFactory,
   ToolProps
 } from '~myjournai/chat-server';
-import { queryUserInfoBlock, queryUserProfileBlock } from '@myjournai/user-server';
+import { queryUserInfoBlock, queryUserProfileBlock } from '~myjournai/user-server';
 import {
   createEmbeddedQuestionsBlock,
   queryMostRecentSessionLogBy,

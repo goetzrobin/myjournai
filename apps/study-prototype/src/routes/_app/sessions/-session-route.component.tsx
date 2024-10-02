@@ -17,7 +17,7 @@ import {
 } from '~myjournai/chat-client';
 import React, { useState } from 'react';
 import { useScrollAnchor } from '~myjournai/components';
-import { useAuthUserIdFromHeaders } from '@myjournai/auth-client';
+import { useAuthUserIdFromHeaders } from '~myjournai/auth-client';
 import {
   useLatestSessionLogBySlugQuery,
   useSessionEndMutation,

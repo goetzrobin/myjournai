@@ -1,5 +1,5 @@
-import { updateUserUsecase } from '@myjournai/user-server';
-import { userUpdateRequestSchema } from '@myjournai/user-shared';
+import { updateUserUsecase } from '~myjournai/user-server';
+import { userUpdateRequestSchema } from '~myjournai/user-shared';
 
 export default defineEventHandler(async (event) => {
   const userId = getRouterParam(event, 'userId');
