@@ -6,6 +6,7 @@ import { PropsWithChildren } from 'react';
 import { Button } from '~myjournai/components';
 import { useSessionsWithLogsQuery } from '~myjournai/session-client';
 import { SessionWithLogs } from '~myjournai/session-shared';
+import { twMerge } from 'tailwind-merge';
 
 export const Route = createFileRoute('/_app/')({
   component: Index
@@ -22,9 +23,16 @@ const MenuItem = ({ session }: PropsWithChildren<{ session: Pick<SessionWithLogs
     (session.slug === 'offboarding-v0') ? () => nav({ to: `/offboarding` }):
     () => nav({ to: `/sessions/${session.slug}` });
 
-  return <div className="drop-shadow-xl relative rounded-xl border">
-    <div className="bg-gradient-to-b px-8 py-8 -mt-8 to-40% from-transparent to-background/80">
-      <h4 className="text-3xl font-serif text-center mt-4 mb-4">{session?.name}</h4>
+  return <div className="relative">
+    <img
+      className={twMerge('drop-shadow-xl border filter rounded-xl h-96 object-cover', !hasCompletedLog ? 'grayscale' : '')}
+      src={`/sessions/${session.imageUrl}`}
+      width={800}
+      height={500}
+      alt="Mountain range with unique motive fitting the session"
+    />
+    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-b px-4 py-8 -mt-8 to-40% from-transparent to-background/80">
+      <h4 className="text-3xl font-serif text-center mb-4">{session?.name}</h4>
       <p className="text-muted-foreground text-lg text-center">{session?.description}</p>
       <Button isDisabled={!onPress} onPress={onPress} className="w-full mt-8" variant="secondary">
         {hasInProgressLog ? 'Continue' : hasCompletedLog ? 'View' : 'Start'}
