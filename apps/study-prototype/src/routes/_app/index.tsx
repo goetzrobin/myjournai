@@ -14,7 +14,7 @@ export const Route = createFileRoute('/_app/')({
 });
 
 const ToOffboarding = () => {
-  return <Link className="relative rounded-xl" to="/offboarding">
+  return <Link className="block relative rounded-xl" to="/offboarding">
     <img
       className="-z-10 object-cover h-32 border rounded-xl"
       src="/sessions/the-journey-continues.jpg"

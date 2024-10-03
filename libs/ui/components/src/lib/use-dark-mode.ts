@@ -14,7 +14,7 @@ export function useDarkMode() {
   // Effect to add or remove the 'dark' class and sync with localStorage
   useEffect(() => {
       const className = 'dark';
-      const bodyClass = window.document.body.classList;
+      const bodyClass = window.document.documentElement.classList;
 
       if (theme === 'dark') {
         bodyClass.add(className);
