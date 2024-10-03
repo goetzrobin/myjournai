@@ -22,13 +22,13 @@ const ToOffboarding = () => {
       height={500}
       alt="Mountain range with unique motive fitting the session"
     />
-    <div className="bg-muted/80 mix-blend-multiply rounded-xl absolute top-0 left-0 right-0 bottom-0"></div>
+    <div className="bg-zinc-600/80 mix-blend-multiply rounded-xl absolute top-0 left-0 right-0 bottom-0"></div>
     <div className="rounded-xl p-4 absolute top-0 left-0 right-0 bottom-0">
-      <h4 className="text-lg font-serif mb-2">The Journey Continues</h4>
-      <p className="text-muted-foreground text-sm">Take the final research survey and read Sam's final note to send you
+      <h4 className="text-lg text-white font-serif mb-2">The Journey Continues</h4>
+      <p className="text-zinc-300 text-sm">Take the final research survey and read Sam's final note to send you
         on your next journey!</p>
 
-      <LucideChevronRight className="absolute bottom-4 right-4 size-6" />
+      <LucideChevronRight className="absolute text-white bottom-4 right-4 size-6" />
     </div>
   </Link>;
 };
@@ -55,9 +55,9 @@ const MenuItem = ({ session }: PropsWithChildren<{
       alt="Mountain range with unique motive fitting the session"
     />
     <div
-      className="absolute bottom-0 left-0 right-0 bg-gradient-to-b px-4 py-8 -mt-8 to-40% from-transparent to-background/80">
-      <h4 className="text-3xl font-serif text-center mb-4">{session?.name}</h4>
-      <p className="text-muted-foreground text-lg text-center">{session?.description}</p>
+      className="absolute rounded-b-xl bottom-0 left-0 right-0 bg-gradient-to-b px-4 py-8 -mt-8 to-40% from-transparent to-zinc-800/80">
+      <h4 className="text-3xl font-serif text-center text-white mb-4">{session?.name}</h4>
+      <p className="text-zinc-300 text-lg text-center">{session?.description}</p>
       <Button isDisabled={!onPress} onPress={onPress} className="w-full mt-8" variant="secondary">
         {hasInProgressLog ? 'Continue' : hasCompletedLog ? 'View' : 'Start'}
       </Button>

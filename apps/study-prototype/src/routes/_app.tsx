@@ -3,6 +3,7 @@ import { authenticateRoute } from '~myjournai/auth-client';
 import { redirectToUnfinishedOnboarding } from '~myjournai/user-client';
 import MobileNav from './-nav/mobile-nav';
 import ReloadPrompt from './-reload/reload-prompt';
+import { useDarkMode } from '~myjournai/components';
 
 export const Route = createFileRoute('/_app')({
   beforeLoad: authenticateRoute,
@@ -11,6 +12,7 @@ export const Route = createFileRoute('/_app')({
 });
 
 function AppLayout() {
+  useDarkMode();
   return (
     <>
       <ReloadPrompt />

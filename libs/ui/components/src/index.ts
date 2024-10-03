@@ -36,5 +36,6 @@ export * from './lib/TimeField';
 export * from './lib/ToggleButton';
 export * from './lib/Toolbar';
 export * from './lib/Tooltip';
+export * from './lib/use-dark-mode';
 export * from './lib/use-scroll-anchor';
 export * from './lib/utils';
