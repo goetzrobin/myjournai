@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useUserQuery } from '~myjournai/user-client';
 import { useAuthUserIdFromHeaders } from '~myjournai/auth-client';
 import { WithMobileNav } from '../-nav/with-mobile-nav';
@@ -7,12 +7,35 @@ import { Button } from '~myjournai/components';
 import { useSessionsWithLogsQuery } from '~myjournai/session-client';
 import { SessionWithLogs } from '~myjournai/session-shared';
 import { twMerge } from 'tailwind-merge';
+import { LucideChevronRight } from 'lucide-react';
 
 export const Route = createFileRoute('/_app/')({
   component: Index
 });
 
-const MenuItem = ({ session }: PropsWithChildren<{ session: Pick<SessionWithLogs, 'logs' | 'slug' | 'imageUrl' | 'name' | 'description'> }>) => {
+const ToOffboarding = () => {
+  return <Link className="relative rounded-xl" to="/offboarding">
+    <img
+      className="-z-10 object-cover h-32 border rounded-xl"
+      src="/sessions/the-journey-continues.jpg"
+      width={800}
+      height={500}
+      alt="Mountain range with unique motive fitting the session"
+    />
+    <div className="bg-muted/80 mix-blend-multiply rounded-xl absolute top-0 left-0 right-0 bottom-0"></div>
+    <div className="rounded-xl p-4 absolute top-0 left-0 right-0 bottom-0">
+      <h4 className="text-lg font-serif mb-2">The Journey Continues</h4>
+      <p className="text-muted-foreground text-sm">Take the final research survey and read Sam's final note to send you
+        on your next journey!</p>
+
+      <LucideChevronRight className="absolute bottom-4 right-4 size-6" />
+    </div>
+  </Link>;
+};
+
+const MenuItem = ({ session }: PropsWithChildren<{
+  session: Pick<SessionWithLogs, 'logs' | 'slug' | 'imageUrl' | 'name' | 'description'>
+}>) => {
   const hasInProgressLog = session.logs.some(l => l.status === 'IN_PROGRESS');
   const hasCompletedLog = session.logs.some(l => l.status === 'COMPLETED');
 
@@ -20,8 +43,8 @@ const MenuItem = ({ session }: PropsWithChildren<{ session: Pick<SessionWithLogs
 
   const onPress = (session.slug === 'onboarding-v0') ?
     () => nav({ to: '/onboarding/final-convo' }) :
-    (session.slug === 'offboarding-v0') ? () => nav({ to: `/offboarding` }):
-    () => nav({ to: `/sessions/${session.slug}` });
+    (session.slug === 'offboarding-v0') ? () => nav({ to: `/offboarding` }) :
+      () => nav({ to: `/sessions/${session.slug}` });
 
   return <div className="relative">
     <img
@@ -31,7 +54,8 @@ const MenuItem = ({ session }: PropsWithChildren<{ session: Pick<SessionWithLogs
       height={500}
       alt="Mountain range with unique motive fitting the session"
     />
-    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-b px-4 py-8 -mt-8 to-40% from-transparent to-background/80">
+    <div
+      className="absolute bottom-0 left-0 right-0 bg-gradient-to-b px-4 py-8 -mt-8 to-40% from-transparent to-background/80">
       <h4 className="text-3xl font-serif text-center mb-4">{session?.name}</h4>
       <p className="text-muted-foreground text-lg text-center">{session?.description}</p>
       <Button isDisabled={!onPress} onPress={onPress} className="w-full mt-8" variant="secondary">
@@ -41,26 +65,35 @@ const MenuItem = ({ session }: PropsWithChildren<{ session: Pick<SessionWithLogs
   </div>;
 };
 
+
+const PendingSessionsIndicator = () => <div className="opacity-50 space-y-10">
+  <div
+    className="h-96 bg-gradient-to-b to-40% from-muted/10 to-muted/80 animate-pulse rounded-xl"
+  />
+  <div
+    className="h-96 bg-gradient-to-b to-40% from-muted/10 to-muted/80 animate-pulse rounded-xl"
+  />
+  <div
+    className="h-96 bg-gradient-to-b to-40% from-muted/10 to-muted/80 animate-pulse rounded-xl"
+  />
+  <div
+    className="h-96 bg-gradient-to-b to-40% from-muted/10 to-muted/80 animate-pulse rounded-xl"
+  />
+  <div
+    className="h-96 bg-gradient-to-b to-40% from-muted/10 to-muted/80 animate-pulse rounded-xl"
+  />
+</div>
 function Index() {
   const userQ = useUserQuery(useAuthUserIdFromHeaders());
   const sessionsQ = useSessionsWithLogsQuery({ userId: userQ.data?.id });
   const sessions = sessionsQ.data ?? [];
 
-  const endSession = {
-    id: 'end-session',
-    logs: [],
-    slug: 'offboarding-v0',
-    imageUrl: 'the-journey-continues.jpg',
-    name: 'The journey continues',
-    description: 'Your final session with Sam, for now!'
-  }
-
   return <WithMobileNav>
     <div className="flex flex-col h-full w-full">
-      <div className="overflow-auto pb-20 pt-8 px-8 -mx-8 space-y-10">
-        {!sessionsQ.isPending ? null : <p className="py-20 text-center">Loading sessions</p>}
+      <div className="overflow-auto pb-20 pt-8 px-2 space-y-10">
+        <ToOffboarding />
+        {!sessionsQ.isPending ? null : <PendingSessionsIndicator/>}
         {sessions.map(s => <MenuItem session={s} key={s.id}>{s.name}</MenuItem>)}
-        <MenuItem key={endSession.id} session={endSession} />
       </div>
     </div>
   </WithMobileNav>
