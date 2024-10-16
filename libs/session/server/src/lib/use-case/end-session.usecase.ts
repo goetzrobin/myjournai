@@ -12,21 +12,19 @@ import { recreateUserProfileUsecase } from '~myjournai/user-server';
 import { querySessionLogBy, querySessionLogMessagesBy } from '~myjournai/sessionlog-server';
 
 
-const generateConversationSummary = async ({ mostRecentConvoMessages, apiKey }: {
+const generateConversationSummary = async ({ mostRecentConvoMessages, groqApiKey }: {
   mostRecentConvoMessages?: BaseMessage[];
-  apiKey: string
+  groqApiKey: string
 }): Promise<string> => {
+  const groq = createOpenAI({
+    baseURL: 'https://api.groq.com/openai/v1',
+    apiKey: groqApiKey
+  });
   const formattedMessages = formatMessages(mostRecentConvoMessages ?? []);
-  const openai = createOpenAI({ apiKey });
-  const llm = openai('gpt-4o-mini');
+  const llm = groq('llama-3.1-70b-versatile');
   const result = await generateText({
     model: llm,
-    prompt: `You are an AI mentor designed to help users navigate complex and emotional topics.
-    At the end of each conversation, provide a summary that is clear, concise, and empathetic.
-    Capture the key points, advice given, and any important context, while also reflecting the emotional tone and nuances of the discussion.
-    Your summary should evoke the warmth and understanding of the conversation, using a touch of humor where appropriate.
-    It should help the user recall not just the facts, but the feeling of the exchange. Format the summary in short paragraphs using Markdown.
-
+    prompt: `Give a concise and clear summary of the conversation. Make sure to focus on the value provided to the user and their state of mind
     Here are the messages of the conversation:
     ${formattedMessages}
     `
@@ -57,7 +55,7 @@ export const endSessionUseCase = async (command: EndSessionCommand): Promise<Ses
   }
 
   const mostRecentConvoMessages = await querySessionLogMessagesBy({ sessionLogId: command.id });
-  const summary = await generateConversationSummary({mostRecentConvoMessages, apiKey: command.apiKey})
+  const summary = await generateConversationSummary({mostRecentConvoMessages, groqApiKey: command.apiKey})
 
   const [updatedSessionLog] = await db.update(sessionLogs).set({
     ...commandWithoutId,

@@ -46,7 +46,8 @@ export const SessionRouteComponent = ({ slug }: { slug: string }) => {
     isStreaming,
     messageChunksByTimestamp,
     currentStepInfo,
-    removeChunksForTimestamp
+    removeChunksForTimestamp,
+    pendingChunkStatus
   } = useStreamResponse({
     userId,
     url: `/api/sessions/slug/${slug}`
@@ -59,7 +60,7 @@ export const SessionRouteComponent = ({ slug }: { slug: string }) => {
     startStream
   });
   const { messagesRef, scrollRef, visibilityRef } = useScrollAnchor();
-  const { onKeyDown, formRef, handleSubmit, input, setInput } = useChatEnterSubmit(startStream);
+  const { onKeyDown, formRef, handleSubmit, input, setInput } = useChatEnterSubmit({ startStream, sessionLogId: sessionLog?.id });
   const endMutation = useSessionEndMutation({ userId, sessionLogId: sessionLog?.id });
   const [isEnded, setIsEnded] = useState(false);
   const isSessionNotStarted = isSuccessSessionLog && !sessionLog;
@@ -89,7 +90,7 @@ export const SessionRouteComponent = ({ slug }: { slug: string }) => {
         {!(!isMessagesPending && isMessagesError) ? null : <LoadPreviousMessagesError error={error} refetchMessages={refetchMessages} />}
         <MessagesContainer messagesRef={messagesRef} scrollRef={scrollRef} visibilityRef={visibilityRef}>
           {mapNonStreamedDBMessagesToChatComponents(messageChunksByTimestamp, messages ?? [])}
-          {mapChunksToChatComponents(messageChunksByTimestamp, startStream, removeChunksForTimestamp)}
+          {mapChunksToChatComponents(messageChunksByTimestamp, startStream, removeChunksForTimestamp, pendingChunkStatus === 'error', () => mutation.mutate({retry: true}))}
           {(mutation.isPending && !isStreaming) ? <ThinkingIndicator /> : null}
         </MessagesContainer>
         {

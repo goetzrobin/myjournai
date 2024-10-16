@@ -1,7 +1,7 @@
 import { BaseMessage } from '~myjournai/chat-shared';
 
 const defaultSupportedMessages = {
-  'analyzer': 'Step Analyzer (Internal Thought):',
+  // 'analyzer': 'Step Analyzer (Internal Thought):',
   'execute-step': 'Step Execution (Internal Thought):'
 }
 

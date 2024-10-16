@@ -60,7 +60,7 @@ const Chat = ({
       startStream
     });
     const { messagesRef, scrollRef, visibilityRef } = useScrollAnchor();
-    const { onKeyDown, formRef, handleSubmit, input, setInput } = useChatEnterSubmit(startStream);
+    const { onKeyDown, formRef, handleSubmit, input, setInput } = useChatEnterSubmit({ startStream });
 
     return <ChatContainer withMenu>
       <MessagesContainer messagesRef={messagesRef} scrollRef={scrollRef} visibilityRef={visibilityRef}>

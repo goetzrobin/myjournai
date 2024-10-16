@@ -1,5 +1,6 @@
 import { CurrentStepInfo } from '~myjournai/chat-shared';
 
+
 export const createStepAnalyzerPromptFactory = (specificCriteriaCreator: (args: {
   currentStep: number,
   messages: string,

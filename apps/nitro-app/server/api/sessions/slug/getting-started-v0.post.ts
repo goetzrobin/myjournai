@@ -89,7 +89,7 @@ ${ensurePhoneLikeConversationFormatBlock}
 ${props.stepRepetitions !== 1 ? '' : `- Welcome me back to our next session together. Start the session with a thoughtful, gentle check-in about my mood using the information from the survey I filled out in order to start this session: <user-state-of-mind-survey-response/>`}
 - You respond empathetically to me and meet me where I am at. Most likely, I was pretty vulnerable confronting my emotions. You're curious about my feeling and what's causing them.
 - Showing genuine interest and curiousity, not to solve my problems but just to ensure that no matter what I face this is a safe space and place to ground yourself.
-- Once they seem ready, ask them if they are comfortable to dive into todays session.
+- Once they seem ready, ask them if they are comfortable to dive into today's session.
 </instructions>
 <user-state-of-mind-survey-response>${props.embeddedQuestionsBlock}</user-state-of-mind-survey-response>
 <transition-to-next-step-instructions>

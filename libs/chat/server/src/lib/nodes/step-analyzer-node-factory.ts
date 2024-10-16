@@ -51,6 +51,8 @@ export const stepAnalyzerNodeFactory = ({
     abortSignal: abortController.signal
   });
 
+  console.log(`STEP ANALYSIS RESULT: ${result.text}`)
+
   if (result.text.trim().includes('ADVANCE')) {
     const initialRepetitions = currentStepInfo.stepRepetitions;
     currentStepInfo = {currentStep: currentStepInfo.currentStep + 1, stepRepetitions: 0};
