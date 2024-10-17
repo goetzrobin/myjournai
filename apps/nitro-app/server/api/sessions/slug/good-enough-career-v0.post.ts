@@ -24,7 +24,7 @@ Your response should be structured exactly as follows:
 - Step 1 Result: DepthScore = [total points], Topic Explored Sufficiently: Yes/No
 - Step 2 Result: User Engagement Level = High/Low
 - Step 3 Result: Emotional Resolution Achieved: Yes/No
-- Step 4 Result: ExchangeCount = [number], Exceeds Limit: Yes/No
+- Step 4 Result: ExchangeCount = ${(stepRepetitions * 2) - 1}, Exceeds Limit: Yes/No
 - Step 5 Result: User Ready to Advance: Yes/No
 - Step 6 Result: Step specific criteria met: Yes/No
 - Final Decision: ADVANCE or STAY
@@ -79,11 +79,11 @@ Your response should be structured exactly as follows:
 4. **Monitor Time Spent on the Current Step:**
 
    - **Evaluate Duration:**
-     - Use the number of exchanges (both user and AI messages) in the current step: ${(stepRepetitions * 2) - 1}
-     - If the number exceeds the upper limit provided in Step Specific Criteria below **and** the user's engagement is **Low**, consider moving on.
+     - You are given the number of exchanges in the current step: ${(stepRepetitions * 2) - 1}
+     - If this number exceeds the upper limit provided in Step Specific Criteria below **and** the user's engagement is **Low**, consider moving on.
 
    **Provide in your response:**
-   - Step 4 Result: ExchangeCount = [number], Exceeds Limit: Yes/No
+   - Step 4 Result: ExchangeCount = ${(stepRepetitions * 2) - 1}, Exceeds Limit: Yes/No
 
 5. **Check for User's Desire to Advance:**
 
