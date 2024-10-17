@@ -25,6 +25,7 @@ import { Route as AppResourcesIndexImport } from './routes/_app/resources/index'
 import { Route as AppOnboardingIndexImport } from './routes/_app/onboarding/index'
 import { Route as AppOffboardingIndexImport } from './routes/_app/offboarding/index'
 import { Route as AppSessionsScenicRouteV0Import } from './routes/_app/sessions/scenic-route-v0'
+import { Route as AppSessionsGoodEnoughCareerV0Import } from './routes/_app/sessions/good-enough-career-v0'
 import { Route as AppSessionsGettingStartedV0Import } from './routes/_app/sessions/getting-started-v0'
 import { Route as AppSessionsCareerConfusionV0Import } from './routes/_app/sessions/career-confusion-v0'
 import { Route as AppSessionsAlignmentV0Import } from './routes/_app/sessions/alignment-v0'
@@ -124,6 +125,12 @@ const AppSessionsScenicRouteV0Route = AppSessionsScenicRouteV0Import.update({
   path: '/sessions/scenic-route-v0',
   getParentRoute: () => AppRoute,
 } as any)
+
+const AppSessionsGoodEnoughCareerV0Route =
+  AppSessionsGoodEnoughCareerV0Import.update({
+    path: '/sessions/good-enough-career-v0',
+    getParentRoute: () => AppRoute,
+  } as any)
 
 const AppSessionsGettingStartedV0Route =
   AppSessionsGettingStartedV0Import.update({
@@ -410,6 +417,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSessionsGettingStartedV0Import
       parentRoute: typeof AppImport
     }
+    '/_app/sessions/good-enough-career-v0': {
+      id: '/_app/sessions/good-enough-career-v0'
+      path: '/sessions/good-enough-career-v0'
+      fullPath: '/sessions/good-enough-career-v0'
+      preLoaderRoute: typeof AppSessionsGoodEnoughCareerV0Import
+      parentRoute: typeof AppImport
+    }
     '/_app/sessions/scenic-route-v0': {
       id: '/_app/sessions/scenic-route-v0'
       path: '/sessions/scenic-route-v0'
@@ -569,6 +583,7 @@ export const routeTree = rootRoute.addChildren({
     AppSessionsAlignmentV0Route,
     AppSessionsCareerConfusionV0Route,
     AppSessionsGettingStartedV0Route,
+    AppSessionsGoodEnoughCareerV0Route,
     AppSessionsScenicRouteV0Route,
     AppOffboardingIndexRoute,
     AppOnboardingIndexRoute,
@@ -628,6 +643,7 @@ export const routeTree = rootRoute.addChildren({
         "/_app/sessions/alignment-v0",
         "/_app/sessions/career-confusion-v0",
         "/_app/sessions/getting-started-v0",
+        "/_app/sessions/good-enough-career-v0",
         "/_app/sessions/scenic-route-v0",
         "/_app/offboarding/",
         "/_app/onboarding/",
@@ -722,6 +738,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/sessions/getting-started-v0": {
       "filePath": "_app/sessions/getting-started-v0.tsx",
+      "parent": "/_app"
+    },
+    "/_app/sessions/good-enough-career-v0": {
+      "filePath": "_app/sessions/good-enough-career-v0.tsx",
       "parent": "/_app"
     },
     "/_app/sessions/scenic-route-v0": {
