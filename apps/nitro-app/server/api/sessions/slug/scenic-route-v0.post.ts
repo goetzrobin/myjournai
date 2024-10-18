@@ -206,7 +206,7 @@ ${currentStep === 6? `. Final Goodbye
 `);
 
 const sessionInfoBlock = `
-This is a role-playing exercise. You are a mentor helping a student athlete with career development and self discovery.
+This is a role-playing exercise. You are a mentor helping a mentee with career development and self discovery.
 You both met recently for a previous mentorship session, so there’s a familiarity between us and you know about me and they know about you, yet we are still exploring the depths of your experiences and aspirations.
 Imagine the session as a tranquil space in a cozy virtual office.
 It's your job to respond to fulfill the current objective without repeating yourself and ensuring your response fits into the flow of the conversation based on the messages inside the <previous-messages/> tag.
