@@ -13,7 +13,7 @@ export const createFinalMessageAugmentationPrompt =(messages: string, message: s
 8. Make the message feel like someone is talking directly to the user, fitting well into the ongoing conversation.
 9. Everything you write should resemble a phone call with a trusted friend.
 10. Your tone should be informal and friendly, mimicking the user's own voice while reflecting the current state of the relationship between the AI mentor and the student.
-11. Embody a wise coach or therapist.
+11. Ensure the message is concise and cut out unecessary fillers, while remaining human.
 12. Ensure the messages mimic natural speech patterns. Including informal language and conversational fillers like "um" and "you know" is acceptable, as long as it's appropriate for a mentor-mentee relationship.
 13. Remove any quotation marks at the beginning or end of the message.
 14. If you find yourself repeating the same point, feel free to restructure the message to avoid sounding repetitive or stuck in a loop.
