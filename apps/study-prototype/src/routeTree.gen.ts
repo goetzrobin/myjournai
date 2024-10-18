@@ -29,6 +29,7 @@ import { Route as AppSessionsGoodEnoughCareerV0Import } from './routes/_app/sess
 import { Route as AppSessionsGettingStartedV0Import } from './routes/_app/sessions/getting-started-v0'
 import { Route as AppSessionsCareerConfusionV0Import } from './routes/_app/sessions/career-confusion-v0'
 import { Route as AppSessionsAlignmentV0Import } from './routes/_app/sessions/alignment-v0'
+import { Route as AppSessionsSessionSlugImport } from './routes/_app/sessions/$sessionSlug'
 import { Route as AppResourcesSlugImport } from './routes/_app/resources/$slug'
 import { Route as AppOnboardingSurveyIntroImport } from './routes/_app/onboarding/survey-intro'
 import { Route as AppOnboardingStartImport } from './routes/_app/onboarding/start'
@@ -146,6 +147,11 @@ const AppSessionsCareerConfusionV0Route =
 
 const AppSessionsAlignmentV0Route = AppSessionsAlignmentV0Import.update({
   path: '/sessions/alignment-v0',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppSessionsSessionSlugRoute = AppSessionsSessionSlugImport.update({
+  path: '/sessions/$sessionSlug',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -396,6 +402,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppResourcesSlugImport
       parentRoute: typeof AppImport
     }
+    '/_app/sessions/$sessionSlug': {
+      id: '/_app/sessions/$sessionSlug'
+      path: '/sessions/$sessionSlug'
+      fullPath: '/sessions/$sessionSlug'
+      preLoaderRoute: typeof AppSessionsSessionSlugImport
+      parentRoute: typeof AppImport
+    }
     '/_app/sessions/alignment-v0': {
       id: '/_app/sessions/alignment-v0'
       path: '/sessions/alignment-v0'
@@ -580,6 +593,7 @@ export const routeTree = rootRoute.addChildren({
     AppOnboardingStartRoute,
     AppOnboardingSurveyIntroRoute,
     AppResourcesSlugRoute,
+    AppSessionsSessionSlugRoute,
     AppSessionsAlignmentV0Route,
     AppSessionsCareerConfusionV0Route,
     AppSessionsGettingStartedV0Route,
@@ -640,6 +654,7 @@ export const routeTree = rootRoute.addChildren({
         "/_app/onboarding/start",
         "/_app/onboarding/survey-intro",
         "/_app/resources/$slug",
+        "/_app/sessions/$sessionSlug",
         "/_app/sessions/alignment-v0",
         "/_app/sessions/career-confusion-v0",
         "/_app/sessions/getting-started-v0",
@@ -726,6 +741,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/resources/$slug": {
       "filePath": "_app/resources/$slug.tsx",
+      "parent": "/_app"
+    },
+    "/_app/sessions/$sessionSlug": {
+      "filePath": "_app/sessions/$sessionSlug.tsx",
       "parent": "/_app"
     },
     "/_app/sessions/alignment-v0": {
