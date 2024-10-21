@@ -35,7 +35,7 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
                                                                       currentStepBySessionLogIdKey,
                                                                       messagesBySessionLogIdKey,
                                                                       executeStepPromptsAndTools,
-                                                                      groq,
+                                                                      openai,
                                                                       model,
                                                                       abortController,
                                                                       maxSteps,
@@ -55,7 +55,7 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
     tools: (props: ToolProps) => Tools;
     prompt: (props: PromptProps<AdditionalProps>) => string
   }>
-  groq: OpenAIProvider;
+  openai: OpenAIProvider;
   abortController: AbortController;
   maxSteps: number;
   llmInteractionsToStore: StoreLLMInteractionArgs<any>[];
@@ -109,7 +109,7 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
   `)
 
   const result = await generateText({
-    model: groq(model),
+    model: openai(model),
     prompt,
     tools: tools as any,
     abortSignal: abortController.signal

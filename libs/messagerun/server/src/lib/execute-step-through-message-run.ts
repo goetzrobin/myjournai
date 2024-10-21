@@ -93,13 +93,15 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
     maxSteps,
     llmInteractionsToStore
   });
+  const model = 'gpt-4o'
   const executeStepNode = executeStepNodeFactory({
     userId,
     runId,
     currentStepBySessionLogIdKey,
     messagesBySessionLogIdKey,
     executeStepPromptsAndTools,
-    groq,
+    openai,
+    model,
     abortController,
     maxSteps,
     llmInteractionsToStore,
