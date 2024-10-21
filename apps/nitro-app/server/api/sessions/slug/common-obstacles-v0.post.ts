@@ -209,30 +209,6 @@ Your core objective might stay the same even as more exchanges are added to the 
 Make use of the context provided inside the useful information part and always answer as the mentor and in alignment with the persona and conversation style laid out.
 `;
 
-
-
-/*
-
-
-- Introduction:
- - Begin by acknowledging the challenges that come with transitioning from athletics to the broader world of work.
- - Set the stage for quickly discussing the obstacles that may hinder their journey.
-- Obstacle 1: External Psychological Forces:
- - Relate to Athletics: Compare external pressures like expectations of family and friends, broad cultural pricture of status, respectavbility and success, in career choices to pressures in sports.
- - Explain: Discuss these pressures influence career decisions and can dominate our view of what is possible. Show how they don't announce themselves as impositions but get inside our heads as voices telling us what's necessary
- - Engage: Ask the user if they've felt such pressures in sports or life. And explore how the right questions can help us start to recognize them for what they are.
-- Obstacle 2: Fear of Failure and Rejection:
- - Relate to Athletics: Draw parallels between the fear of trying a new technique in sports and taking risks in career choices.
- - Explain: Explore how fear can limit potential both on the field and in professional life.
- - Engage: Hint at future session that will explore where these fears are coming from and why they have such a powerful grip on our imaginations.
-- Obstacle 3: Destructive Pragmatism
- - Relate to Athletics: Compare sticking with a painful training regimen or playing through injury because it seems practical in the short term.
- - Explain: Discuss how short-term practicality can overshadow long-term fulfillment, especially in a career focused environment with money.
- - Engage: Ask about situations where they chose short-term practicality over long-term well-being.
-
-
- */
-
 // first step starts with props.stepRepetitions = 1 because we always STAY on initial contact
 // following steps often have conditions start at props.stepRepetitions = 0 because we normally move to step as we ADVANCE and reset to 0
 const executeStepPromptsAndTools = {
@@ -302,7 +278,7 @@ Make the second major obstacle, the fear of failure and risk, approachable to th
 </core-objective>
 <instructions>
 - Transition from the obstacle of External Psychological Forces to a related one. Use Oprah-like conversation skills to make the following approachable to them: To make a change or pick a career is, necessarily to take a risk, and we may be stymied by our fear of failure and rejection.
-- Then use Simon Sinek like storytelling to adjust the followine to be pesonalized but be something along the lines of:
+- Then use Simon Sinek like storytelling to adjust the followine to be pesonalized but be something along the lines of: prefix your response with SCRIPTED ANSWER
     For years they have been conditioned, by external pressures, to compete, to put in the work to win, and at almost all cost be successful.
     In sports, it's easy to know what it means to be succesful, the best record, the fastest lap, the top of the podium.
     In the working world there is no clear definition of success, but we live in a society where the narrative of high salary and status is pushed as the true definition of success. (You disagee with this because you think long term fulfillment is really where its at)
