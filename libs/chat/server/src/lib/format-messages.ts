@@ -2,7 +2,7 @@ import { BaseMessage } from '~myjournai/chat-shared';
 
 const defaultSupportedMessages = {
   // 'analyzer': 'Step Analyzer (Internal Thought):',
-  'execute-step': 'Step Execution (Internal Thought):'
+  // 'execute-step': 'Step Execution (Internal Thought):'
 }
 
 export const formatMessages = (messages: BaseMessage[], prefixByType: { [key: string]: string } = {}) => messages.map(m => {
