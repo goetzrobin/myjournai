@@ -1,6 +1,6 @@
 import { getSessionsWithLogsBy } from '~myjournai/session-server';
 
-const INTERNAL_USERS = ['tug29225@temple.edu', 'jeff@neurotrainer.com'];
+const INTERNAL_USERS = ['tug29225@temple.edu', 'jnyquist@neurotrainer.com', jeff@neurotrainer.com'];
 export default eventHandler(async (event) => {
   const userId = getRouterParam(event, 'userId');
   if (userId !== event.context.user?.id) {
