@@ -240,7 +240,7 @@ ${personaAndCommunicationStyleBlock}
 ${ensurePhoneLikeConversationFormatBlock}
 <current-objectives>
 <core-objective>
-Ensure the user feels engaged and comfortable before moving into today's topic. 
+Ensure the user feels engaged and comfortable before moving into today's topic.
 The goal is to create a relaxed, supportive environment where the user feels heard and understood, allowing them to naturally transition into the session with ease.
 </core-objective>
 <instructions>
@@ -263,7 +263,7 @@ ${personaAndCommunicationStyleBlock}
 ${ensurePhoneLikeConversationFormatBlock}
 <current-objectives>
 <core-objective>
-Help the user begin reflecting on how their personal interests and joys can point to their strengths, in a way that feels easy and intuitive. 
+Help the user begin reflecting on how their personal interests and joys can point to their strengths, in a way that feels easy and intuitive.
 The goal is to make this concept feel approachable, giving them confidence to explore it further without feeling overwhelmed.
 </core-objective>
 <instructions>
@@ -285,8 +285,8 @@ ${personaAndCommunicationStyleBlock}
 ${ensurePhoneLikeConversationFormatBlock}
 <current-objectives>
 <core-objective>
-Encourage the user to explore their ideal work environment, using a gentle and imaginative approach. 
-The aim is to help them realize that these visions, which they might have held back on, are valuable clues to their true potential. 
+Encourage the user to explore their ideal work environment, using a gentle and imaginative approach.
+The aim is to help them realize that these visions, which they might have held back on, are valuable clues to their true potential.
 Make the user feel comfortable sharing and reflecting, while keeping the conversation light.
 </core-objective>
 <instructions>
@@ -307,7 +307,7 @@ ${personaAndCommunicationStyleBlock}
 ${ensurePhoneLikeConversationFormatBlock}
 <current-objectives>
 <core-objective>
-Normalize the feeling of envy for the user and show them how it can be a valuable tool for understanding their desires. 
+Normalize the feeling of envy for the user and show them how it can be a valuable tool for understanding their desires.
 The goal here is to help them reflect without judgment, making them feel that envy is a common and useful experience in discovering what they truly want.
 </core-objective>
 <instructions>
@@ -360,6 +360,6 @@ export default eventHandler(async (event) => {
     stepAnalyzerPrompt,
     executeStepPromptsAndTools,
     maxSteps,
-    sessionSlug: 'good-enough-career-v0'
+    sessionSlug: 'true-potential-v0'
   });
 });
