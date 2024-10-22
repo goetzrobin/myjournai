@@ -11,7 +11,7 @@ export const ChatContainer = ({ children, userId, sessionLogId, withMenu }: Prop
   withMenu?: boolean
 }>) => {
   const userQ = useUserQuery(userId);
-  const isJeffOrRobin = userQ.data?.username === 'jeff@neurotrainer.com' || userQ.data?.username === 'tug29225@temple.edu';
+  const isJeffOrRobin = ['tug29225@temple.edu', 'robin@neurotrainer.com', 'jnyquist@neurotrainer.com', 'jeff@neurotrainer.com'].includes(userQ.data?.username ?? '')
 
   const nav = useNavigate();
   const abortMut = useSessionAbortMutation({ userId, sessionLogId });

@@ -207,6 +207,8 @@ export default eventHandler(async (event) => {
     stepAnalyzerPrompt,
     executeStepPromptsAndTools,
     maxSteps,
-    sessionSlug: 'scenic-route-v0'
+    sessionSlug: 'scenic-route-v0',
+    additionalAdjustFinalMessagePrompt: `This conversation is the mentor being in telling mode so all your knows are still present and turned on, but they are just more subtle and turned down a little.
+    For scripted messages, keep adjustments to an absolute minimum and just ensure it flows well with the conversation.`
   });
 });

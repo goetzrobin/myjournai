@@ -24,11 +24,11 @@ export const mapChunksToChatComponents = (messageChunksByTimestamp: Record<strin
     .sort(([key1], [key2]) => key1.localeCompare(key2));
   return sortedMessages.map(([key, chunks], index) => {
     const isLastChunk = index === sortedMessages.length - 1;
-    return chunks[0].scope === 'internal' ?
-      (chunks[0].chunkType !== 'error' ? null :
-        <MessageError removeChunksForTimestamp={removeChunksForTimestamp} error={chunks[0]?.textDelta}
-                      startStream={startStream} previousKeyAndChunks={sortedMessages[index - 1]} key={key} />)
-      : mapMessageTypeToComponent(chunks[0]?.type, key + chunks.length, chunks.map((chunk) => chunk.textDelta).join(''), isLastChunk, lastChunkError, onLastChunkRetry);
+    return chunks[0].chunkType === 'error' ?
+      <MessageError removeChunksForTimestamp={removeChunksForTimestamp} error={chunks[0]?.textDelta}
+                    startStream={startStream} previousKeyAndChunks={sortedMessages[index - 1]}
+                    key={key} /> : chunks[0].scope === 'internal' ? null
+        : mapMessageTypeToComponent(chunks[0]?.type, key + chunks.length, chunks.map((chunk) => chunk.textDelta).join(''), isLastChunk, lastChunkError, onLastChunkRetry)
   });
 };
 

@@ -30,7 +30,6 @@ export const Survey = ({
   setAnxietyScore: (value: number) => void;
   renderFinalStep: (values: SurveyResults) => ReactNode
 }) => {
-
   switch (view) {
     case 'feeling':
       return <FeelingIndicator value={feelingScore} setValue={setFeelingScore}

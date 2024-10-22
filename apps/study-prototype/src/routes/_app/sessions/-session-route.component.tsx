@@ -14,7 +14,7 @@ import {
   UserInputForm,
   useStreamResponse
 } from '~myjournai/chat-client';
-import React, { useState } from 'react';
+import React, { Dispatch, PropsWithChildren, SetStateAction, useState } from 'react';
 import { useAuthUserIdFromHeaders } from '~myjournai/auth-client';
 import {
   useLatestSessionLogBySlugQuery,
@@ -25,16 +25,25 @@ import {
 import { SessionLogWithSession } from '~db/schema/session-logs';
 import { useEngagementTracker } from './-track-engagement';
 
-export const useDrawers = ({ userId, slug, sessionLogId, isSessionNotStarted }: {
+export const Drawers = ({
+                          userId,
+                          slug,
+                          isEnded,
+                          setIsEnded,
+                          sessionLogId,
+                          isSessionNotStarted,
+                          children
+                        }: PropsWithChildren<{
+  isEnded: boolean;
+  setIsEnded: Dispatch<SetStateAction<boolean>>;
   userId: string | undefined;
   slug: string | undefined;
   sessionLogId: string | undefined;
   isSessionNotStarted: boolean
-}) => {
+}>) => {
   const nav = useNavigate();
   const startMutation = useSessionStartMutation({ userId, slug });
   const endMutation = useSessionEndMutation({ userId, sessionLogId });
-  const [isEnded, setIsEnded] = useState(false);
   const onStartClicked = (scores: QuestionDrawerScores) => startMutation.mutate({
     preAnxietyScore: scores.anxietyScore,
     preFeelingScore: scores.feelingScore,
@@ -47,14 +56,12 @@ export const useDrawers = ({ userId, slug, sessionLogId, isSessionNotStarted }: 
   }, {
     onSuccess: () => setTimeout(() => nav({ to: '/' }), 500)
   });
-  return {
-    setIsEnded,
-    Drawers: () => <>
-      <PreQuestionsDrawer status={startMutation.status} open={isSessionNotStarted} onStartClicked={onStartClicked} />
-      <PostQuestionsDrawer status={endMutation.status} open={isEnded} setOpen={setIsEnded}
-                           onEndClicked={onEndClicked} />
-    </>
-  };
+  return <>
+    <PreQuestionsDrawer status={startMutation.status} open={isSessionNotStarted} onStartClicked={onStartClicked} />
+    <PostQuestionsDrawer status={endMutation.status} open={isEnded} setOpen={setIsEnded}
+                         onEndClicked={onEndClicked} />
+    {children}
+  </>;
 };
 
 export const OnlyTheChat = ({
@@ -135,10 +142,9 @@ export const SessionRouteComponent = ({ slug }: { slug: string }) => {
     userId
   });
   const isSessionNotStarted = isSuccessSessionLog && !sessionLog;
-  const { Drawers, setIsEnded } = useDrawers({ userId, slug, sessionLogId: sessionLog?.id, isSessionNotStarted });
-
-  return <>
-    <Drawers />
+  const [isEnded, setIsEnded] = useState(false);
+  return <Drawers slug={slug} isEnded={isEnded} isSessionNotStarted={isSessionNotStarted} sessionLogId={sessionLog?.id}
+                  userId={userId} setIsEnded={setIsEnded}>
     {isSessionNotStarted ? null :
       <OnlyTheChat url={`/api/sessions/slug/${slug}`}
                    sessionLog={sessionLog}
@@ -147,5 +153,5 @@ export const SessionRouteComponent = ({ slug }: { slug: string }) => {
                    setIsEnded={setIsEnded}
                    error={error}
       />}
-  </>;
+  </Drawers>;
 };

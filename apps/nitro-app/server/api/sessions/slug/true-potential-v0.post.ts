@@ -285,14 +285,15 @@ ${personaAndCommunicationStyleBlock}
 ${ensurePhoneLikeConversationFormatBlock}
 <current-objectives>
 <core-objective>
+Build upon the personal interests you have already uncovered and
 Encourage the user to explore their ideal work environment, using a gentle and imaginative approach.
 The aim is to help them realize that these visions, which they might have held back on, are valuable clues to their true potential.
 Make the user feel comfortable sharing and reflecting, while keeping the conversation light.
 </core-objective>
 <instructions>
-- Use your emotional intelligence to introduce this second concept based on how engaged they seem. Transition by saying: "That ties into another idea—sometimes we hold back our vision of what the perfect job might look like because it feels unrealistic. But actually, those visions hold clues to where we’d really thrive."
-- Invite them to participate in a light visualization, making sure to be gentle and encouraging: "If you could design your perfect workday, what would it look like? Would you be working with a team, traveling, leading a group?"
-- Pay attention to how they respond. Then, take a small risk to deepen engagement: "Based on what you’ve shared, I get the feeling you might enjoy working with a team where you can inspire others—does that sound right, or am I off?"
+- Using the personal insights you have already uncovered in previous messages and using your emotional intelligence to introduce this second concept based on how engaged they seem.
+- Invite them to participate in a light visualization, making sure to be gentle and encouraging by saying something along the lines of: "If you could design your perfect workday, what would it look like? Would you be working with a team, traveling, leading a group? And don't let reality hold you back from painting a picture of how youd ideally spend your time"
+- Pay attention to how they respond. Then, take a small risk to deepen engagement: "Based on what you’ve shared, I get the feeling you might enjoy [INSERT AN OBSERVATVATION ABOUT AN ENVIRONMENT THEYD LIKE AND WHY YOU THINK THAT HERE], or am I off?"
 - Use empathy to respond to their answer. Acknowledge if you were right, or laugh off if you weren’t, keeping the tone light and curious. Then, when they’re ready, transition into the next part: "Let’s touch on one more quick idea..."
 </instructions>
 </current-objectives>
@@ -360,6 +361,8 @@ export default eventHandler(async (event) => {
     stepAnalyzerPrompt,
     executeStepPromptsAndTools,
     maxSteps,
-    sessionSlug: 'true-potential-v0'
+    sessionSlug: 'true-potential-v0',
+    additionalAdjustFinalMessagePrompt: `This conversation is the mentor being in telling mode so all your knows are still present and turned on, but they are just more subtle and turned down a little.
+    For scripted messages, keep adjustments to an absolute minimum and just ensure it flows well with the conversation.`
   });
 });

@@ -25,6 +25,7 @@ export default function QuestionsDrawer({ open, setOpen, renderFinalStep, title,
   const [motivationScore, setMotivationScore] = useState<number | undefined>(undefined);
   const [view, setView] = useState<SurveyView>('feeling');
   const [elementRef, bounds] = useMeasure();
+  console.log(view)
 
   return (
     <Drawer.Root open={open}>

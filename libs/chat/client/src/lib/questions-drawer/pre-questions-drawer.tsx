@@ -10,6 +10,7 @@ export const PreQuestionsDrawer = ({ onStartClicked, open, setOpen, status }: {
   setOpen?: Dispatch<SetStateAction<boolean>>;
   onStartClicked: (scores: QuestionDrawerScores) => void
 }) => {
+  console.log(status)
   const navigate = useNavigate();
   return (
     <QuestionsDrawer
