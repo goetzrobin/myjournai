@@ -9,10 +9,12 @@ export const users = pgTable('users', {
   pronouns: varchar('pronouns'),
   genderIdentity: text('gender_identity'),
   ethnicity: text('ethnicity'),
+  competitionLevel: text('competition_level'),
   ncaaDivision: text('ncaa_division'),
   graduationYear: integer('graduation_year'),
   birthday: date('birthday'),
   onboardingCompletedAt: timestamp('onboarding_completed_at', { withTimezone: true }),
+  offboardingInitiated: timestamp('offboarding_initiated', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
 });

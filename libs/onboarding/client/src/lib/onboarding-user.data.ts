@@ -19,7 +19,7 @@ const GROUP_QUESTION: SurveyQuestion = {
     {
       type: 'fixed',
       value: 'former-athlete-current-mssb',
-      label: 'Current Temple MSSB student (former student-athlete)'
+      label: 'Current Temple MSSB student'
     },
     {
       type: 'fixed',
@@ -133,6 +133,28 @@ const ETHNICITY_QUESTION: SurveyQuestion = {
   question: 'What is your race/ethnicity?',
   type: 'multiple-choice'
 };
+const COMPETITION_LEVEL_QUESTION: SurveyQuestion = {
+  index: 3,
+  possibleAnswers: [
+    {
+      type: 'fixed',
+      value: 'youth-rec',
+      label: 'Youth/Recreational Sport'
+    },
+    {
+      type: 'fixed',
+      value: 'high-school',
+      label: 'High School Sport'
+    },
+    {
+      type: 'fixed',
+      value: 'college',
+      label: 'College Sport'
+    }
+  ],
+  question: 'What is the highest level of sport competition you participate(d) in?',
+  type: 'multiple-choice'
+};
 // If you are/were a student-athlete, what division did you participate in?
 //   NCAA Division I, NCAA Division II, NCAA Division III, other (with text box)
 const DIVISION_QUESTION: SurveyQuestion = {
@@ -158,11 +180,6 @@ const DIVISION_QUESTION: SurveyQuestion = {
       value: 'other',
       label: 'Other'
     },
-    {
-      type: 'fixed',
-      value: 'none',
-      label: 'Not a (former) student athlete'
-    }
   ],
   question: 'If you are/were a student-athlete, what division did you participate in?',
   type: 'multiple-choice'
@@ -180,6 +197,8 @@ const GRAD_YEAR_QUESTION: SurveyQuestion = {
 };
 
 export const ONBOARDING_USER_SURVEY: Survey = {
-  questions: [GROUP_QUESTION, GENDER_IDENTITY_QUESTION, ETHNICITY_QUESTION, DIVISION_QUESTION, GRAD_YEAR_QUESTION],
+  questions: [GROUP_QUESTION, GENDER_IDENTITY_QUESTION, ETHNICITY_QUESTION, COMPETITION_LEVEL_QUESTION, DIVISION_QUESTION, GRAD_YEAR_QUESTION],
   answers: [undefined, undefined, undefined, undefined, { value: 2025, type: 'custom', customValue: 2025 }]
 };
+
+export const COMPETITION_LEVEL_QUESTION_RAW = COMPETITION_LEVEL_QUESTION.question

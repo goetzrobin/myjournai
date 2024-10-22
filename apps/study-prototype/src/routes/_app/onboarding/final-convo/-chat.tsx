@@ -6,11 +6,10 @@ import {
   MessagesContainer,
   ThinkingIndicator,
   useAutoStartMessage,
-  useChatEnterSubmit,
   UserInputForm,
   useStreamResponse
 } from '~myjournai/chat-client';
-import { SmoothButton, useScrollAnchor } from '~myjournai/components';
+import { SmoothButton } from '~myjournai/components';
 import OnboardingWrapper from '../-components/-onboarding-wrapper';
 import { BaseMessage } from '~myjournai/chat-shared';
 import { LucideLoader } from 'lucide-react';
@@ -35,6 +34,7 @@ const Chat = ({
                 sessionStepCount,
                 onEndConversation,
                 endMutationStatus,
+                sessionLogId,
                 children
               }: PropsWithChildren<
     {
@@ -43,12 +43,20 @@ const Chat = ({
       userId: string;
       isShowingUserInput: boolean;
       isSessionLogExists: boolean;
+      sessionLogId: string | undefined;
       sessionStepCount: number;
       onEndConversation: () => void;
       endMutationStatus: 'idle' | 'pending' | 'success' | 'error';
     }
   >) => {
-    const { mutation, startStream, isStreaming, messageChunksByTimestamp, currentStepInfo, removeChunksForTimestamp } = useStreamResponse({
+    const {
+      mutation,
+      startStream,
+      isStreaming,
+      messageChunksByTimestamp,
+      currentStepInfo,
+      removeChunksForTimestamp
+    } = useStreamResponse({
       userId,
       url: `/api/sessions/slug/onboarding-v0`
     });
@@ -59,11 +67,8 @@ const Chat = ({
       isNoMessages: messages.length === 0,
       startStream
     });
-    const { messagesRef, scrollRef, visibilityRef } = useScrollAnchor();
-    const { onKeyDown, formRef, handleSubmit, input, setInput } = useChatEnterSubmit({ startStream });
-
     return <ChatContainer withMenu>
-      <MessagesContainer messagesRef={messagesRef} scrollRef={scrollRef} visibilityRef={visibilityRef}>
+      <MessagesContainer>
         {children}
         {mapNonStreamedDBMessagesToChatComponents(messageChunksByTimestamp, messages)}
         {mapChunksToChatComponents(messageChunksByTimestamp, startStream, removeChunksForTimestamp)}
@@ -71,9 +76,9 @@ const Chat = ({
       </MessagesContainer>
       {!isShowingUserInput ? null :
         <UserInputForm onEndConversationPressed={onEndConversation}
-                       stepsRemaining={sessionStepCount - currentStepInfo.currentStep} formRef={formRef} input={input}
-                       setInput={setInput} onKeyDown={onKeyDown}
-                       handleSubmit={handleSubmit}
+                       stepsRemaining={sessionStepCount - currentStepInfo.currentStep}
+                       sessionLogId={sessionLogId}
+                       startStream={startStream}
                        customEndConvoButton={<SmoothButton variant="ghost" onPress={onEndConversation}
                                                            className="mt-4 w-full"
                                                            buttonState={endMutationStatus}>

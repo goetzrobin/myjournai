@@ -18,14 +18,27 @@ export const surveyStoreFactory = (survey: Survey, storageKey: string) => {
         survey,
         currentIndex: 0,
         actions: {
-          reset: () => set({survey, currentIndex: 0}),
+          reset: () => set({ survey, currentIndex: 0 }),
           moveToPreviousQuestion: () => {
             const { currentIndex } = get();
-            set({ currentIndex: Math.max(currentIndex - 1, 0) });
+            // skip division question if current question is determined as non athlete
+            if (survey.answers?.[currentIndex - 2]?.value !== 'college' && survey.questions[currentIndex - 2].question === 'What is the highest level of sport competition you participate(d) in?') {
+              set({ currentIndex: Math.max(currentIndex - 2, 0) });
+            } else {
+              set({ currentIndex: Math.max(currentIndex - 1, 0) });
+            }
           },
           moveToNextQuestion: () => {
             const { currentIndex, survey } = get();
-            set({ currentIndex: Math.min(currentIndex + 1, survey.questions.length - 1) });
+            // skip division question if current question is determined as non athlete
+            if (survey.answers?.[currentIndex]?.value !== 'college' && survey.questions[currentIndex].question === 'What is the highest level of sport competition you participate(d) in?') {
+              const newAnswers = [...survey.answers];
+              newAnswers[currentIndex + 1] = { type: 'fixed', value: 'none' };
+              set({ currentIndex: Math.min(currentIndex + 2, survey.questions.length - 1), survey: { ...survey, answers: newAnswers } });
+
+            } else {
+              set({ currentIndex: Math.min(currentIndex + 1, survey.questions.length - 1) });
+            }
           },
           answerCurrentQuestion: (selectedAnswer: SurveyPossibleAnswer, customValue?: string | number) => {
             const { survey, currentIndex } = get();

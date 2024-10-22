@@ -42,7 +42,7 @@ export const CIDI_CAREER_IDENTITY_CONFUSION_SURVEY: Survey = {
     {
       index: 0,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'I feel confused as to who I really am when it comes to my career',
+      question: 'I feel confused as to who I really am when it comes to my career path',
       type: 'multiple-choice',
       direction: 'smaller-better'
     },
@@ -104,7 +104,7 @@ export const CIDI_CAREER_EXPLORATION_BREADTH_SELF_SURVEY: Survey = {
     {
       index: 0,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'I learn about myself for the purpose of finding a career that meets my needs',
+      question: 'I like to learn about myself for the purpose of finding a career that meets my needs',
       type: 'multiple-choice',
       direction: 'bigger-better'
     },
@@ -138,7 +138,7 @@ export const CIDI_CAREER_EXPLORATION_DEPTH_SELF_SURVEY: Survey = {
     {
       index: 0,
       possibleAnswers: LIKERT_ANSWERS,
-      question: 'I reflect on how my chosen career aligns with my past experiences',
+      question: 'I reflect on how my chosen career path aligns with my past experiences',
       type: 'multiple-choice',
       direction: 'bigger-better'
     },

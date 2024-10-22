@@ -24,5 +24,5 @@ export const updateUserOnboardingCommand = async (userId: string, request: UserO
       status: 'ACTIVE'
     });
   }
-  return db.update(users).set(request).where(eq(users.id, userId)).returning();
+  return db.update(users).set({ ...request, updatedAt: new Date() }).where(eq(users.id, userId)).returning();
 };

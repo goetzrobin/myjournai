@@ -45,7 +45,7 @@ Thought about which career options would be a good fit with my personality and v
 Reflected on how my strengths and abilities could be best used in a variety of careers: ${likertScale[cidiResponse.question41 ?? 3]}
 
 My career of interest is one of the most important aspects of my life: ${likertScale[cidiResponse.question50 ?? 3]}
-Can say that I have found my purpose in life through my career of interest: ${likertScale[cidiResponse.question51 ?? 3]}
+I can say that I have found my purpose in life through my career of interest: ${likertScale[cidiResponse.question51 ?? 3]}
 My career of interest gives meaning to my life: ${likertScale[cidiResponse.question52 ?? 3]}
 My career plans match my true interests and values: ${likertScale[cidiResponse.question53 ?? 3]}
   `;

@@ -21,7 +21,7 @@ export const Letter = ({ letterContent, setLetterContent, name }: {
     'What’s one thing your friends love about you?',
     'What’s an important belief that guides your choices?',
     'What, in life, do you want to be known for?',
-    'Thank you so much! You’ve answered all my questions, for now!'
+    'Thanks for answering all my questions! Feel free to read through the letter again and add what you\'d like me to know about you!'
   ];
   const currentQuestion = questions[Math.min((sentenceCount), questions.length - 1) % questions.length];
 

@@ -14,7 +14,7 @@ export type SurveyQuestion = {
   question: string;
   type: 'multiple-choice' | 'number';
   index: number;
-  direction: 'bigger-better' | 'smaller-better'
+  direction?: 'bigger-better' | 'smaller-better'
   possibleAnswers: SurveyPossibleAnswer[];
 }
 

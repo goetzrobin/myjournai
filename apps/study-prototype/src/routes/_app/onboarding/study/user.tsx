@@ -15,6 +15,7 @@ import {
 import OnboardingSurveyWrapper from '../-components/-onboarding-survey-wrapper';
 import SavingUserData from '../-components/-saving-user-data';
 import { SurveyActualAnswer } from '~myjournai/survey';
+import { useEffect } from 'react';
 
 
 export const Route = createFileRoute('/_app/onboarding/study/user')({
@@ -22,8 +23,9 @@ export const Route = createFileRoute('/_app/onboarding/study/user')({
 });
 
 const buildUserOnboardingRequest = (answers: (SurveyActualAnswer | undefined)[]) => {
-  const keys = ['cohort', 'genderIdentity', 'ethnicity', 'ncaaDivision', 'graduationYear'];
+  const keys = ['cohort', 'genderIdentity', 'ethnicity', 'competitionLevel', 'ncaaDivision', 'graduationYear'];
   let result = {};
+  console.log(answers)
   keys.forEach((key, index) => {
     const answer = answers[index];
     result = { ...result, [key]: answer?.type === 'fixed' ? answer.value : answer?.customValue };
@@ -56,6 +58,10 @@ function Onboarding() {
 
   const onMoveToNextQuestionPressed = () => isFinalQuestion ? updateUserWithOnboardingData() : moveToNextQuestion();
 
+  useEffect(() => {
+    if (currentQuestion.type !== 'number') return;
+    answerCurrentQuestion(currentQuestion.possibleAnswers[0], 2025)
+  }, [currentQuestion.type]);
   return <OnboardingSurveyWrapper
     onMoveToNextQuestionPressed={onMoveToNextQuestionPressed}
     moveToPreviousQuestion={moveToPreviousQuestion}

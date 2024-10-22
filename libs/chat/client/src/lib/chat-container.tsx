@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
-import { Button } from '~myjournai/components';
+import { Button, Link } from '~myjournai/components';
 import { LucideChevronLeft, LucideUndoDot } from 'lucide-react';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { useSessionAbortMutation } from '~myjournai/session-client';
 import { useUserQuery } from '~myjournai/user-client';
 
@@ -22,8 +22,8 @@ export const ChatContainer = ({ children, userId, sessionLogId, withMenu }: Prop
     <div
       className="px-2 z-10 bg-gradient-to-b from-background -m-[1px] from-30% to-transparent absolute h-16 left-0 right-0 top-2">
       <div className="flex justify-between items-center">
-        <Link to="/"><Button variant="icon"><span
-          className="sr-only">Back to main</span><LucideChevronLeft /></Button></Link>
+        <Link to="/"><span
+          className="sr-only">Back to main</span><LucideChevronLeft /></Link>
         {!withMenu || !isJeffOrRobin ? null :
           <Button onPress={onAbort} className="bg-destructive/30" variant="icon">
             {abortMut.isPending ? 'Aborting' : <LucideUndoDot className="text-destructive-foreground size-5" />}

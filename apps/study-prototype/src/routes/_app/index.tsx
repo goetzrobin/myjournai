@@ -91,7 +91,7 @@ function Index() {
   return <WithMobileNav>
     <div className="flex flex-col h-full w-full">
       <div className="overflow-auto pb-20 pt-8 px-2 space-y-10">
-        <ToOffboarding />
+        {!userQ.data?.offboardingInitiated ? null : <ToOffboarding />}
         {!sessionsQ.isPending ? null : <PendingSessionsIndicator/>}
         {sessions.map(s => <MenuItem session={s} key={s.id}>{s.name}</MenuItem>)}
       </div>

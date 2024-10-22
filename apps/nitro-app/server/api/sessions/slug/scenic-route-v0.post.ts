@@ -1,145 +1,12 @@
 import { eventHandler } from 'h3';
 import {
   basicUsefulInfoBlockFactory,
+  createStepAnalyzerPromptFactory,
   ensurePhoneLikeConversationFormatBlock,
   personaAndCommunicationStyleBlock,
   PromptProps
 } from '~myjournai/chat-server';
 import { executeStepThroughMessageRun } from '~myjournai/messagerun-server';
-import { CurrentStepInfo } from '~myjournai/chat-shared';
-
-export const createStepAnalyzerPromptFactory = (specificCriteriaCreator: (args: {
-  currentStep: number,
-  messages: string,
-  stepRepetitions: number
-}) => string) =>
-  (messages: string, { currentStep, stepRepetitions }: CurrentStepInfo) => `
-As an AI language model, you are to follow these explicit instructions to decide whether to ADVANCE to the next step in a conversation or STAY on the current topic.
-Use the conversation history provided at the end of the prompt to inform your decision, applying the criteria outlined below.
-
-After processing each step, provide a result for that step. At the end, output the final decision of either ADVANCE or STAY.
-
-Your response should be structured exactly as follows:
-
-- Step 1 Result: DepthScore = [total points], Topic Explored Sufficiently: Yes/No
-- Step 2 Result: User Engagement Level = High/Low
-- Step 3 Result: Emotional Resolution Achieved: Yes/No
-- Step 4 Result: ExchangeCount = ${Math.max((stepRepetitions * 2) - 1,0)}, Exceeds Limit: Yes/No
-- Step 5 Result: User Ready to Advance: Yes/No
-- Step 6 Result: Step specific criteria met: Yes/No
-- Final Decision: ADVANCE or STAY
-
-**Important:** Do not include any additional text, explanations, or responses beyond what is specified.
-
----
-
-**Instructions:**
-
-1. **Assess the Depth of Exploration:**
-
-   - **Evaluate New Information:**
-     - Review the user's messages in the current conversation step.
-     - Assign **2 points** for each **new idea, detail, or insight** the user has introduced.
-     - Assign **3 points** for each **specific example or personal story** the user has shared.
-   - **Determine Sufficiency:**
-     - If the total points accumulated are **5 or more**, consider that the topic has been explored sufficiently.
-
-   **Provide in your response:**
-   - Step 1 Result: DepthScore = [total points], Topic Explored Sufficiently: Yes/No
-
-2. **Analyze User Engagement Level:**
-
-   - **Response Length Comparison:**
-     - Compare the length of the user's latest response to the average length of their previous responses in this step.
-     - If the user's latest response is **less than 50%** of the average length for **two consecutive responses**, consider their engagement level to be **Low**.
-   - **Engagement Keywords:**
-     - Look for **Low Engagement Keywords**: "Okay", "Sure", "I guess", "Fine", "Yeah".
-       - If these appear in **two consecutive responses**, consider engagement **Low**.
-     - Look for **High Engagement Keywords**: "Tell me more", "I'm curious about", "Can we explore", "I want to discuss".
-       - If these appear, consider engagement **High**.
-   - **Determine Engagement Level:**
-     - Based on the above, classify the user's engagement as **High** or **Low**.
-
-   **Provide in your response:**
-   - Step 2 Result: User Engagement Level = High/Low
-
-3. **Evaluate Emotional Resolution:**
-
-   - **Sentiment Analysis:**
-     - Assess the sentiment of the user's recent responses (Positive, Neutral, Negative).
-   - **Sentiment Shift:**
-     - If the user's sentiment shifts from **Negative to Neutral or Positive** over the last **two responses**, consider that they have reached emotional resolution.
-   - **Resolution Phrases:**
-     - Look for phrases like "I feel better now", "That makes sense", "I'm glad we talked about this", "I understand now".
-       - If any are present, consider emotional resolution achieved.
-
-   **Provide in your response:**
-   - Step 3 Result: Current Sentiment: [Result of Sentiment Analysis]. Emotional Resolution Achieved: Yes/No
-
-4. **Monitor Time Spent on the Current Step:**
-
-   - **Evaluate Duration:**
-     - You are given the number of exchanges in the current step: ${Math.max((stepRepetitions * 2) - 1,0)}
-     - If this number exceeds the upper limit provided in Step Specific Criteria below **and** the user's engagement is **Low**, consider moving on.
-
-   **Provide in your response:**
-   - Step 4 Result: ExchangeCount = ${Math.max((stepRepetitions * 2) - 1,0)}, Exceeds Limit: Yes/No
-
-5. **Check for User's Desire to Advance:**
-
-   - **Direct Requests:**
-     - Look for phrases like "Can we move on?", "What's next?", "I'd like to talk about...", "Let's proceed".
-       - If any are present, the user is ready to advance.
-   - **Indirect Cues:**
-     - Look for phrases like "I think that's it", "I'm good with that", "That covers it", "Nothing more to add".
-       - If these appear in **two consecutive responses**, consider the user ready to advance.
-     - Be careful to not mistake short answers to leading questions the mentor asked, like "Sounds good to me!" as an Indirect Cue. Be smart about it!
-
-   **Provide in your response:**
-   - Step 5 Result: User Ready to Advance: Yes/No
-
- 6. Evaluate Specific Criteria:
-
-  ${specificCriteriaCreator({ currentStep, stepRepetitions, messages })}
-
-  **Provide in your response:**
-  - **Step 6 Result:** Criteria Met: Yes/No
-
-7. **Decision Logic:**
-   - **Err on the side of ADVANCE**: Normally users feel like sessions are dragging on too long.
-     That's why if you're unsure if you should ADVANCE or STAY, tend to slightly lean to ADVANCE by default
-   - **Decide to ADVANCE** if **any** of the following conditions are met:
-
-     - **Condition A:**
-       - The topic has been explored sufficiently (DepthScore ≥ 5), **and**
-       - The user has reached emotional resolution.
-
-     - **Condition B:**
-       - The user's engagement level is **Low**, **and**
-       - The number of exchanges has reached or exceeded the upper limit for the step.
-
-     - **Condition C:**
-       - The user has expressed a desire to advance (through direct requests or indirect cues in two consecutive responses).
-
-     - **Condition D:**
-       - The topic has been explored sufficiently (DepthScore ≥ 5), **and**
-       - Step Criteria have been met
-
-   - **If none** of the above conditions are met, decide to **STAY**.
-   - **If the conversation history is empty, **STAY**.
-
-   **Provide in your response:**
-   - Final Decision: ADVANCE or STAY
-
----
-
-**Remember:** Your response should only include the results for each step as specified and the final decision, without any additional commentary or explanation.
-
----
-
-Conversation History:
-${messages}
-`;
 
 const stepAnalyzerPrompt = createStepAnalyzerPromptFactory(({ currentStep }) =>
 `${currentStep === 1 ? `1. Gentle Check-In
@@ -177,7 +44,7 @@ ${currentStep === 4? `4. It's not always going to be easy
  - The user has not been told that this journey is gonna be hard sometimes and not easy and there's gonna be tough questions
  - The user doesn't have the feeling that they I will be helping them and it will be worth it
  - The user is unaware of Jacob story and has not heard his quote yet
-- Expected Exchange Count: 4-5 exchanges. 
+- Expected Exchange Count: 4-5 exchanges.
 ` : ''}
 ${currentStep === 5? `Final Excitement
    - Criteria to Advance:
@@ -278,13 +145,13 @@ ${personaAndCommunicationStyleBlock}
 ${ensurePhoneLikeConversationFormatBlock}
 <current-objectives>
 <core-objective>
-Make sure they know that this is not always gonna be easy and the conversations are going to be pretty intense, but that'll be absolutely worth it 
+Make sure they know that this is not always gonna be easy and the conversations are going to be pretty intense, but that'll be absolutely worth it
 and share how Jacob described the benefit of going on this journey
 </core-objective>
 <instructions>
 - be honest with the user and share openly that having these type of conversations and thinking about these questions can be uncomfortable challenging, and not always easy
 - but that's also why you're here to help them sit with these emotions confront these feelings and really put some thought into these things. That's where your strength is with your access to almost infinite knowledge about psychology, mentorship, and advice of those who have been in your shoes before you.
-- and the best thing is, you can promise that it will be worth it and they don't have to take your word for it. Ask them if they mind if you share a story from one of the mentees that have already completed the program. 
+- and the best thing is, you can promise that it will be worth it and they don't have to take your word for it. Ask them if they mind if you share a story from one of the mentees that have already completed the program.
 - Wait for their answer, then share that we did a pilot study with some students at Temple and Jacob, who is a master student and former hockey player said it better than you ever could and you are quoting him here:
     "Sam gave me clarity. Thought I now know in certain things exactly what I'm looking for. He was a private outlet to work through stuff and help me play offense instead of defense and let me take charge and take the next step for example to make myself feel better just learn more about myself and what I wanna do and ultimately help me to go from an idea of what I want my career to be to a specific target. I can run with now." make sure to prefix your response with SCRIPTED ANSWER
  - Then ask them if they're in. If they are ready to go on that journey with you and wait for their response

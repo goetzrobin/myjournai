@@ -17,7 +17,6 @@ export const Route = createFileRoute('/_app/onboarding/final-convo/')({
   errorComponent: ChatError
 });
 
-
 function FinalConvo() {
   const nav = useNavigate();
 
@@ -73,9 +72,16 @@ function FinalConvo() {
         </div>
       </div>}
     {!isShowingChat ? null :
-      <Chat endMutationStatus={endMutation.status} onEndConversation={onEndConversation} isSessionLogExists={sessionInProgress}
-            isShowingUserInput={isShowingUserInput} sessionStepCount={sessionLog?.session?.stepCount ?? 99}
-            isMessageSuccess={isMessageSuccess} messages={messages} userId={userId}>
+      <Chat endMutationStatus={endMutation.status}
+            onEndConversation={onEndConversation}
+            isSessionLogExists={sessionInProgress}
+            isShowingUserInput={isShowingUserInput}
+            sessionStepCount={sessionLog?.session?.stepCount ?? 99}
+            isMessageSuccess={isMessageSuccess}
+            messages={messages}
+            userId={userId}
+            sessionLogId={sessionLog?.id}
+      >
         {!existingLetter || !isMessageSuccess ? null : <div className="px-8 pb-12 flex items-center justify-end">
           <div
             className="overflow-hidden relative text-left animate-in zoom-in-50 fade-in-0 flex items-start p-4 h-80 rotate-6 w-56 text-sm pressed:bg-muted bg-background text-muted-foreground border rounded-xl">
