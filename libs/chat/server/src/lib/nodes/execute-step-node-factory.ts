@@ -8,8 +8,8 @@ import {
 import { kv } from '@vercel/kv';
 import { formatMessages } from '../format-messages';
 import { generateText } from 'ai';
-import { OpenAIProvider } from '@ai-sdk/openai';
 import { StoreLLMInteractionArgs } from '../store-llm-interaction';
+import { AnthropicProvider } from '@ai-sdk/anthropic';
 
 export type PromptProps<AdditionalProps = {}> =
   {
@@ -35,7 +35,7 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
                                                                       currentStepBySessionLogIdKey,
                                                                       messagesBySessionLogIdKey,
                                                                       executeStepPromptsAndTools,
-                                                                      groq,
+                                                                      anthropic,
                                                                       model,
                                                                       abortController,
                                                                       maxSteps,
@@ -55,7 +55,7 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
     tools: (props: ToolProps) => Tools;
     prompt: (props: PromptProps<AdditionalProps>) => string
   }>
-  groq: OpenAIProvider;
+  anthropic: AnthropicProvider;
   abortController: AbortController;
   maxSteps: number;
   llmInteractionsToStore: StoreLLMInteractionArgs<any>[];
@@ -109,7 +109,7 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
   `)
 
   const result = await generateText({
-    model: groq(model),
+    model: anthropic('claude-3-5-sonnet-latest'),
     prompt,
     tools: tools as any,
     abortSignal: abortController.signal

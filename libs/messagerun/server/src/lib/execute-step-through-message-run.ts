@@ -99,7 +99,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
     currentStepBySessionLogIdKey,
     messagesBySessionLogIdKey,
     executeStepPromptsAndTools,
-    groq,
+    anthropic,
     abortController,
     maxSteps,
     llmInteractionsToStore,
