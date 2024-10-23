@@ -3,8 +3,8 @@ import { kv } from '@vercel/kv';
 import { generateText } from 'ai';
 import { formatMessages } from '../format-messages';
 import { filterOutInternalMessages } from '../filter-out-internal-messages';
-import { OpenAIProvider } from '@ai-sdk/openai';
 import { StoreLLMInteractionArgs } from '../store-llm-interaction';
+import { AnthropicProvider } from '@ai-sdk/anthropic';
 
 
 export const stepAnalyzerNodeFactory = ({
@@ -13,7 +13,7 @@ export const stepAnalyzerNodeFactory = ({
                                           currentStepBySessionLogIdKey,
                                           messagesBySessionLogIdKey,
                                           stepAnalyzerPrompt,
-                                          openai,
+                                          anthropic,
                                           model,
                                           abortController,
                                           maxSteps,
@@ -26,7 +26,7 @@ export const stepAnalyzerNodeFactory = ({
   currentStepBySessionLogIdKey: string
   messagesBySessionLogIdKey: string;
   stepAnalyzerPrompt: (messageString: string, currentStepInfo: CurrentStepInfo, ...args: any) => string;
-  openai: OpenAIProvider;
+  anthropic: AnthropicProvider;
   abortController: AbortController;
   maxSteps: number;
   llmInteractionsToStore: StoreLLMInteractionArgs<any>[];
@@ -35,7 +35,7 @@ export const stepAnalyzerNodeFactory = ({
   const llmInteractionId = crypto.randomUUID();
   const type = 'analyzer';
   const scope = 'internal';
-  model = model ??= 'gpt-4o';
+  model = model ??= 'claude-3-5-sonnet-latest';
   const createdAt = new Date();
 
   let currentStepInfo = (await kv.get(currentStepBySessionLogIdKey) ?? {currentStep: 1, stepRepetitions: 0}) as CurrentStepInfo;
@@ -46,7 +46,7 @@ export const stepAnalyzerNodeFactory = ({
   console.log(`prompt used for step analysis: ${prompt}`)
 
   const result = await generateText({
-    model: openai(model),
+    model: anthropic(model),
     prompt,
     abortSignal: abortController.signal
   });

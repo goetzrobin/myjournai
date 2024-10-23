@@ -88,7 +88,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
     currentStepBySessionLogIdKey,
     messagesBySessionLogIdKey,
     stepAnalyzerPrompt,
-    openai,
+    anthropic,
     abortController,
     maxSteps,
     llmInteractionsToStore

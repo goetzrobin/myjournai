@@ -40,7 +40,7 @@ export const streamFinalMessageNodeFactory = ({
   additionalPrompt?: string
 }) => async (messages: BaseMessage[]) => {
   const llmInteractionId = crypto.randomUUID();
-  model ??= 'claude-3-5-sonnet-20240620';
+  model ??= 'claude-3-5-sonnet-latest';
   const type = 'ai-message';
   const scope = 'external';
   const createdAt = new Date();
