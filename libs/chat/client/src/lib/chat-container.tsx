@@ -3,16 +3,14 @@ import { Button, Link } from '~myjournai/components';
 import { LucideChevronLeft, LucideUndoDot } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
 import { useSessionAbortMutation } from '~myjournai/session-client';
-import { useUserQuery } from '~myjournai/user-client';
+import { useIsAdmin } from '~myjournai/user-client';
 
 export const ChatContainer = ({ children, userId, sessionLogId, withMenu }: PropsWithChildren<{
   userId?: string;
   sessionLogId?: string;
   withMenu?: boolean
 }>) => {
-  const userQ = useUserQuery(userId);
-  const isJeffOrRobin = ['tug29225@temple.edu', 'robin@neurotrainer.com', 'jnyquist@neurotrainer.com', 'jeff@neurotrainer.com'].includes(userQ.data?.username ?? '')
-
+  const { isAdmin } = useIsAdmin();
   const nav = useNavigate();
   const abortMut = useSessionAbortMutation({ userId, sessionLogId });
   const onAbort = () => abortMut.mutate(undefined, { onSuccess: () => nav({ to: '/' }) });
@@ -24,11 +22,11 @@ export const ChatContainer = ({ children, userId, sessionLogId, withMenu }: Prop
       <div className="flex justify-between items-center">
         <Link to="/"><span
           className="sr-only">Back to main</span><LucideChevronLeft /></Link>
-        {!withMenu || !isJeffOrRobin ? null :
+        {!withMenu || !isAdmin ? null :
           <Button onPress={onAbort} className="bg-destructive/30" variant="icon">
             {abortMut.isPending ? 'Aborting' : <LucideUndoDot className="text-destructive-foreground size-5" />}
-            </Button>
-         }
+          </Button>
+        }
       </div>
     </div>
     {children}</div>;
