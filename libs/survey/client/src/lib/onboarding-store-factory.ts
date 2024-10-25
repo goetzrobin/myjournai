@@ -22,7 +22,7 @@ export const surveyStoreFactory = (survey: Survey, storageKey: string) => {
           moveToPreviousQuestion: () => {
             const { currentIndex } = get();
             // skip division question if current question is determined as non athlete
-            if (survey.answers?.[currentIndex - 2]?.value !== 'college' && survey.questions[currentIndex - 2].question === 'What is the highest level of sport competition you participate(d) in?') {
+            if (survey.answers?.[currentIndex - 2]?.value !== 'college' && survey.questions?.[currentIndex - 2]?.question === 'What is the highest level of sport competition you participate(d) in?') {
               set({ currentIndex: Math.max(currentIndex - 2, 0) });
             } else {
               set({ currentIndex: Math.max(currentIndex - 1, 0) });
