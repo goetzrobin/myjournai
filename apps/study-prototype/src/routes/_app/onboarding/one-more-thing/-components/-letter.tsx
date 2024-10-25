@@ -21,20 +21,20 @@ export const Letter = ({ letterContent, setLetterContent, name }: {
     'What’s one thing your friends love about you?',
     'What’s an important belief that guides your choices?',
     'What, in life, do you want to be known for?',
-    'Thanks for answering all my questions! Feel free to read through the letter again and add what you\'d like me to know about you!'
+    'All done! Feel free to read through the letter again and add what you\'d like me to know about you!'
   ];
   const currentQuestion = questions[Math.min((sentenceCount), questions.length - 1) % questions.length];
 
   return (
     <div className="h-full -mt-5 flex flex-col w-full bg-background/80">
-      <div className="h-20 mb-1 px-4 w-full">
+      <div className="h-24 mb-1 px-4 w-full">
         <div
           className="text-sm bg-background text-left shadow-lg px-4 py-2.5 border rounded-xl inline-flex justify-between w-full items-center">
-          <span className="max-w-[250px] sm:max-w-[400px]">{currentQuestion}</span>
+          <span className="max-w-[300px] sm:max-w-[400px]">{currentQuestion}</span>
         </div>
       </div>
       <div
-        className="overflow-hidden bg-background p-4 w-full text-xl h-[50%] pressed:bg-muted text-muted-foreground border rounded-xl"
+        className="overflow-hidden bg-background p-4 w-full text-xl h-[45%] pressed:bg-muted text-muted-foreground border rounded-xl"
       >
         <div className="inset-0 bg-muted/20 h-full w-full absolute -z-10" />
         <TextArea value={letterContent} onChange={e => setLetterContent(e.target.value)}

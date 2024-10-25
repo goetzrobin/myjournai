@@ -195,7 +195,7 @@ function Complete() {
         How the experience affected your career readiness:
       </h2>
       <hr />
-      <SurveyCategory title="Career Identity Confusion" preResults={preQ.data} postResults={postQ.data}
+      <SurveyCategory title="Career Identity" preResults={preQ.data} postResults={postQ.data}
                       survey={CIDI_CAREER_IDENTITY_CONFUSION_SURVEY} />
       <SurveyCategory title="Career Exploration Breadth Self" preResults={preQ.data} postResults={postQ.data}
                       survey={CIDI_CAREER_EXPLORATION_BREADTH_SELF_SURVEY} />
