@@ -56,9 +56,10 @@ function CareerExplorationDepthSelf() {
       className="font-medium text-muted-foreground">Question {currentQuestion.index + 1} of {questionCount}</p>}
   >
     <SavingCidiData
-      title="Past Career Exploration in Breadth"
-      description="2 questions"
-      to="/offboarding/study/past-career-exploration-breadth-self/survey"
+      title="Career Commitment Quality"
+      description="4 questions"
+      frameUp="This final set of questions asks about your perspectives of your intended career."
+      to="/onboarding/study/career-commitment-quality/survey"
       label="Continue"
       isIdle={cidiMutation.isIdle}
     />

@@ -57,8 +57,9 @@ function CareerComittmentQuality() {
   >
     <SavingCidiData
       hideNextSection={true}
-      title="And that's a wrap!"
+      title="Done!"
       description="Your responses have been stored!"
+      frameUp="And that's a wrap!"
       to="/onboarding/study/complete"
       label="Finish Survey"
       isIdle={cidiMutation.isIdle}

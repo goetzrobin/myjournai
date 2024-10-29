@@ -4,10 +4,11 @@ import { Link } from '@tanstack/react-router';
 import { twMerge } from 'tailwind-merge';
 import { OnboardingStep, useOnboardingProgressActions } from '~myjournai/onboarding-client';
 
-const OnboardingWrapper = ({ children, currentStep, className, link }: PropsWithChildren<{
+const OnboardingWrapper = ({ children, currentStep, className, link, disabled }: PropsWithChildren<{
   currentStep?: OnboardingStep,
   className?: string | null;
-  link?: { to: string; label: string }
+  link?: { to: string; label: string },
+  disabled?: boolean | null;
 }>) => {
   const { setLastStep } = useOnboardingProgressActions();
   useEffect(() => {
@@ -19,7 +20,7 @@ const OnboardingWrapper = ({ children, currentStep, className, link }: PropsWith
       {children}
     </div>
     {!link ? null :
-      <Link to={link.to}><Button className="absolute bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-0 right-0 w-full">{link.label}</Button></Link>}
+      <Link disabled={!!disabled} to={link.to}><Button isDisabled={!!disabled} className="absolute bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-0 right-0 w-full">{link.label}</Button></Link>}
   </div>;
 };
 

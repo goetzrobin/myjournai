@@ -5,7 +5,8 @@ import SavingCidiData from '../../-components/-saving-cidi-data';
 import { LikertScaleSlider } from '../../-components/-likert-scale-slider';
 import React from 'react';
 import {
-  buildCreateUserCidiResponseRequest, useCidiDataMutation,
+  buildCreateUserCidiResponseRequest,
+  useCidiDataMutation,
   useCidiPreCareerExplorationDepthSelfAnswers,
   useCidiPreCareerExplorationDepthSelfCanMoveToNextQuestion,
   useCidiPreCareerExplorationDepthSelfCurrentAnswer,
@@ -55,9 +56,10 @@ function CareerExplorationDepthSelf() {
       className="font-medium text-muted-foreground">Question {currentQuestion.index + 1} of {questionCount}</p>}
   >
     <SavingCidiData
-      title="Past Career Exploration in Breadth"
-      description="2 questions"
-      to="/onboarding/study/past-career-exploration-breadth-self/survey"
+      title="Career Commitment Quality"
+      description="4 questions"
+      frameUp="This final set of questions asks about your perspectives of your intended career."
+      to="/onboarding/study/career-commitment-quality/survey"
       label="Continue"
       isIdle={cidiMutation.isIdle}
     />

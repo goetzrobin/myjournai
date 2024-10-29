@@ -4,7 +4,8 @@ import { LikertScaleSlider } from '../../-components/-likert-scale-slider';
 import SavingCidiData from '../../-components/-saving-cidi-data';
 import { useAuthUserIdFromHeaders } from '~myjournai/auth-client';
 import {
-  buildCreateUserCidiResponseRequest, useCidiDataMutation,
+  buildCreateUserCidiResponseRequest,
+  useCidiDataMutation,
   useCidiPreCareerIdentityConfusionAnswers,
   useCidiPreCareerIdentityConfusionCanMoveToNextQuestion,
   useCidiPreCareerIdentityConfusionCurrentAnswer,
@@ -56,6 +57,7 @@ function CareerIdentityConfusion() {
     <SavingCidiData
       title="Career Exploration in Breadth"
       description="4 questions"
+      frameUp="These next few questions ask you to reflect on yourself and your actions as it relates to your career exploration."
       to="/onboarding/study/career-exploration-breadth-self/survey"
       label="Continue"
       isIdle={cidiMutation.isIdle}

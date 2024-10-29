@@ -58,6 +58,7 @@ function CareerExplorationBreadthSelf() {
   >
     <SavingCidiData
       title="Career Exploration in Depth"
+      frameUp="These next few questions ask you to reflect on yourself and your actions as it relates to your career exploration."
       description="4 questions"
       to="/offboarding/study/career-exploration-depth-self/survey"
       label="Continue"
