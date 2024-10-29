@@ -91,7 +91,8 @@ function Index() {
   const sessionsQ = useSessionsWithLogsQuery({ userId: userQ.data?.id });
   const sessions = sessionsQ.data ?? [];
   const {isAdmin} = useIsAdmin();
-  const allSessionsCompleted = sessions.every(session => session.logs.some(l => l.status === 'COMPLETED'));
+  const allSessionsCompleted = sessionsQ.status === 'success'
+    && sessions.every(session => session.logs.some(l => l.status === 'COMPLETED'));
 
   return <WithMobileNav>
     <div className="flex flex-col h-full w-full">
