@@ -59,7 +59,7 @@ function CareerExplorationDepthSelf() {
       title="Career Commitment Quality"
       description="4 questions"
       frameUp="This final set of questions asks about your perspectives of your intended career."
-      to="/onboarding/study/career-commitment-quality/survey"
+      to="/offboarding/study/career-commitment-quality/survey"
       label="Continue"
       isIdle={cidiMutation.isIdle}
     />

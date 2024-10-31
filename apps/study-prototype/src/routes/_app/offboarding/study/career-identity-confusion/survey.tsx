@@ -58,7 +58,7 @@ function CareerIdentityConfusion() {
       title="Career Exploration in Breadth"
       description="4 questions"
       frameUp="These next few questions ask you to reflect on yourself and your actions as it relates to your career exploration."
-      to="/onboarding/study/career-exploration-breadth-self/survey"
+      to="/offboarding/study/career-exploration-breadth-self/survey"
       label="Continue"
       isIdle={cidiMutation.isIdle}
     />
