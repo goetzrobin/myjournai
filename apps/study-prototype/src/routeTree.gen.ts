@@ -21,6 +21,7 @@ import { Route as PublicPrivacyPolicyImport } from './routes/_public/privacy-pol
 import { Route as AuthStartImport } from './routes/_auth/start'
 import { Route as AuthSignUpImport } from './routes/_auth/sign-up'
 import { Route as AuthSignInImport } from './routes/_auth/sign-in'
+import { Route as AuthResetImport } from './routes/_auth/reset'
 import { Route as AppResourcesIndexImport } from './routes/_app/resources/index'
 import { Route as AppOnboardingIndexImport } from './routes/_app/onboarding/index'
 import { Route as AppOffboardingIndexImport } from './routes/_app/offboarding/index'
@@ -31,6 +32,7 @@ import { Route as AppSessionsCareerConfusionV0Import } from './routes/_app/sessi
 import { Route as AppSessionsAlignmentV0Import } from './routes/_app/sessions/alignment-v0'
 import { Route as AppSessionsSessionSlugImport } from './routes/_app/sessions/$sessionSlug'
 import { Route as AppResourcesSlugImport } from './routes/_app/resources/$slug'
+import { Route as AppProfileUpdatePasswordImport } from './routes/_app/profile/update-password'
 import { Route as AppOnboardingSurveyIntroImport } from './routes/_app/onboarding/survey-intro'
 import { Route as AppOnboardingStartImport } from './routes/_app/onboarding/start'
 import { Route as AppOnboardingPronounsImport } from './routes/_app/onboarding/pronouns'
@@ -100,6 +102,11 @@ const AuthSignInRoute = AuthSignInImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
+const AuthResetRoute = AuthResetImport.update({
+  path: '/reset',
+  getParentRoute: () => AuthRoute,
+} as any)
+
 const AppProfileIndexLazyRoute = AppProfileIndexLazyImport.update({
   path: '/profile/',
   getParentRoute: () => AppRoute,
@@ -157,6 +164,11 @@ const AppSessionsSessionSlugRoute = AppSessionsSessionSlugImport.update({
 
 const AppResourcesSlugRoute = AppResourcesSlugImport.update({
   path: '/resources/$slug',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppProfileUpdatePasswordRoute = AppProfileUpdatePasswordImport.update({
+  path: '/profile/update-password',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -304,6 +316,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
+    '/_auth/reset': {
+      id: '/_auth/reset'
+      path: '/reset'
+      fullPath: '/reset'
+      preLoaderRoute: typeof AuthResetImport
+      parentRoute: typeof AuthImport
+    }
     '/_auth/sign-in': {
       id: '/_auth/sign-in'
       path: '/sign-in'
@@ -393,6 +412,13 @@ declare module '@tanstack/react-router' {
       path: '/onboarding/survey-intro'
       fullPath: '/onboarding/survey-intro'
       preLoaderRoute: typeof AppOnboardingSurveyIntroImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/profile/update-password': {
+      id: '/_app/profile/update-password'
+      path: '/profile/update-password'
+      fullPath: '/profile/update-password'
+      preLoaderRoute: typeof AppProfileUpdatePasswordImport
       parentRoute: typeof AppImport
     }
     '/_app/resources/$slug': {
@@ -592,6 +618,7 @@ export const routeTree = rootRoute.addChildren({
     AppOnboardingPronounsRoute,
     AppOnboardingStartRoute,
     AppOnboardingSurveyIntroRoute,
+    AppProfileUpdatePasswordRoute,
     AppResourcesSlugRoute,
     AppSessionsSessionSlugRoute,
     AppSessionsAlignmentV0Route,
@@ -620,6 +647,7 @@ export const routeTree = rootRoute.addChildren({
     AppOnboardingStudyPastCareerExplorationBreadthSelfSurveyRoute,
   }),
   AuthRoute: AuthRoute.addChildren({
+    AuthResetRoute,
     AuthSignInRoute,
     AuthSignUpRoute,
     AuthStartRoute,
@@ -653,6 +681,7 @@ export const routeTree = rootRoute.addChildren({
         "/_app/onboarding/pronouns",
         "/_app/onboarding/start",
         "/_app/onboarding/survey-intro",
+        "/_app/profile/update-password",
         "/_app/resources/$slug",
         "/_app/sessions/$sessionSlug",
         "/_app/sessions/alignment-v0",
@@ -684,10 +713,15 @@ export const routeTree = rootRoute.addChildren({
     "/_auth": {
       "filePath": "_auth.tsx",
       "children": [
+        "/_auth/reset",
         "/_auth/sign-in",
         "/_auth/sign-up",
         "/_auth/start"
       ]
+    },
+    "/_auth/reset": {
+      "filePath": "_auth/reset.tsx",
+      "parent": "/_auth"
     },
     "/_auth/sign-in": {
       "filePath": "_auth/sign-in.tsx",
@@ -737,6 +771,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/onboarding/survey-intro": {
       "filePath": "_app/onboarding/survey-intro.tsx",
+      "parent": "/_app"
+    },
+    "/_app/profile/update-password": {
+      "filePath": "_app/profile/update-password.tsx",
       "parent": "/_app"
     },
     "/_app/resources/$slug": {

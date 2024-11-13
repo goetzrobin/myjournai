@@ -24,12 +24,15 @@ function SignIn() {
       <h2 className="text-center mb-8 text-muted-foreground font-medium">Sign in to continue your journey!</h2>
       <Form onSubmit={(e) => mut.mutate(parseFormData(e))}>
         <TextField label="Email" name="email" type="email" isRequired />
-        <TextField
-          label="Password"
-          name="password"
-          type="password"
-          isRequired
-        />
+       <div className="relative pt-2">
+         <Link className="-top-2 right-0 absolute" to="/reset">Forgot Password?</Link>
+         <TextField
+           label="Password"
+           name="password"
+           type="password"
+           isRequired
+         />
+       </div>
         <SmoothButton type="submit" className="mt-8" buttonState={mut.status}>
           {mut.status !== 'idle' ? null : 'Sign in'}
           {mut.status !== 'pending' ? null : <LucideLoader className="size-5 animate-spin" />}
