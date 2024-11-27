@@ -26,10 +26,10 @@ function Bday() {
     e.preventDefault();
     const birthday = parseFormData(e)['date'];
     if (!birthday || birthday.length === 0) {
-      await navigate({ to: '/onboarding/survey-intro' });
+      await navigate({ to: '/onboarding/one-more-thing' });
       return;
     }
-    mutation.mutate({ birthday }, { onSuccess: () => setTimeout(() => navigate({ to: '/onboarding/survey-intro' }), 500) });
+    mutation.mutate({ birthday }, { onSuccess: () => setTimeout(() => navigate({ to: '/onboarding/one-more-thing' }), 500) });
   };
   return <OnboardingWrapper currentStep="bday" className="block">
     <div className="flex items-center justify-between">
