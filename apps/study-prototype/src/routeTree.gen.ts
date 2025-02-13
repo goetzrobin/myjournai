@@ -22,6 +22,7 @@ import { Route as AuthStartImport } from './routes/_auth/start'
 import { Route as AuthSignUpImport } from './routes/_auth/sign-up'
 import { Route as AuthSignInImport } from './routes/_auth/sign-in'
 import { Route as AuthResetImport } from './routes/_auth/reset'
+import { Route as AuthConfirmResetImport } from './routes/_auth/confirm-reset'
 import { Route as AppResourcesIndexImport } from './routes/_app/resources/index'
 import { Route as AppOnboardingIndexImport } from './routes/_app/onboarding/index'
 import { Route as AppOffboardingIndexImport } from './routes/_app/offboarding/index'
@@ -104,6 +105,11 @@ const AuthSignInRoute = AuthSignInImport.update({
 
 const AuthResetRoute = AuthResetImport.update({
   path: '/reset',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthConfirmResetRoute = AuthConfirmResetImport.update({
+  path: '/confirm-reset',
   getParentRoute: () => AuthRoute,
 } as any)
 
@@ -315,6 +321,13 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
+    }
+    '/_auth/confirm-reset': {
+      id: '/_auth/confirm-reset'
+      path: '/confirm-reset'
+      fullPath: '/confirm-reset'
+      preLoaderRoute: typeof AuthConfirmResetImport
+      parentRoute: typeof AuthImport
     }
     '/_auth/reset': {
       id: '/_auth/reset'
@@ -647,6 +660,7 @@ export const routeTree = rootRoute.addChildren({
     AppOnboardingStudyPastCareerExplorationBreadthSelfSurveyRoute,
   }),
   AuthRoute: AuthRoute.addChildren({
+    AuthConfirmResetRoute,
     AuthResetRoute,
     AuthSignInRoute,
     AuthSignUpRoute,
@@ -713,11 +727,16 @@ export const routeTree = rootRoute.addChildren({
     "/_auth": {
       "filePath": "_auth.tsx",
       "children": [
+        "/_auth/confirm-reset",
         "/_auth/reset",
         "/_auth/sign-in",
         "/_auth/sign-up",
         "/_auth/start"
       ]
+    },
+    "/_auth/confirm-reset": {
+      "filePath": "_auth/confirm-reset.tsx",
+      "parent": "/_auth"
     },
     "/_auth/reset": {
       "filePath": "_auth/reset.tsx",
