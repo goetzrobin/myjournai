@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     // Set lock with 30 second expiry
-    await kv.set(lockKey, true, { ex: 30 });
+    await kv.set(lockKey, true, { ex: 5 });
 
     const authClient = createClient(event);
     console.log(`Processing recovery for token_hash: ${token_hash.substring(0, 10)}...`);
@@ -67,8 +67,5 @@ export default defineEventHandler(async (event) => {
   } catch (err) {
     console.error('Unexpected error:', err);
     return sendRedirect(event, '/reset-password-failed?reason=unexpected-error', 303);
-  } finally {
-    // Clean up the lock
-    await kv.del(lockKey);
   }
 });
