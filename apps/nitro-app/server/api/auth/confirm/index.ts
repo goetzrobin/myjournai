@@ -1,39 +1,76 @@
-import { defineEventHandler, sendRedirect } from 'h3';
+import { defineEventHandler, getQuery, H3Event, sendRedirect } from 'h3';
 import { EmailOtpType } from '@supabase/supabase-js';
 import { createClient } from '~myjournai/auth-server';
 
+// Utility functions for headers and logging
+const noCacheHeaders = {
+  'Cache-Control': 'private, no-cache, no-store, must-revalidate, max-age=0',
+  'Pragma': 'no-cache',
+  'Expires': '0'
+};
+
+const addNoCacheHeaders = (event: H3Event) => {
+  Object.entries(noCacheHeaders).forEach(([key, value]) => {
+    event.node.res.setHeader(key, value);
+  });
+};
+
+const logRequest = (event: H3Event, params?: Record<string, any>) => {
+  console.log(`Incoming ${event.method} request to ${event.path}`);
+  if (params) {
+    console.log('Parameters:', params);
+  }
+};
+
 export default defineEventHandler(async (event) => {
-  // Only process GET requests
+  logRequest(event);
+
+  // Handle non-GET requests immediately
   if (event.method !== 'GET') {
-    return new Response(null, { status: 204 }); // No content for non-GET requests
+    logRequest(event, { message: 'Non-GET request received, returning 204' });
+    return new Response(null, { status: 204 });
   }
 
   const query = getQuery(event);
   const token_hash = query.token_hash as string;
   const type = query.type as EmailOtpType | null;
-  let redirectTo = (query.next as string) ?? '/';
+  const redirectTo = (query.next as string) ?? '/';
 
-  // Validate required parameters
+  logRequest(event, {
+    type,
+    redirectTo,
+    token_hash: token_hash ? `${token_hash.substring(0, 10)}...` : 'missing'
+  });
+
+  // Add cache control headers
+  addNoCacheHeaders(event);
+
+  // Early return if missing parameters
   if (!token_hash || !type) {
     return sendRedirect(event, '/reset-password-failed?reason=missing-params');
   }
 
   try {
     const authClient = createClient(event);
+
+    console.log(`Processing recovery for token_hash: ${token_hash.substring(0, 10)}...`);
+
     const { data, error } = await authClient.auth.verifyOtp({
       type,
       token_hash,
     });
 
     if (error) {
-      // Log the error for debugging
-      console.error('OTP verification failed:', error);
+      console.error('Recovery verification failed:', error.code);
+
       return sendRedirect(event, `/reset-password-failed?reason=${error.code}`);
     }
 
+    console.log('Successful verification, redirecting to:', redirectTo);
+
     return sendRedirect(event, redirectTo);
   } catch (err) {
-    console.error('Unexpected error during OTP verification:', err);
+    console.error('Unexpected error:', err);
     return sendRedirect(event, '/reset-password-failed?reason=unexpected-error');
   }
 });
