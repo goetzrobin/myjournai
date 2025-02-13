@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
 
   // Early return if missing parameters
   if (!token_hash || !type) {
-    return sendRedirect(event, '/reset-password-failed?reason=missing-params');
+    return sendRedirect(event, '/reset-password-failed?reason=missing-params', 303);
   }
 
   try {
@@ -47,14 +47,14 @@ export default defineEventHandler(async (event) => {
     if (error) {
       console.error('Recovery verification failed:', error.code);
 
-      return sendRedirect(event, `/reset-password-failed?reason=${error.code}`);
+      return sendRedirect(event, `/reset-password-failed?reason=${error.code}`, 303);
     }
 
     console.log('Successful verification, redirecting to:', redirectTo);
 
-    return sendRedirect(event, redirectTo);
+    return sendRedirect(event, redirectTo, 303);
   } catch (err) {
     console.error('Unexpected error:', err);
-    return sendRedirect(event, '/reset-password-failed?reason=unexpected-error');
+    return sendRedirect(event, '/reset-password-failed?reason=unexpected-error', 303);
   }
 });
