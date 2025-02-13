@@ -11,8 +11,20 @@ const logRequest = (event: H3Event, params?: Record<string, any>) => {
 };
 
 export default defineEventHandler(async (event) => {
-  const userAgent = event.node.req.headers['user-agent'];
-  console.log('User Agent:', userAgent);
+  const headers = event.node.req.headers;
+
+  console.log('Request details:', {
+    method: event.method,
+    path: event.path,
+    userAgent: headers['user-agent'],
+    referer: headers.referer,
+    secFetch: {
+      dest: headers['sec-fetch-dest'],
+      mode: headers['sec-fetch-mode'],
+      site: headers['sec-fetch-site'],
+      user: headers['sec-fetch-user']
+    }
+  });
 
   logRequest(event);
 
@@ -28,10 +40,12 @@ export default defineEventHandler(async (event) => {
 
   // Check if token is being processed using Vercel KV
   const lockKey = `auth:token:${token_hash}:lock`;
+  console.log('Checking lock:', { lockKey });
   const isProcessing = await kv.get(lockKey);
+  console.log('Lock state:', { isProcessing });
 
   if (isProcessing) {
-    console.log('Duplicate request detected for token:', token_hash.substring(0, 10));
+    console.log('Duplicate request detected for token:', token_hash?.substring(0, 10));
     return new Response(null, { status: 425 }); // 425 Too Early
   }
 
@@ -46,8 +60,9 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    // Set lock with 30 second expiry
+    console.log('Setting lock');
     await kv.set(lockKey, true, { ex: 5 });
+    console.log('Lock set');
 
     const authClient = createClient(event);
     console.log(`Processing recovery for token_hash: ${token_hash.substring(0, 10)}...`);
@@ -67,5 +82,13 @@ export default defineEventHandler(async (event) => {
   } catch (err) {
     console.error('Unexpected error:', err);
     return sendRedirect(event, '/reset-password-failed?reason=unexpected-error', 303);
+  } finally {
+    console.log('Cleaning up lock');
+    try {
+      await kv.del(lockKey);
+      console.log('Lock cleaned up');
+    } catch (kvDelError) {
+      console.error('Failed to clean up lock:', kvDelError);
+    }
   }
 });
