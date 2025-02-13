@@ -50,9 +50,15 @@ const pwaOptions: Partial<VitePWAOptions> = {
     navigateFallback: 'index.html',
   },
   workbox: {
-    // Prevent index.html from being cached
     globPatterns: ["**/*.{js,css}"],
     navigateFallback: null,
+    navigationPreload: true,
+    // Explicitly exclude auth endpoints from service worker
+    navigateFallbackDenylist: [/^\/api\/auth/],
+    runtimeCaching: [{
+      urlPattern: ({ url }) => url.pathname.startsWith('/api/auth'),
+      handler: 'NetworkOnly', // Never cache auth requests
+    }]
   },
 }
 

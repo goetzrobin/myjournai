@@ -2,19 +2,6 @@ import { defineEventHandler, getQuery, H3Event, sendRedirect } from 'h3';
 import { EmailOtpType } from '@supabase/supabase-js';
 import { createClient } from '~myjournai/auth-server';
 
-// Utility functions for headers and logging
-const noCacheHeaders = {
-  'Cache-Control': 'private, no-cache, no-store, must-revalidate, max-age=0',
-  'Pragma': 'no-cache',
-  'Expires': '0'
-};
-
-const addNoCacheHeaders = (event: H3Event) => {
-  Object.entries(noCacheHeaders).forEach(([key, value]) => {
-    event.node.res.setHeader(key, value);
-  });
-};
-
 const logRequest = (event: H3Event, params?: Record<string, any>) => {
   console.log(`Incoming ${event.method} request to ${event.path}`);
   if (params) {
@@ -41,9 +28,6 @@ export default defineEventHandler(async (event) => {
     redirectTo,
     token_hash: token_hash ? `${token_hash.substring(0, 10)}...` : 'missing'
   });
-
-  // Add cache control headers
-  addNoCacheHeaders(event);
 
   // Early return if missing parameters
   if (!token_hash || !type) {
