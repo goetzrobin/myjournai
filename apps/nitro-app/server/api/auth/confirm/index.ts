@@ -1,7 +1,9 @@
 import { defineEventHandler, getQuery, H3Event, sendRedirect } from 'h3';
 import { EmailOtpType } from '@supabase/supabase-js';
 import { createClient } from '~myjournai/auth-server';
-import { kv } from '@vercel/kv';
+
+// Simple in-memory request lock
+const processingTokens = new Set<string>();
 
 const logRequest = (event: H3Event, params?: Record<string, any>) => {
   console.log(`Incoming ${event.method} request to ${event.path}`);
@@ -11,20 +13,8 @@ const logRequest = (event: H3Event, params?: Record<string, any>) => {
 };
 
 export default defineEventHandler(async (event) => {
-  const headers = event.node.req.headers;
-
-  console.log('Request details:', {
-    method: event.method,
-    path: event.path,
-    userAgent: headers['user-agent'],
-    referer: headers.referer,
-    secFetch: {
-      dest: headers['sec-fetch-dest'],
-      mode: headers['sec-fetch-mode'],
-      site: headers['sec-fetch-site'],
-      user: headers['sec-fetch-user']
-    }
-  });
+  const userAgent = event.node.req.headers['user-agent'];
+  console.log('User Agent:', userAgent);
 
   logRequest(event);
 
@@ -38,14 +28,9 @@ export default defineEventHandler(async (event) => {
   const type = query.type as EmailOtpType | null;
   const redirectTo = (query.next as string) ?? '/';
 
-  // Check if token is being processed using Vercel KV
-  const lockKey = `auth:token:${token_hash}:lock`;
-  console.log('Checking lock:', { lockKey });
-  const isProcessing = await kv.get(lockKey);
-  console.log('Lock state:', { isProcessing });
-
-  if (isProcessing) {
-    console.log('Duplicate request detected for token:', token_hash?.substring(0, 10));
+  // Check if we're already processing this token
+  if (token_hash && processingTokens.has(token_hash)) {
+    console.log('Duplicate request detected for token:', token_hash.substring(0, 10));
     return new Response(null, { status: 425 }); // 425 Too Early
   }
 
@@ -60,9 +45,8 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    console.log('Setting lock');
-    await kv.set(lockKey, true, { ex: 5 });
-    console.log('Lock set');
+    // Add token to processing set
+    processingTokens.add(token_hash);
 
     const authClient = createClient(event);
     console.log(`Processing recovery for token_hash: ${token_hash.substring(0, 10)}...`);
@@ -83,12 +67,7 @@ export default defineEventHandler(async (event) => {
     console.error('Unexpected error:', err);
     return sendRedirect(event, '/reset-password-failed?reason=unexpected-error', 303);
   } finally {
-    console.log('Cleaning up lock');
-    try {
-      await kv.del(lockKey);
-      console.log('Lock cleaned up');
-    } catch (kvDelError) {
-      console.error('Failed to clean up lock:', kvDelError);
-    }
+    // Always remove token from processing set
+    processingTokens.delete(token_hash);
   }
 });
