@@ -1,8 +1,15 @@
 // /routes/confirm-reset-password.tsx
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { z } from 'zod';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { SmoothButton } from '~myjournai/components';
+import { useMutation } from '@tanstack/react-query';
+
+type ConfirmResetParams = {
+  token_hash: string;
+  type: string;
+  next: string;
+}
 
 const searchSchema = z.object({
   token_hash: z.string(),
@@ -16,9 +23,36 @@ export const Route = createFileRoute('/_auth/confirm-reset')({
 
 function ConfirmResetPassword() {
   const { token_hash, type } = Route.useSearch();
+  const navigate = useNavigate();
+
+  const confirmMutation = useMutation({
+    mutationFn: async (params: ConfirmResetParams) => {
+      const response = await fetch('/api/auth/confirm', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(params)
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to reset password');
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      navigate({ to: '/profile/update-password' });
+    }
+  });
 
   const handleReset = () => {
-    window.location.href = `/api/auth/confirm?token_hash=${token_hash}&type=${type}&next=/profile/update-password`;
+    confirmMutation.mutate({
+      token_hash,
+      type,
+      next: '/profile/update-password'
+    });
   };
 
   return (
@@ -32,10 +66,20 @@ function ConfirmResetPassword() {
       <SmoothButton
         onPress={handleReset}
         className="mt-8 w-full"
-        buttonState="idle"
+        buttonState={
+          confirmMutation.isPending ? 'pending' :
+            confirmMutation.isError ? 'error' :
+              confirmMutation.isSuccess ? 'success' :
+                'idle'
+        }
       >
         Continue to Reset Password
       </SmoothButton>
+      {confirmMutation.isError && (
+        <p className="text-sm text-destructive mt-2 text-center">
+          {confirmMutation.error.message}
+        </p>
+      )}
       <Link
         className="text-sm text-muted-foreground mt-2 block text-center"
         to="/sign-in"
