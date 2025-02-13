@@ -23,19 +23,6 @@ export default defineNitroConfig({
     anthropicApiKey: process.env.NITRO_ANTHROPIC_API_KEY,
     groqApiKey: process.env.NITRO_GROQ_API_KEY
   },
-  routeRules: {
-    '/api/auth/**': {
-      cache: {
-        maxAge: 0,
-        swr: false,
-        staleMaxAge: 0
-      },
-      headers: {
-        'Cache-Control': 'no-store, no-cache, must-revalidate',
-        'Pragma': 'no-cache'
-      }
-    }
-  },
   modules: ['./modules/tsconfig-paths-to-aliases.ts'],
   vercel: {
     functions: {
