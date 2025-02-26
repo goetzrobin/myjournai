@@ -7,7 +7,7 @@ export const signInAction = async (
   event: H3Event,
   { email, password }: SignInRequest
 ): Promise<AuthError | User> => {
-  const authClient = createClient(event);
+  const authClient = await createClient(event);
   const signInResult = await authClient.auth.signInWithPassword({
     email,
     password,

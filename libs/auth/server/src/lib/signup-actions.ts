@@ -7,7 +7,7 @@ export const signUpAction = async (
   event: H3Event,
   { email, password }: SignUpRequest
 ): Promise<AuthError | User | null> => {
-  const authClient = createClient(event);
+  const authClient = await createClient(event);
   const signUpResult = await authClient.auth.signUp({
     email,
     password,

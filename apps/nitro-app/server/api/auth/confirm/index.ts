@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     const body = await readBody<ConfirmBody>(event);
-    const authClient = createClient(event);
+    const authClient = await createClient(event);
 
     const { data, error } = await authClient.auth.verifyOtp({
       type: body.type,

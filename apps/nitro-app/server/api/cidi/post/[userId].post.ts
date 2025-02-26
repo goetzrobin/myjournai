@@ -18,5 +18,5 @@ export default defineEventHandler(async (event) => {
       message: 'User can only create response for themselves'
     });
   }
-  return await createOrUpdateUserCidiResponseUsecase(parsedRequest.data);
+  return (await createOrUpdateUserCidiResponseUsecase(parsedRequest.data))[0];
 });

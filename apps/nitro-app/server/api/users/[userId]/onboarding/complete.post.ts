@@ -6,6 +6,7 @@ import { users } from '~db/schema/users';
 import { and, desc, eq } from 'drizzle-orm';
 import { sessions } from '~db/schema/sessions';
 import { sessionLogs } from '~db/schema/session-logs';
+import { createClient } from '~myjournai/auth-server';
 
 export default defineEventHandler(async (event) => {
   const { openApiKey } = useRuntimeConfig(event);
@@ -30,7 +31,9 @@ export default defineEventHandler(async (event) => {
 
   // mark onboarding as complete
   await db.update(users).set({ onboardingCompletedAt: new Date(), updatedAt: new Date() }).where(eq(users.id, userId));
-console.log('marked users onboarding as completed')
+  const supabase = await createClient(event);
+  await supabase.auth.updateUser({data: {'onboarding_completed': true}})
+  console.log('marked users onboarding as completed')
 
   // create session log for that session with id
   const [existingSessionLog] = await db.select().from(sessionLogs).where(
