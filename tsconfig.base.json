@@ -34,13 +34,12 @@
       "~db/schema/session-logs": ["db/schema/session-logs"],
       "~db/schema/session-log-engagements": ["db/schema/session-log-engagements"],
       "~db/schema/sessions": ["db/schema/sessions"],
-      "~db/schema/survey-question-responses": [
-        "db/schema/survey-question-responses"
-      ],
-      "~db/schema/survey-questions": ["db/schema/survey-questions"],
-      "~db/schema/survey-responses": ["db/schema/survey-responses"],
-      "~db/schema/surveys": ["db/schema/surveys"],
+      "~db/schema/user-interests": ["db/schema/user-interests"],
+      "~db/schema/user-interests-categories": ["db/schema/user-interests-categories"],
+      "~db/schema/user-mentor-traits": ["db/schema/user-mentor-traits"],
       "~db/schema/user-profiles": ["db/schema/user-profiles"],
+      "~db/schema/user-prompts": ["db/schema/user-prompts"],
+      "~db/schema/user-prompts-categories": ["db/schema/user-prompts-categories"],
       "~db/schema/users": ["db/schema/users"],
       "~myjournai/cidi-client": ["libs/cidi/client/src/index.ts"],
       "~myjournai/survey": ["libs/survey/client/src/index.ts"],

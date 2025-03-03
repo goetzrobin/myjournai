@@ -135,7 +135,7 @@ If you have any questions or concerns about this Privacy Policy or our data prac
 
 **Journai Support Team**
 
-Email: [support~myjournai.app](mailto:support~myjournai.app)
+Email: [robin@thejournai.com](mailto:robin@thejournai.com)
 
 ---
 `;

@@ -20,6 +20,7 @@ export const querySessionLogBy = async ({ id }: {
     .limit(1);
   return potentialSessionLog;
 };
+
 export const queryMostRecentSessionLogBy = async ({ sessionSlug, sessionId, userId, includeAborted }: {
   sessionSlug?: string;
   sessionId?: string;
@@ -90,4 +91,23 @@ export const querySessionLogMessagesBy = async ({ sessionLogId }: { sessionLogId
     .where(and(
       eq(unionQuery.scope, 'external')
     ))) as (BaseMessage & { userId: string })[];
+};
+
+
+export const queryAllUnguidedSessionLogsBy = async ({ userId }: {
+  userId: string;
+}): Promise<SessionLogWithSession[]> => {
+  const query = db.select()
+    .from(sessionLogs)
+    .innerJoin(sessions, eq(sessions.id, sessionLogs.sessionId))
+    .where(
+      and(
+        eq(sessionLogs.userId, userId),
+        eq(sessions.type, 'UNGUIDED')
+      )
+    ).orderBy(desc(sessionLogs.createdAt));
+  return (await query).map(potentialSessionLog => ({
+    ...potentialSessionLog.session_logs,
+    session: potentialSessionLog?.sessions
+  }));
 };

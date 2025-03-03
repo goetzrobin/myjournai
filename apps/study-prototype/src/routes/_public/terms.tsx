@@ -276,7 +276,7 @@ The Service is made available to the U.S. government with â€œRESTRICTED RIGHTS.â
 
 **19. Questions? Concerns? Suggestions?**
 
-Please contact us at **support~myjournai.app** to report any violations of these Terms of Service or to pose any questions regarding these Terms of Service or the Service.
+Please contact us at **robin@thejournai.com** to report any violations of these Terms of Service or to pose any questions regarding these Terms of Service or the Service.
 
 ---
 `;

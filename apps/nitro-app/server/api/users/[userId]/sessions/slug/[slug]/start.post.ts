@@ -16,6 +16,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const session = await getSessionBy({ slug });
   if (!session) {
+    console.log(`no session for slug ${slug}`)
     throw createError({
       status: 400,
       statusMessage: 'Bad Request',

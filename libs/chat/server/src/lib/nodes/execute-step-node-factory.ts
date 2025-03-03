@@ -1,33 +1,11 @@
-import {
-  BaseMessage,
-  BaseMessageChunk,
-  BaseMessageScope,
-  BaseMessageType,
-  CurrentStepInfo
-} from '~myjournai/chat-shared';
+import { BaseMessage, BaseMessageChunk, CurrentStepInfo } from '~myjournai/chat-shared';
 import { kv } from '@vercel/kv';
 import { formatMessages } from '../format-messages';
 import { generateText } from 'ai';
 import { StoreLLMInteractionArgs } from '../store-llm-interaction';
 import { AnthropicProvider } from '@ai-sdk/anthropic';
+import { PromptProps, ToolProps } from '../prompt-props';
 
-export type PromptProps<AdditionalProps = {}> =
-  {
-    messages: string,
-    userInfoBlock: string,
-    userProfileBlock: string;
-    embeddedQuestionsBlock: string;
-    stepRepetitions: number
-  }
-  & AdditionalProps;
-export type ToolProps = {
-  additionalChunks: BaseMessageChunk[];
-  llmInteractionId: string,
-  runId: string,
-  scope: BaseMessageScope;
-  type: BaseMessageType;
-  createdAt: Date
-};
 
 export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
                                                                       userId,
@@ -64,80 +42,82 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
   embeddedQuestionsBlock: string;
   additionalChunks: BaseMessageChunk[];
   additionalProps?: AdditionalProps
-}) => async (messages: BaseMessage[]): Promise<BaseMessage[]> => {
-  const llmInteractionId = crypto.randomUUID();
-  const type = 'execute-step';
-  const scope = 'internal';
-  model ??= 'llama-3.1-70b-versatile';
-  const createdAt = new Date();
+}) => {
+  return async (messages: BaseMessage[]): Promise<BaseMessage[]> => {
+    const llmInteractionId = crypto.randomUUID();
+    const type = 'execute-step';
+    const scope = 'internal';
+    model ??= 'llama-3.1-70b-versatile';
+    const createdAt = new Date();
 
-  let currentStep = (await kv.get(currentStepBySessionLogIdKey) ?? {
-    currentStep: 1,
-    stepRepetitions: 0
-  }) as CurrentStepInfo;
+    let currentStep = (await kv.get(currentStepBySessionLogIdKey) ?? {
+      currentStep: 1,
+      stepRepetitions: 0
+    }) as CurrentStepInfo;
 
-  console.log(`executing current step ${JSON.stringify(currentStep)}`);
-  if (currentStep.currentStep > maxSteps) {
-    console.warn(`current step greater than available, resetting to max step ${maxSteps}`);
-    currentStep = { currentStep: maxSteps, stepRepetitions: currentStep.stepRepetitions + 1 };
-  }
+    console.log(`executing current step ${JSON.stringify(currentStep)}`);
+    if (currentStep.currentStep > maxSteps) {
+      console.warn(`current step greater than available, resetting to max step ${maxSteps}`);
+      currentStep = { currentStep: maxSteps, stepRepetitions: currentStep.stepRepetitions + 1 };
+    }
 
-  const messageString = formatMessages(messages);
-  const currentPromptAndTools = executeStepPromptsAndTools[currentStep.currentStep];
-  const currentPromptFactory = currentPromptAndTools.prompt ?? (() => '');
-  const currentToolFactory = currentPromptAndTools.tools ?? (() => '');
+    const messageString = formatMessages(messages);
+    const currentPromptAndTools = executeStepPromptsAndTools[currentStep.currentStep];
+    const currentPromptFactory = currentPromptAndTools.prompt ?? (() => '');
+    const currentToolFactory = currentPromptAndTools.tools ?? (() => '');
 
-  const prompt = currentPromptFactory({
-    messages: messageString,
-    userInfoBlock,
-    userProfileBlock,
-    embeddedQuestionsBlock,
-    stepRepetitions: currentStep.stepRepetitions,
-    ...additionalProps
-  } as any);
-  const tools = currentToolFactory({
-    additionalChunks,
-    llmInteractionId,
-    runId,
-    scope: 'external',
-    type: 'tool-call',
-    createdAt
-  } as any);
+    const prompt = currentPromptFactory({
+      messages: messageString,
+      userInfoBlock,
+      userProfileBlock,
+      embeddedQuestionsBlock,
+      stepRepetitions: currentStep.stepRepetitions,
+      ...additionalProps
+    } as any);
+    const tools = currentToolFactory({
+      additionalChunks,
+      llmInteractionId,
+      runId,
+      scope: 'external',
+      type: 'tool-call',
+      createdAt
+    } as any);
 
-  console.log(`prompt used for execution: ${prompt}
- current step: ${JSON.stringify(currentStep)}
-  `)
+    console.log(`prompt used for execution: ${prompt}
+   current step: ${JSON.stringify(currentStep)}
+    `);
 
-  const result = await generateText({
-    model: anthropic('claude-3-5-sonnet-latest'),
-    prompt,
-    tools: tools as any,
-    abortSignal: abortController.signal
-  });
+    const result = await generateText({
+      model: anthropic('claude-3-5-sonnet-latest'),
+      prompt,
+      tools: tools as any,
+      abortSignal: abortController.signal
+    });
 
-  messages.push({
-    id: llmInteractionId,
-    type,
-    scope,
-    content: result.text,
-    formatVersion: 1,
-    createdAt
-  });
+    messages.push({
+      id: llmInteractionId,
+      type,
+      scope,
+      content: result.text,
+      formatVersion: 1,
+      createdAt
+    });
 
-  await kv.set(currentStepBySessionLogIdKey, currentStep);
-  await kv.set(messagesBySessionLogIdKey, messages);
-  llmInteractionsToStore.push({
-    ...result,
-    runId,
-    userId,
-    llmInteractionId,
-    model,
-    type,
-    scope,
-    tools,
-    createdAt,
-    prompt
-  });
+    await kv.set(currentStepBySessionLogIdKey, currentStep);
+    await kv.set(messagesBySessionLogIdKey, messages);
+    llmInteractionsToStore.push({
+      ...result,
+      runId,
+      userId,
+      llmInteractionId,
+      model,
+      type,
+      scope,
+      tools,
+      createdAt,
+      prompt
+    });
 
-  return messages;
+    return messages;
+  };
 };

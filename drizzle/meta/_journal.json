@@ -267,6 +267,48 @@
       "when": 1729600059140,
       "tag": "0038_bent_korvac",
       "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1740601115607,
+      "tag": "0039_tranquil_shatterstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1740601184519,
+      "tag": "0040_wakeful_vermin",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1740771640990,
+      "tag": "0041_parallel_mac_gargan",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1740771643235,
+      "tag": "0042_faithful_tag",
+      "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1740785597560,
+      "tag": "0043_fixed_killer_shrike",
+      "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1740788174774,
+      "tag": "0044_petite_zuras",
+      "breakpoints": true
     }
   ]
 }

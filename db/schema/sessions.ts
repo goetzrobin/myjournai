@@ -5,6 +5,7 @@ import { relations } from 'drizzle-orm';
 import { sessionLogs } from './session-logs';
 
 export const sessionStatus = pgEnum('session_status', ['DRAFT', 'ACTIVE', 'ARCHIVED']);
+export const sessionType = pgEnum('session_type', ['GUIDED', 'UNGUIDED']);
 
 export const sessions = pgTable('sessions', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -14,6 +15,7 @@ export const sessions = pgTable('sessions', {
   stepCount: integer('step_count'),
   imageUrl: varchar('image_url'),
   index: integer('index').notNull(),
+  type: sessionType('type').default('GUIDED'),
   status: sessionStatus('status').default('DRAFT'),
   estimatedCompletionTime: integer('estimated_completion_time'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),

@@ -19,5 +19,7 @@ export default defineEventHandler(async (event) => {
       message: 'User can only update their own data'
     });
   }
-  return await updateUserUsecase(userId, parsedRequest.data);
+  const result = (await updateUserUsecase(userId, parsedRequest.data))[0];
+  console.log(result)
+  return result
 });
