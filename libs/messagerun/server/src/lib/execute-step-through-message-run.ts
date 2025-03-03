@@ -27,7 +27,10 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
                                                                                   stepAnalyzerPrompt,
                                                                                   executeStepPromptsAndTools,
                                                                                   additionalAdjustFinalMessagePrompt,
-                                                                                  fetchAdditionalPromptProps
+                                                                                  fetchAdditionalPromptProps,
+                                                                                  analyzerModel,
+                                                                                  executeStepModel,
+                                                                                  finalMessageModel
                                                                                 }: {
   event: H3Event;
   sessionSlug: string;
@@ -39,6 +42,9 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
     prompt: (props: PromptProps<AdditionalProps>) => string
   }>
   additionalAdjustFinalMessagePrompt?: string;
+  analyzerModel?: string;
+  executeStepModel?: string;
+  finalMessageModel?: string;
 }) {
   const abortController = new AbortController();
   const body = await readBody(event);
@@ -53,7 +59,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
     });
   }
 
-  const { openai, anthropic, groq } = createLLMProviders(event);
+  const { anthropic } = createLLMProviders(event);
   console.log(`fetching user data and session log for userId ${userId} and session with slug ${sessionSlug}`);
   const [userInfoBlock, userProfileBlock, sessionLog] = await Promise.all([
     queryUserInfoBlock(userId),
@@ -91,6 +97,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
     anthropic,
     abortController,
     maxSteps,
+    model: analyzerModel,
     llmInteractionsToStore
   });
   const executeStepNode = executeStepNodeFactory({
@@ -107,7 +114,8 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
     userInfoBlock,
     embeddedQuestionsBlock: createEmbeddedQuestionsBlock(sessionLog),
     additionalChunks,
-    additionalProps
+    additionalProps,
+    model: executeStepModel
   });
   const streamFinalMessageNode = streamFinalMessageNodeFactory({
     userId,
@@ -122,7 +130,8 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
     userInfoBlock,
     additionalChunks,
     eventStream,
-    additionalPrompt: additionalAdjustFinalMessagePrompt
+    additionalPrompt: additionalAdjustFinalMessagePrompt,
+    model: finalMessageModel
   });
 
   console.log(`messages from previous runs retrieved from KV for key ${messagesBySessionLogIdKey}`);
@@ -151,7 +160,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
       console.log('completed graph execution');
       await kv.set(messagesBySessionLogIdKey, messagesAfterRun);
     } catch (e: any) {
-      endReason = 'ERROR'
+      endReason = 'ERROR';
       console.error(e);
 
       const errorChunk: BaseMessageChunk = {
@@ -174,7 +183,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
   })().then(async () => console.log('stream done'));
 
   eventStream.onClosed(async () => {
-    console.log(await kv.get(currentStepBySessionLogIdKey))
+    console.log(await kv.get(currentStepBySessionLogIdKey));
     console.log('stream closed aborting all llm calls');
     abortController.abort();
     console.log(`storing message run in db ${runId}`);

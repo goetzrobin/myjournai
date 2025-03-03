@@ -295,6 +295,9 @@ export default eventHandler(async (event) => {
     maxSteps,
     sessionSlug: 'unguided-open-v0',
     additionalAdjustFinalMessagePrompt: `This conversation is the mentor being in telling mode so all your knows are still present and turned on, but they are just more subtle and turned down a little.
-    For scripted messages, keep adjustments to an absolute minimum and just ensure it flows well with the conversation.`
+    For scripted messages, keep adjustments to an absolute minimum and just ensure it flows well with the conversation.`,
+    analyzerModel: 'claude-3-7-sonnet-latest',
+    executeStepModel: 'claude-3-7-sonnet-latest',
+    finalMessageModel: 'claude-3-7-sonnet-latest'
   });
 });

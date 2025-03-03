@@ -191,6 +191,9 @@ export default eventHandler(async (event) => {
     sessionSlug: 'onboarding-v0',
     additionalAdjustFinalMessagePrompt: `Remember the profile provided is just an initial profile and not verified yet.
     You will never mention that this profile exists to the user.
-    For scripted messages, keep adjustments to an absolute minimum and just ensure it flows well with the conversation.`
+    For scripted messages, keep adjustments to an absolute minimum and just ensure it flows well with the conversation.`,
+    analyzerModel: 'claude-3-7-sonnet-latest',
+    executeStepModel: 'claude-3-7-sonnet-latest',
+    finalMessageModel: 'claude-3-7-sonnet-latest'
   });
 });
