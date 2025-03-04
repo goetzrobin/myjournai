@@ -20,6 +20,7 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
                                                                       llmInteractionsToStore,
                                                                       userInfoBlock,
                                                                       userProfileBlock,
+                                                                      contextBlock,
                                                                       embeddedQuestionsBlock,
                                                                       additionalChunks,
                                                                       additionalProps
@@ -39,6 +40,7 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
   llmInteractionsToStore: StoreLLMInteractionArgs<any>[];
   userInfoBlock: string;
   userProfileBlock: string;
+  contextBlock: string;
   embeddedQuestionsBlock: string;
   additionalChunks: BaseMessageChunk[];
   additionalProps?: AdditionalProps
@@ -71,6 +73,7 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
       userInfoBlock,
       userProfileBlock,
       embeddedQuestionsBlock,
+      contextBlock,
       stepRepetitions: currentStep.stepRepetitions,
       ...additionalProps
     } as any);

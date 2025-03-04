@@ -20,6 +20,7 @@ export const streamFinalMessageNodeFactory = ({
                                                 llmInteractionsToStore,
                                                 userInfoBlock,
                                                 userProfileBlock,
+                                                contextBlock,
                                                 additionalChunks,
                                                 eventStream,
                                                 additionalPrompt
@@ -35,6 +36,7 @@ export const streamFinalMessageNodeFactory = ({
   llmInteractionsToStore: StoreLLMInteractionArgs<any>[];
   userInfoBlock: string;
   userProfileBlock: string;
+  contextBlock: string;
   additionalChunks: BaseMessageChunk[];
   eventStream: EventStream;
   additionalPrompt?: string
@@ -47,7 +49,7 @@ export const streamFinalMessageNodeFactory = ({
 
   const messageString = formatMessages(filterOutInternalMessages(messages.slice(messages.length - 5, messages.length)));
   const lastMessage = messages[messages.length - 1].content as string;
-  const prompt = createFinalMessageAugmentationPrompt(messageString, lastMessage, userInfoBlock, userProfileBlock, additionalPrompt);
+  const prompt = createFinalMessageAugmentationPrompt(messageString, lastMessage, userInfoBlock, userProfileBlock, contextBlock, additionalPrompt);
   const currentStepInfo = (await kv.get(currentStepBySessionLogIdKey) ?? {currentStep: 1, stepRepetitions: 0}) as CurrentStepInfo;
 
   const finalStream = await streamText({

@@ -17,3 +17,6 @@ export * from './lib/nodes/stream-final-message-node-factory';
 
 
 export * from './lib/prompts/basic-useful-info-block-factory';
+
+
+export * from './lib/chat-context';

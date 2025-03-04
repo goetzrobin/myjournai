@@ -5,6 +5,7 @@ export type PromptProps<AdditionalProps = {}> =
     messages: string,
     userInfoBlock: string,
     userProfileBlock: string;
+    contextBlock: string;
     embeddedQuestionsBlock: string;
     stepRepetitions: number
   }

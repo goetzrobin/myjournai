@@ -2,7 +2,9 @@ import {
   createInitialMessage,
   createLLMProviders,
   executeStepNodeFactory,
+  getCurrentWeekAndYear,
   PromptProps,
+  queryContextBlock,
   stepAnalyzerNodeFactory,
   StoreLLMInteractionArgs,
   streamFinalMessageNodeFactory,
@@ -60,11 +62,13 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
   }
 
   const { anthropic } = createLLMProviders(event);
+  const { weekNumber, year } = getCurrentWeekAndYear();
   console.log(`fetching user data and session log for userId ${userId} and session with slug ${sessionSlug}`);
-  const [userInfoBlock, userProfileBlock, sessionLog] = await Promise.all([
+  const [userInfoBlock, userProfileBlock, sessionLog, contextBlock] = await Promise.all([
     queryUserInfoBlock(userId),
     queryUserProfileBlock(userId),
-    queryMostRecentSessionLogBy({ sessionSlug, userId })
+    queryMostRecentSessionLogBy({ sessionSlug, userId }),
+    queryContextBlock({ userId, weekNumber, year })
   ]);
 
   if (!sessionLog) {
@@ -112,6 +116,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
     llmInteractionsToStore,
     userProfileBlock,
     userInfoBlock,
+    contextBlock,
     embeddedQuestionsBlock: createEmbeddedQuestionsBlock(sessionLog),
     additionalChunks,
     additionalProps,
@@ -128,6 +133,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
     llmInteractionsToStore,
     userProfileBlock,
     userInfoBlock,
+    contextBlock,
     additionalChunks,
     eventStream,
     additionalPrompt: additionalAdjustFinalMessagePrompt,

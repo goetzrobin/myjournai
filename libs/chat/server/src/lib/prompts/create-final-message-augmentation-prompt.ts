@@ -1,4 +1,4 @@
-export const createFinalMessageAugmentationPrompt =(messages: string, message: string, userProfile: string, userInfo: string, additionalPrompt?: string) => `
+export const createFinalMessageAugmentationPrompt =(messages: string, message: string, userProfile: string, contextBlock: string, userInfo: string, additionalPrompt?: string) => `
 <task>
 <primary-task>Your task is to refine your <original-message/> before sending it to the student.</primary-task>
 
@@ -63,6 +63,10 @@ ${userInfo}
 <user-profile>
 ${userProfile}
 </user-profile>
+
+<additional-context>
+${userProfile}
+</additional-context>
 
 <previous-messages>
 ${messages}
