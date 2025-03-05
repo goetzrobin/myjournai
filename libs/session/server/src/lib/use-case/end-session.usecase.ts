@@ -11,71 +11,118 @@ import { SessionLog } from '~myjournai/sessionlog-shared';
 import { recreateUserProfileUsecase } from '~myjournai/user-server';
 import { querySessionLogBy, querySessionLogMessagesBy } from '~myjournai/sessionlog-server';
 
+const SUMMARY_PROMPT = `You are a specialized AI designed to create concise, descriptive titles for "check-in" conversations between an AI mentor and a human mentee. Your task is to read through the conversation provided and generate a title that:
+1. Succinctly captures both the primary personal situation AND the emotional state of the person
+2. Is brief and kept to 1-3 sentences at most
+3. Focuses specifically on what's happening in the person's life and how they feel about it
+4. Uses clear, straightforward language that accurately describes their situation and emotional experience
+5. Balances factual circumstances with emotional context
+6. Avoids clinical or overly formal phrasing
 
-const generateConversationSummary = async ({ mostRecentConvoMessages, apiKey }: {
-  mostRecentConvoMessages?: BaseMessage[];
+## Input Format
+The input will be a conversation between an AI mentor and a human mentee, with each speaker clearly labeled.
+
+## Output Format
+Your response should contain ONLY the title, with no additional explanation or commentary.
+
+## Examples
+For a conversation about a recent relationship ending:
+"Heartbroken after 4.5-year relationship ends"
+
+For a conversation about digital distractions:
+"Frustrated by phone addiction struggles"
+
+For a conversation about general life pressure:
+"Overwhelmed by mounting life stressors"
+
+For a conversation about job loss:
+"Anxious uncertainty following unexpected layoff"
+
+For a conversation about complicated feelings toward a former partner:
+"Conflicted longing for ex-girlfriend"
+
+Here are the messages:
+    `;
+
+const generateConversationSummary = async ({ messages, apiKey }: {
+  messages?: BaseMessage[];
   apiKey: string
 }): Promise<string> => {
-  const formattedMessages = formatMessages(mostRecentConvoMessages ?? []);
+  const msgs = messages ?? [];
+  const formattedMessages = formatMessages(msgs);
+
+  console.log(`generating summary for session-log messages=${msgs.length}`);
+
   const openai = createOpenAI({ apiKey });
   const llm = openai('gpt-4o-mini');
+
   const result = await generateText({
     model: llm,
-    prompt: `You are an AI mentor designed to help users navigate complex and emotional topics.
-    At the end of each conversation, provide a summary that is clear, concise, and empathetic.
-    Capture the key points, advice given, and any important context, while also reflecting the emotional tone and nuances of the discussion.
-    Your summary should evoke the warmth and understanding of the conversation, using a touch of humor where appropriate.
-    It should help the user recall not just the facts, but the feeling of the exchange. Format the summary in short paragraphs using Markdown.
-
-    Here are the messages of the conversation:
-    ${formattedMessages}
-    `
+    prompt: SUMMARY_PROMPT + formattedMessages
   });
+
+  console.log(`summary generated chars=${result.text.length}`);
   return result.text;
 };
 
 export const endSessionUseCase = async (command: EndSessionCommand): Promise<SessionLog> => {
-  const now = new Date();
-  const { id, ...commandWithoutId } = command;
-
-  const sessionLogToUpdate = await querySessionLogBy({ id });
-
-  if (!sessionLogToUpdate) {
+  const sessionLog = await querySessionLogBy({ id: command.id });
+  if (!sessionLog) {
+    console.error(`session-log not found id=${command.id} user=${command.userId}`);
     throw createError({
       status: 400,
       statusMessage: 'Bad Request',
-      message: 'Invalid session log id.'
+      message: 'invalid session log id'
     });
   }
 
-  if (sessionLogToUpdate.userId !== command.userId) {
+  if (sessionLog.userId !== command.userId) {
+    console.error(`session-log permission denied id=${command.id} requested_by=${command.userId} owned_by=${sessionLog.userId}`);
     throw createError({
       status: 400,
       statusMessage: 'Bad Request',
-      message: 'User can only end session for themselves'
+      message: 'user can only end own session'
     });
   }
 
-  const mostRecentConvoMessages = await querySessionLogMessagesBy({ sessionLogId: command.id });
-  const summary = await generateConversationSummary({mostRecentConvoMessages, apiKey: command.apiKey})
-
-  const [updatedSessionLog] = await db.update(sessionLogs).set({
-    ...commandWithoutId,
-    completedAt: now,
-    updatedAt: now,
-    status: 'COMPLETED',
-    summary
-  }).where(eq(sessionLogs.id, id)).returning();
-  if (!updatedSessionLog) {
-    console.error('something went wrong updating session log');
-  }
-
-  await recreateUserProfileUsecase({
-    userId: sessionLogToUpdate.userId,
-    apiKey: command.apiKey,
-    mostRecentConvoMessages
+  const messages = await querySessionLogMessagesBy({
+    sessionLogId: command.id
   });
+  console.log(`session-log ending id=${command.id} user=${command.userId} messages=${messages.length}`);
 
+  const [summary] = await Promise.all([
+    generateConversationSummary({
+      messages,
+      apiKey: command.apiKey
+    }),
+    recreateUserProfileUsecase({
+      userId: sessionLog.userId,
+      apiKey: command.apiKey,
+      mostRecentConvoMessages: messages
+    })
+  ]);
+
+  const now = new Date();
+  const { id, ...updateData } = command;
+
+  console.log(`session-log updating id=${id} status=COMPLETED summary_length=${summary.length}`);
+
+  const [updatedSessionLog] = await db.update(sessionLogs)
+    .set({
+      ...updateData,
+      completedAt: now,
+      updatedAt: now,
+      status: 'COMPLETED',
+      summary
+    })
+    .where(eq(sessionLogs.id, id))
+    .returning();
+
+  if (!updatedSessionLog) {
+    console.error(`session-log update failed id=${id} user=${command.userId}`);
+  } else {
+    console.log(`session-log completed id=${id} user=${command.userId} summary="${summary.substring(0, 30)}..."`);
+  }
 
   return updatedSessionLog;
 };
