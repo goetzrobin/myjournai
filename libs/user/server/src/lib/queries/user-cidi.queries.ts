@@ -18,6 +18,44 @@ export const queryUserCidiSurveyResponsesBy = async ({
   const [result] = await query;
   return result;
 };
+// Return type for both PRE and POST
+export type CombinedSurveyResponses = {
+  pre?: CidiSurveyResponses;
+  post?: CidiSurveyResponses;
+};
+// Get all survey responses for a user, organized by type
+export const queryUserPreAndPostSurveyResponsesBy = async ({ userId }: {
+  userId: string
+}): Promise<CombinedSurveyResponses> => {
+  // Get all responses for user (both PRE and POST)
+  console.log(`[cidi-survey-responses-query] Fetching survey responses for userId: ${userId}`);
+
+  const allResponses = await db.select()
+    .from(cidiSurveyResponses)
+    .where(eq(cidiSurveyResponses.userId, userId))
+    .orderBy(cidiSurveyResponses.createdAt);
+
+  console.log(`[cidi-survey-responses-query] Found ${allResponses.length} survey responses for userId: ${userId}`);
+
+  // Start with empty result
+  const result: CombinedSurveyResponses = {};
+
+  for (const response of allResponses) {
+    if (response.type === 'PRE') {
+      // Keep overwriting to get latest PRE
+      console.log(`[cidi-survey-responses-query] Found PRE survey from ${response.createdAt}`);
+      result.pre = response;
+    } else if (response.type === 'POST') {
+      // Keep overwriting to get latest POST
+      console.log(`[cidi-survey-responses-query] Found POST survey from ${response.createdAt}`);
+      result.post = response;
+    }
+  }
+
+  console.log(`[cidi-survey-responses-query] Returning survey data - PRE: ${result.pre ? 'present' : 'absent'}, POST: ${result.post ? 'present' : 'absent'}`);
+  return result;
+};
+
 
 export const createCidiConfusionBlock = (cidiResponse?: CidiSurveyResponses): string => !cidiResponse ? `` : `
 Feel confused as to who I really am when it comes to my career: ${likertScale[cidiResponse.question10 ?? 3]}
