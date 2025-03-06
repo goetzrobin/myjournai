@@ -37,7 +37,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
   event: H3Event;
   sessionSlug: string;
   maxSteps: number;
-  stepAnalyzerPrompt: (messages: string, currentStep: CurrentStepInfo) => string;
+  stepAnalyzerPrompt?: (messages: string, currentStep: CurrentStepInfo) => string;
   fetchAdditionalPromptProps?: ({ userId }: { userId: string }) => Promise<AdditionalProps>;
   executeStepPromptsAndTools: Record<number, {
     tools: (props: ToolProps) => Tools;
@@ -92,18 +92,21 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
 
   const additionalProps = await fetchAdditionalPromptProps?.({ userId });
 
-  const stepAnalyzerNode = stepAnalyzerNodeFactory({
-    userId,
-    runId,
-    currentStepBySessionLogIdKey,
-    messagesBySessionLogIdKey,
-    stepAnalyzerPrompt,
-    anthropic,
-    abortController,
-    maxSteps,
-    model: analyzerModel,
-    llmInteractionsToStore
-  });
+  let stepAnalyzerNode: ((messages: BaseMessage[]) => Promise<BaseMessage[]>) | undefined = undefined;
+  if (stepAnalyzerPrompt) {
+    stepAnalyzerNode = stepAnalyzerNodeFactory({
+      userId,
+      runId,
+      currentStepBySessionLogIdKey,
+      messagesBySessionLogIdKey,
+      stepAnalyzerPrompt,
+      anthropic,
+      abortController,
+      maxSteps,
+      model: analyzerModel,
+      llmInteractionsToStore
+    });
+  }
   const executeStepNode = executeStepNodeFactory({
     userId,
     runId,
@@ -160,7 +163,7 @@ export async function executeStepThroughMessageRun<Tools, AdditionalProps = {}>(
   (async () => {
     try {
       console.log('starting graph execution');
-      const messagesAfterAnalyzer = await stepAnalyzerNode(messagesFromPreviousRuns);
+      const messagesAfterAnalyzer = stepAnalyzerNode === undefined ? messagesFromPreviousRuns : await stepAnalyzerNode(messagesFromPreviousRuns);
       const messagesAfterStepExecution = await executeStepNode(messagesAfterAnalyzer);
       const messagesAfterRun = await streamFinalMessageNode(messagesAfterStepExecution);
       console.log('completed graph execution');

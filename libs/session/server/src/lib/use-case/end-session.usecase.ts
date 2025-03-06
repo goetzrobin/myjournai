@@ -18,6 +18,7 @@ const SUMMARY_PROMPT = `You are a specialized AI designed to create concise, des
 4. Uses clear, straightforward language that accurately describes their situation and emotional experience
 5. Balances factual circumstances with emotional context
 6. Avoids clinical or overly formal phrasing
+7. If there is not enough data present to deduct a title simply return INCONCLUSIVE
 
 ## Input Format
 The input will be a conversation between an AI mentor and a human mentee, with each speaker clearly labeled.
@@ -62,7 +63,7 @@ const generateConversationSummary = async ({ messages, apiKey }: {
   });
 
   console.log(`summary generated chars=${result.text.length}`);
-  return result.text;
+  return result.text.trim().replace(/['"]+/g, '');
 };
 
 export const endSessionUseCase = async (command: EndSessionCommand): Promise<SessionLog> => {
