@@ -67,7 +67,7 @@ const Chat = ({
       isNoMessages: messages.length === 0,
       startStream
     });
-    return <ChatContainer withMenu>
+    return <ChatContainer withMenu userId={userId} sessionLogId={sessionLogId}>
       <MessagesContainer>
         {children}
         {mapNonStreamedDBMessagesToChatComponents(messageChunksByTimestamp, messages)}

@@ -1,12 +1,7 @@
 import { eventHandler } from 'h3';
-import {
-  basicUsefulInfoBlockFactory,
-  createStepAnalyzerPromptFactory,
-  ensurePhoneLikeConversationFormatBlock,
-  personaAndCommunicationStyleBlock,
-  PromptProps
-} from '~myjournai/chat-server';
+import { basicUsefulInfoBlockFactory, createStepAnalyzerPromptFactory, PromptProps } from '~myjournai/chat-server';
 import { executeStepThroughMessageRun } from '~myjournai/messagerun-server';
+import { unguidedPersonaBlock, unguidedResponseFormatBlock } from './unguided-open-v0.post';
 
 const stepAnalyzerPrompt = createStepAnalyzerPromptFactory(({ currentStep }) => `
 ${currentStep !== 1 ? '' : `
@@ -76,8 +71,8 @@ const executeStepPromptsAndTools = {
   1: {
     tools: () => ({}), prompt: (props: PromptProps) => `
 ${sessionInfoBlock}
-${personaAndCommunicationStyleBlock}
-${ensurePhoneLikeConversationFormatBlock}
+${unguidedPersonaBlock}
+${unguidedResponseFormatBlock}
 <current-objectives>
 <core-objective>Your job is to introduce yourself and ask them about how it felt answering the questions and writing the letter</core-objective>
 <instructions>
@@ -96,8 +91,8 @@ ${basicUsefulInfoBlockFactory(props)}
   2: {
     tools: () => ({}), prompt: (props: PromptProps) => `
 ${sessionInfoBlock}
-${personaAndCommunicationStyleBlock}
-${ensurePhoneLikeConversationFormatBlock}
+${unguidedPersonaBlock}
+${unguidedResponseFormatBlock}
 <current-objectives>
 <core-objective>Your job is to be vulnerable and share the scripted message below.</core-objective>
 <instructions>
@@ -123,8 +118,8 @@ ${basicUsefulInfoBlockFactory(props)}
   3: {
     tools: () => ({}), prompt: (props: PromptProps) => `
 ${sessionInfoBlock}
-${personaAndCommunicationStyleBlock}
-${ensurePhoneLikeConversationFormatBlock}
+${unguidedPersonaBlock}
+${unguidedResponseFormatBlock}
 <current-objectives>
 <core-objective>Your job is to take inspiration from the profile and combine that with the letter that the user wrote to introduce themselves to really uncover some insightful guess about their personality</core-objective>
 <instructions>
@@ -147,8 +142,8 @@ ${coreStepInfoBlockFactory(props)}
   4: {
     tools: () => ({}), prompt: (props: PromptProps) => `
 ${sessionInfoBlock}
-${personaAndCommunicationStyleBlock}
-${ensurePhoneLikeConversationFormatBlock}
+${unguidedPersonaBlock}
+${unguidedResponseFormatBlock}
 <current-objectives>
 <core-objective>Your job is telling the user something like the message below and start to guide the conversation to its end</core-objective>
 <instructions>
@@ -165,8 +160,8 @@ ${basicUsefulInfoBlockFactory(props)}
   5: {
     tools: () => ({}), prompt: (props: PromptProps) => `
 ${sessionInfoBlock}
-${personaAndCommunicationStyleBlock}
-${ensurePhoneLikeConversationFormatBlock}
+${unguidedPersonaBlock}
+${unguidedResponseFormatBlock}
 <current-objectives>
 <core-objective>Your job is to end the conversation smoothly. As repetitions increase become much more conscise and clearly prompt the user to hit the End Conversation button. </core-objective>
 <instructions>

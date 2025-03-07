@@ -63,7 +63,7 @@ export const useSessionAbortMutation = ({ userId, sessionLogId, onSuccess }: {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () => {
-      console.log('yoooo')
+      console.log(`userId ${userId} sessionLogId ${sessionLogId}`)
       if (!userId || !sessionLogId) {
         throw Error('provide userId and sessionLogId');
       }

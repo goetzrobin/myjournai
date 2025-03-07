@@ -5,7 +5,7 @@ export const useIsAdmin = () => {
   const userId = useAuthUserIdFromHeaders();
   const userQ = useUserQuery(userId);
   const isAdmin =
-    ['tug29225@temple.edu', 'robin@neurotrainer.com', 'jnyquist@neurotrainer.com', 'jeff@neurotrainer.com']
+    ['tug29225@temple.edu', 'robin@neurotrainer.com', 'jnyquist@neurotrainer.com', 'jeff@neurotrainer.com', 'robin@thejournai.com']
       .includes(userQ.data?.username ?? '');
   return { isAdmin };
 };
