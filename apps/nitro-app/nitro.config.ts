@@ -26,7 +26,7 @@ export default defineNitroConfig({
   modules: ['./modules/tsconfig-paths-to-aliases.ts'],
   vercel: {
     functions: {
-      maxDuration: 60
+      maxDuration: 120
     }
   }
 });
