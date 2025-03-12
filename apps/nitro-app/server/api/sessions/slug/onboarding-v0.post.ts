@@ -48,14 +48,17 @@ This is our first session, the conversation feels like one meeting a pen pal for
 </session-description>
 </session-info>
 `
-const coreStepInfoBlockFactory = ({ messages, stepRepetitions, userInfoBlock, userProfileBlock }: PromptProps) => `
+const coreStepInfoBlockFactory = ({ messages, stepRepetitions, userInfoBlock, userProfileBlock, userPersonalityBlock }: PromptProps) => `
 <useful-information>
 <what-you-know-about-user>
 ${userInfoBlock}
 </what-you-know-about-user>
-<what-user-shared-about-themselves>
+<a-complete-profile-of-the-user>
 ${userProfileBlock}
-</what-user-shared-about-themselves>
+</a-complete-profile-of-the-user>
+<what-user-shared-about-their-personality>
+${userPersonalityBlock}
+</what-user-shared-about-their-personality>
 <step-repetitions-count>
 stepRepetitions for current step: ${stepRepetitions}
 </step-repetitions-count>

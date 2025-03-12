@@ -21,6 +21,7 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
                                                                       userInfoBlock,
                                                                       userProfileBlock,
                                                                       contextBlock,
+                                                                      userPersonalityBlock,
                                                                       embeddedQuestionsBlock,
                                                                       additionalChunks,
                                                                       additionalProps
@@ -41,6 +42,7 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
   userInfoBlock: string;
   userProfileBlock: string;
   contextBlock: string;
+  userPersonalityBlock: string;
   embeddedQuestionsBlock: string;
   additionalChunks: BaseMessageChunk[];
   additionalProps?: AdditionalProps
@@ -74,6 +76,7 @@ export const executeStepNodeFactory = <Tools, AdditionalProps = {}>({
       userProfileBlock,
       embeddedQuestionsBlock,
       contextBlock,
+      userPersonalityBlock,
       stepRepetitions: currentStep.stepRepetitions,
       ...additionalProps
     } as any);
