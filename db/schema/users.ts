@@ -13,6 +13,7 @@ export const users = pgTable('users', {
   ncaaDivision: text('ncaa_division'),
   graduationYear: integer('graduation_year'),
   birthday: date('birthday'),
+  referredBy: text('referred_by'),
   onboardingCompletedAt: timestamp('onboarding_completed_at', { withTimezone: true }),
   offboardingInitiated: timestamp('offboarding_initiated', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
