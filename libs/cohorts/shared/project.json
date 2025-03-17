@@ -1,0 +1,19 @@
+{
+  "name": "cohorts-shared",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/cohorts/shared/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/cohorts/shared",
+        "main": "libs/cohorts/shared/src/index.ts",
+        "tsConfig": "libs/cohorts/shared/tsconfig.lib.json",
+        "assets": ["libs/cohorts/shared/*.md"]
+      }
+    }
+  }
+}

@@ -14,6 +14,9 @@ import { sessionLogRelations, sessionLogs } from './schema/session-logs';
 import { sessions, sessionsRelations } from './schema/sessions';
 import { userProfiles } from './schema/user-profiles';
 import { users } from './schema/users';
+import { personalContexts } from './schema/personal-contexts';
+import { localContexts } from './schema/local-contexts';
+import { globalContexts } from './schema/global-contexts';
 
 const connectionString = process.env['NITRO_DATABASE_URL']!;
 
@@ -35,6 +38,9 @@ export const db = drizzle(client, {
     sessions,
     sessionsRelations,
     userProfiles,
-    users
+    users,
+    personalContexts,
+    localContexts,
+    globalContexts
   }
 });

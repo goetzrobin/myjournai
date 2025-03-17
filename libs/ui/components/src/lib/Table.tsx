@@ -1,22 +1,22 @@
 import { ArrowUp } from 'lucide-react';
 import React from 'react';
 import {
-  Cell as AriaCell,
-  Column as AriaColumn,
-  Row as AriaRow,
-  Table as AriaTable,
-  TableHeader as AriaTableHeader,
   Button,
+  Cell as AriaCell,
   CellProps,
   Collection,
+  Column as AriaColumn,
   ColumnProps,
   ColumnResizer,
+  composeRenderProps,
   Group,
   ResizableTableContainer,
+  Row as AriaRow,
   RowProps,
+  Table as AriaTable,
+  TableHeader as AriaTableHeader,
   TableHeaderProps,
   TableProps,
-  composeRenderProps,
   useTableOptions
 } from 'react-aria-components';
 import { twMerge } from 'tailwind-merge';
@@ -26,7 +26,7 @@ import { composeTailwindRenderProps, focusRing } from './utils';
 
 export function Table(props: TableProps) {
   return (
-    <ResizableTableContainer className="max-h-[280px] w-[550px] overflow-auto scroll-pt-[2.281rem] relative border dark:border-zinc-600 rounded-lg">
+    <ResizableTableContainer className="max-h-[280px] w-[1000px] overflow-auto scroll-pt-[2.281rem] relative border dark:border-zinc-600 rounded-lg">
       <AriaTable {...props} className="border-separate border-spacing-0" />
     </ResizableTableContainer>
   );
@@ -71,7 +71,7 @@ export function Column(props: ColumnProps) {
 }
 
 export function TableHeader<T extends object>(props: TableHeaderProps<T>) {
-  let { selectionBehavior, selectionMode, allowsDragging } = useTableOptions();
+  const { selectionBehavior, selectionMode, allowsDragging } = useTableOptions();
 
   return (
     <AriaTableHeader {...props} className={twMerge('sticky top-0 z-10 bg-gray-100/60 dark:bg-zinc-700/60 backdrop-blur-md supports-[-moz-appearance:none]:bg-gray-100 dark:supports-[-moz-appearance:none]:bg-zinc-700 forced-colors:bg-[Canvas] rounded-t-lg border-b dark:border-b-zinc-700', props.className)}>
@@ -97,7 +97,7 @@ const rowStyles = tv({
 export function Row<T extends object>(
   { id, columns, children, ...otherProps }: RowProps<T>
 ) {
-  let { selectionBehavior, allowsDragging } = useTableOptions();
+  const { selectionBehavior, allowsDragging } = useTableOptions();
 
   return (
     <AriaRow id={id} {...otherProps} className={rowStyles}>

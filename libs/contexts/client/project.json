@@ -1,0 +1,19 @@
+{
+  "name": "contexts-client",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/contexts/client/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/contexts/client",
+        "main": "libs/contexts/client/src/index.ts",
+        "tsConfig": "libs/contexts/client/tsconfig.lib.json",
+        "assets": ["libs/contexts/client/*.md"]
+      }
+    }
+  }
+}

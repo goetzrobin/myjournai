@@ -23,6 +23,7 @@ import { Route as AuthSignUpImport } from './routes/_auth/sign-up'
 import { Route as AuthSignInImport } from './routes/_auth/sign-in'
 import { Route as AuthResetImport } from './routes/_auth/reset'
 import { Route as AuthConfirmResetImport } from './routes/_auth/confirm-reset'
+import { Route as AppAdminImport } from './routes/_app/admin'
 import { Route as AppResourcesIndexImport } from './routes/_app/resources/index'
 import { Route as AppOnboardingIndexImport } from './routes/_app/onboarding/index'
 import { Route as AppOffboardingIndexImport } from './routes/_app/offboarding/index'
@@ -41,6 +42,9 @@ import { Route as AppOnboardingNameImport } from './routes/_app/onboarding/name'
 import { Route as AppOnboardingMeetSamImport } from './routes/_app/onboarding/meet-sam'
 import { Route as AppOnboardingBdayImport } from './routes/_app/onboarding/bday'
 import { Route as AppOffboardingFinalWordFromSamImport } from './routes/_app/offboarding/final-word-from-sam'
+import { Route as AppAdminPersonalContextsImport } from './routes/_app/admin/personal-contexts'
+import { Route as AppAdminLocalContextsImport } from './routes/_app/admin/local-contexts'
+import { Route as AppAdminGlobalContextsImport } from './routes/_app/admin/global-contexts'
 import { Route as AppOnboardingOneMoreThingIndexImport } from './routes/_app/onboarding/one-more-thing/index'
 import { Route as AppOnboardingFinalConvoIndexImport } from './routes/_app/onboarding/final-convo/index'
 import { Route as AppOnboardingStudyUserImport } from './routes/_app/onboarding/study/user'
@@ -111,6 +115,11 @@ const AuthResetRoute = AuthResetImport.update({
 const AuthConfirmResetRoute = AuthConfirmResetImport.update({
   path: '/confirm-reset',
   getParentRoute: () => AuthRoute,
+} as any)
+
+const AppAdminRoute = AppAdminImport.update({
+  path: '/admin',
+  getParentRoute: () => AppRoute,
 } as any)
 
 const AppProfileIndexLazyRoute = AppProfileIndexLazyImport.update({
@@ -213,6 +222,21 @@ const AppOffboardingFinalWordFromSamRoute =
     path: '/offboarding/final-word-from-sam',
     getParentRoute: () => AppRoute,
   } as any)
+
+const AppAdminPersonalContextsRoute = AppAdminPersonalContextsImport.update({
+  path: '/personal-contexts',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+
+const AppAdminLocalContextsRoute = AppAdminLocalContextsImport.update({
+  path: '/local-contexts',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+
+const AppAdminGlobalContextsRoute = AppAdminGlobalContextsImport.update({
+  path: '/global-contexts',
+  getParentRoute: () => AppAdminRoute,
+} as any)
 
 const AppOnboardingOneMoreThingIndexRoute =
   AppOnboardingOneMoreThingIndexImport.update({
@@ -322,6 +346,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
+    '/_app/admin': {
+      id: '/_app/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AppAdminImport
+      parentRoute: typeof AppImport
+    }
     '/_auth/confirm-reset': {
       id: '/_auth/confirm-reset'
       path: '/confirm-reset'
@@ -377,6 +408,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AppIndexImport
       parentRoute: typeof AppImport
+    }
+    '/_app/admin/global-contexts': {
+      id: '/_app/admin/global-contexts'
+      path: '/global-contexts'
+      fullPath: '/admin/global-contexts'
+      preLoaderRoute: typeof AppAdminGlobalContextsImport
+      parentRoute: typeof AppAdminImport
+    }
+    '/_app/admin/local-contexts': {
+      id: '/_app/admin/local-contexts'
+      path: '/local-contexts'
+      fullPath: '/admin/local-contexts'
+      preLoaderRoute: typeof AppAdminLocalContextsImport
+      parentRoute: typeof AppAdminImport
+    }
+    '/_app/admin/personal-contexts': {
+      id: '/_app/admin/personal-contexts'
+      path: '/personal-contexts'
+      fullPath: '/admin/personal-contexts'
+      preLoaderRoute: typeof AppAdminPersonalContextsImport
+      parentRoute: typeof AppAdminImport
     }
     '/_app/offboarding/final-word-from-sam': {
       id: '/_app/offboarding/final-word-from-sam'
@@ -623,6 +675,11 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   AppRoute: AppRoute.addChildren({
+    AppAdminRoute: AppAdminRoute.addChildren({
+      AppAdminGlobalContextsRoute,
+      AppAdminLocalContextsRoute,
+      AppAdminPersonalContextsRoute,
+    }),
     AppIndexRoute,
     AppOffboardingFinalWordFromSamRoute,
     AppOnboardingBdayRoute,
@@ -687,6 +744,7 @@ export const routeTree = rootRoute.addChildren({
     "/_app": {
       "filePath": "_app.tsx",
       "children": [
+        "/_app/admin",
         "/_app/",
         "/_app/offboarding/final-word-from-sam",
         "/_app/onboarding/bday",
@@ -734,6 +792,15 @@ export const routeTree = rootRoute.addChildren({
         "/_auth/start"
       ]
     },
+    "/_app/admin": {
+      "filePath": "_app/admin.tsx",
+      "parent": "/_app",
+      "children": [
+        "/_app/admin/global-contexts",
+        "/_app/admin/local-contexts",
+        "/_app/admin/personal-contexts"
+      ]
+    },
     "/_auth/confirm-reset": {
       "filePath": "_auth/confirm-reset.tsx",
       "parent": "/_auth"
@@ -763,6 +830,18 @@ export const routeTree = rootRoute.addChildren({
     "/_app/": {
       "filePath": "_app/index.tsx",
       "parent": "/_app"
+    },
+    "/_app/admin/global-contexts": {
+      "filePath": "_app/admin/global-contexts.tsx",
+      "parent": "/_app/admin"
+    },
+    "/_app/admin/local-contexts": {
+      "filePath": "_app/admin/local-contexts.tsx",
+      "parent": "/_app/admin"
+    },
+    "/_app/admin/personal-contexts": {
+      "filePath": "_app/admin/personal-contexts.tsx",
+      "parent": "/_app/admin"
     },
     "/_app/offboarding/final-word-from-sam": {
       "filePath": "_app/offboarding/final-word-from-sam.tsx",
